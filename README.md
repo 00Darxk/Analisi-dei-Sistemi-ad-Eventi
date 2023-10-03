@@ -1,2 +1,2 @@
-# Analisi di Sistemi ad Eventi
-Appunti di Analisi dei Sistemi ad Eventi, AA 2023/2024, Università di Roma Tre
+# Analisi dei Sistemi a Eventi
+Appunti di Analisi dei Sistemi a Eventi, AA 2023/2024, Università di Roma Tre
