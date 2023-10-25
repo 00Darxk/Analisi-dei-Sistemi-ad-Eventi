@@ -395,9 +395,9 @@ vettore peso $W$ ed il vettore marcatura $M$ assume un valore finito e costante:
 Il vettore peso $W$ poiché è maggiore uguale al vettore nullo presente al minimo una sola componente non nulla positiva, ed al massimo tutte componenti positive non nulle. Il 
 prodotto tra $W^T$ e $M$ si può esprimere in diversi modi:
 \begin{gather*}
-    \forall M\in R(N,M_0):\,W^T\cdot M=\begin{bmatrix}
-        w_1,\cdots,w_{|P|}
-    \end{bmatrix}\cdot\begin{pmatrix}
+    \forall M\in R(N,M_0):\,W^T\cdot M=\begin{pmatrix}
+        w_1&\cdots&w_{|P|}
+    \end{pmatrix}\cdot\begin{pmatrix}
         m_1\\
         \vdots\\
         m_{|P|}
@@ -438,7 +438,7 @@ Una rete $N$, con marcatura iniziale $M_0$, si dice raggiungibile se e solo se t
     N:\mbox{viva}\iff \forall t\in T\to t:\mbox{viva} 
 \end{equation*}
 
-\subsection{Analisi Dimamica e Strutturale}
+\subsection{Analisi Dimamica}
 
 Partendo da una rete è possibile creare un grafo di stato o grafo di raggiungibilità, che racchiude le relazioni tra ogni marcatura appartenente all'insieme di raggiungibilità, 
 data una marcatura iniziale $M_0$, tramite li scatti di una singola transizione. Questo grafo è sempre limitato, anche se la rete non lo è. Dal grafo è possible inferire sulle 
@@ -674,5 +674,181 @@ di $k$, allora quella transizione è morta. Se il peso degli archi entranti ed u
 \end{center} 
 
 \subsection{Rappresentazione Algebrica}
+
+Una qualsiasi rete di petri può essere rappresentata in riferimento a $3$ matrici:
+
+
+La matrice di ingresso $I$ (Input) è una matrice avente tante righe quanti sono i posti nella rete e tante colonne quante sono le transizioni. Gli elemnenti della matrice 
+sono interi positivi o nulli: $I\in M(|P|,|T|,\mathbb{N})$. L'elemento $i_{ij}$ della matrice $I:=(i_{ij})$ viene definito come il peso dell'arco che collega il $i-$esimo posto 
+alla $j-$esima transizione. Per cui questa matrice racchiude tutti i pesi degli archi entranti nelle transizioni. 
+
+Analogamente la matrice di uscita $O\in M(|P|,|T|,\mathbb{N})$ (Output), contiene tutti i pesi degli archi uscenti dalle transizioni. L'elemento $o_{ij}$ della matrice $O:=(o_{ij})$ 
+è definito come il peso dell'arco uscente dalla transizione $j$ in entrata al posto $i$. 
+
+
+La matrice di incidenza $C$ è definita come la differenza tra la matrice di uscita e la matrice di entrata:
+\begin{equation*}
+    C:=O-I\in M(|P|,|T|,\mathbb{N})
+\end{equation*}
+
+Se nella rete è presente un ciclo, a gettoni costanti, le componenti della matrice di incidenza relative a quegli archi assumono valori nulli. Se un elemento $c_{ij}$ della 
+matrice di incidenza $C:=(c_{ij})$ è negativo, allora la transizione $t_j$ è in ingresso al posto $p_i$, se è positivo allora la transizione $t_j$ è di uscita dal posto $p_i$, 
+ed il modulo dell'elemento indica il peso dell'arco corrispondente. 
+
+
+Questa rappresentazione corrisponde ad un'analisi puramente strutturale di una rete, poiché si perdono le informazioni sui gettoni contenuti nei posti. Se ogni elemento 
+della matrice di incidenza è nullo, allora la rete è strettamente, strutturalmente, conservativa, poiché è indipendente dalla marcatura $M_0$ della rete. Gli elementi della 
+matrice di incidenza possono essere nulli in caso sia presente un ciclo o un autociclo nelle rispettive posizioni. Una rete senza autocicli si definisce pura. 
+
+
+Per determinare se una data transizione $t_i$ è abilitata, si controlla se il vettore marcatura corrente $M$ è maggiore uguale alla colonna $i-$esima della matrice di ingresso 
+$I_i$, poiché quella colonna indica quanti gettoni devono essere consumati per lo scatto della transizione $t_i$ e se la marcatura $M$ è maggiore uguale a quella colonna, 
+sono presenti necessariamente abbastanza gettoni per scattare la transizione $t_i$ in tutti i posti collegati, rendendola abilitata:
+\begin{equation*}
+    t_i:\mbox{ abilitata }\iff M\geq I_i
+\end{equation*}
+La marcatura corrente $M$ se viene sommata con la colonna $i-$esima della matrice di uscita risulta maggiore uguale di $M$ prima della somma, poiché gli elementi della matrice 
+$O$ sono strettamente positivi, allora:
+\begin{gather*}
+    M+O_i\geq M\geq I_i\to M+O_i\geq I_i\\
+    M+O_i-I_i=M+C_i\geq 0
+\end{gather*}
+La marcatura $M$ rappresenta lo stato della rete, mentre l'espressione $M+C_i$ rappresenta l'equazione di stato della rete, ovvero la sua evoluzione dopo lo scatto di una 
+transizione $t_i$, se abilitata. Rappresenta una nuova marcatura raggiunta dalla rete aggiungendo e togliendo gettoni in base ai pesi degli archi entranti ed uscenti alla 
+transizione $t_i$. L'evoluzione della rete non dipende dalla marcatura, ma dipende interamente dalla topo logia della stessa. Per ottenere la colonna $i-$esima della matrice 
+di incidenza si considera il versore $s_i$, vettore di dimensione pari alla cardinalità dell'insieme delle transizioni $\mbox{dim }s=|T|$, avente tutti elementi nulli eccetto 
+per l'elemento nella posizione $i-$esima:
+\begin{equation*}
+    s_i=\begin{pmatrix}
+        0\\
+        \vdots\\
+        1\\
+        \vdots\\
+        0
+    \end{pmatrix}\begin{matrix}
+        (1)\\
+        \vdots\\
+        (i)\\
+        \vdots\\
+        (|T|)
+    \end{matrix}
+\end{equation*}
+Per cui si può esprimere una colonna corrispondente ad una transizione $t_i$ attraverso il prodotto della matrice di incidenza per il versore associato a quella transizione:
+\begin{equation*}
+    C_i=C\cdot s_i
+\end{equation*} 
+
+Una sequenza di scatti $S=t_{k_1},\cdots,t_{k_n}$ abilitata in una marcatura iniziale $M_0$ è una sequenza di transizioni $t_{k_j}\in T,\;\forall j=1,\cdots,n$ tali che la 
+marcatura raggiunta dallo scatto di $t_{k_j}$ da $M_j$ porta ad una marcatura $M_{j+1}$ dove la transizione $t_{k_{j+1}}$ è abilitata:
+\begin{equation*}
+    M_0\left[\right.t_{k_1}>M_1,\cdots,M_{n-1}\left[\right.t_{k_n}>M_n\implies M_0\left[\right.t_{k_1},\cdots,t_{k_n}=S>M_n
+\end{equation*}
+
+Una sequenza di transizioni $S$ si dice sequenza di scatti solo se tutte le transizioni sono abilitate quando devono scattare, non necessariamente vero per una sequenza 
+arbitraria. Se questo è verificato la sequenza di transizioni si dice ammissibile. 
+
+L'effetto di una sequenza di scatti $S=t_{k_1},\cdots,t_{k_n}$ da una marcatura $M_0$ ad una marcatura $M^*$ può essere espresso mediante l'equazione di stato della rete:
+\begin{equation*}
+    M^*=M+C_{k_1}+\cdots+C_{k_n}=M+C\cdot(s_{k_1}+\cdots+c_{k_n})
+\end{equation*}
+Si definisce il vettore colonna $s_k$, di dimensione pari alla cardinalità dell'insieme delle transizioni, associato alla sequenza di scatti, che indica quante volte ogni 
+singola transizione è scattata, senza fornire informazioni sull'ordine in cui le transizioni scattano. Presenta nella posizione $i-$esima il valore corrispondente al numero 
+di occorrenze della transizione $t_i$ nella sequenza $S$:
+\begin{equation*}
+    s_{k_1}+\cdots+s_{k_n}=s_k
+\end{equation*}
+Per cui si può esprimere l'evoluzione della rete da una marcatura $M_0$ dopo una sequenza di scatti $S$ come:
+\begin{equation*}
+    M_0\left[\right.S>M^*:\;\;M^*=M_0+C\cdot s_k
+\end{equation*}
+Quest'espressione indica una relazione lineare. 
+
+\subsection{Analisi Strutturale}
+
+L'analisi della rappresentazione algebrica di una rete permette di trovare proprietà esclusivamente strutturali, intrinseche alla rete. Quest'analisi si basa solo su 
+informazioni contenute nel grafo di incidenza. Questa analisi punta ad individuare delle strutture specifiche nella rete. Alcune di queste strutture si chiamano invarianti, 
+possono essere di posto, $P-$invarianti, di transizione, $T-$invarianti. 
+
+\subsubsection{P-invarianti}
+
+Gli invarianti di posto sono delle strutture associate all'insieme dei posti $P$, dove la somma pesata dei gettoni è costante, si studiano per determinare la conservatività 
+strutturale della rete. Un $P-$invariante di una rete $N$ viene definito come un vettore colonna $x$ di dimensione pari alla cardinalità dell'insieme dei posti $|P|$, tale 
+che il prodotto matriciale tra la sua trasposta ed una qualsiasi marcatura $M$ raggiungibile da $M_0$ è costante e finito:
+\begin{equation*}
+    x^TM=x^TM_0,\;\forall M\in R(N,M_0)
+\end{equation*} 
+
+Per calcolare i $P-$invarianti si considera una generica marcatura raggiungibile $M$ da una sequenza di scatti $S$, con associato un vettore $s$:
+\begin{equation*}
+    M=M_0+Cs
+\end{equation*}
+Gli ivarianti di posto $x$ sono tali che:
+\begin{equation*}
+    x^TM=x^T(M+Cs)=x^TM_0+Csx^T
+\end{equation*}
+Per definizione $x^TM=x^TM_0$, allora, un vettore colonna $x$ si dice $P-$invariante se rispetta la seguente equazione:
+\begin{equation*}
+    x^TCs=0
+\end{equation*}
+Per definizione un vettore associato ad una sequenza di scatti $S$ non è nullo, per cui non si considera come soluzione $s=0$. Per cui il l'equazione diventa un sistema 
+di $|P|$ equazioni: 
+\begin{equation*}
+    x^TC=0\to\begin{pmatrix}
+        x_1 & \cdots & x_{|P|}
+    \end{pmatrix}\cdot\begin{pmatrix}
+        c_{11} & \cdots & c_{1|T|}\\
+        \vdots & \ddots & \vdots\\
+        c_{|P|1} & \cdots & c_{|P||T|}
+    \end{pmatrix}=\begin{pmatrix}
+        0\\
+        \vdots\\
+        0
+    \end{pmatrix}\to\begin{cases}
+        x_1c_{11}+\cdots+x_{|P|}c_{|P|1}=&0\\
+        \vdots &\vdots\\
+        x_1c_{1|T|}+\cdots+x_{|P|}c_{|P||T|}=&0
+    \end{cases}
+\end{equation*}
+Si omette la soluzione $x$ uguale al vettore nullo, poiché inutile nell'analisi di una rete di Petri. Le soluzioni accettate sono vettori colonna con componenti intere. Se 
+non sono presenti soluzioni, la rete non è strutturalmente conservativa, se è presente almeno una soluzione è possibile crearne infinite tramite combinazione lineare e la rete 
+è strutturalmente conservativa. 
+
+\subsubsection{T-invarianti}
+
+I $T-$invarianti sono analoghi ai $P-$invarianti associati alle transizioni $T$. Un vettore colonna $y$, di dimensione pari alla cardinalità dell'insieme delle transizioni, 
+si definisce $T-$invariante, se dopo lo scatto delle transizioni indicate dal vettore si ritorna alla marcatura iniziale, quindi esprime la reversibilità della rete. 
+Si considera uno sequenza di scatti $S: M_0\left[\right.S>M_0$ associata al vettore $y$: 
+\begin{equation*}
+    M=M_0+Cy=M_0\to Cy=0
+\end{equation*}
+Non si considera $y=0$ una soluzione, per cui un vettore colonna si definisce $T-$invariante se non è il vettore nullo e ha componenti interi. Per trovare 
+le componenti del vettore $y$ bisogna risolvare un sistema di $|T|$ equazioni: 
+\begin{gather*}
+    Cy=0\to
+    \begin{pmatrix}
+        c_{11} & \cdots & c_{1|T|}\\
+        \vdots & \ddots & \vdots\\
+        c_{|P|1} & \cdots & c_{|P||T|}
+    \end{pmatrix}\cdot
+    \begin{pmatrix}
+        y_1\\
+        \vdots\\
+        y_{|T|}
+    \end{pmatrix}=
+    \begin{pmatrix}
+        0\\
+        \vdots\\
+        0
+    \end{pmatrix}\to
+    \begin{cases}
+        y_1c_{11}+\cdots+y_{|T|}c_{1|T|}=&0\\
+        \vdots & \vdots\\
+        y_{|T|}c_{|P|1}+\cdots+y_{|T|}c_{|P||T|}=&0
+    \end{cases}
+\end{gather*}
+Se il vettore $y$ è maggiore uguale del vettore nullo, ovvero ha componenti tutte positive, la rete si dice reversibile, altrimenti se presenta almeno una componente negativa 
+implicherebbe che per ritornare alla marcatura iniziale bisognerebbe invertire lo scatto di una transizione, ma ciò è impossibile, quindi in questo caso la rete non è 
+reversibile. Se una ammete un $T-$invariante, ne ammette infiniti. Se non ammette $T-$invarianti sicuramente non è reversibile. 
+
 
 \end{document}
