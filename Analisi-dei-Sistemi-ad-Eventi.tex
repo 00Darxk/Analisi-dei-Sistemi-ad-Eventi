@@ -13,7 +13,7 @@
 \usepackage{bookmark}
 
 
-\usetikzlibrary{petri, positioning}
+\usetikzlibrary{petri, positioning, arrows.meta}
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
@@ -21,7 +21,8 @@
 
 \tikzset{every transition/.style={draw,minimum width=1mm,minimum height=5mm},
          every place/.style={draw,thick,minimum size=6mm},
-         ltransition/.style={draw,minimum width=5mm,minimum height=1mm}}
+         instant/.style={draw, fill,minimum width=1mm,minimum height=5mm, inner sep=0pt},
+        }
 
 \renewcommand{\contentsname}{Indice}
 
@@ -87,8 +88,6 @@ La rete di Petri è un modello logico per rappresentare sistemi ad eventi determ
 asincrono di eventi che avvengono in intervalli di tempo diversi, operazioni concorrenti che avvengono totalemente indipendentemente tra di loro, conflitti ed altre 
 caratteristiche di sistemi ad eventi. 
 
-\subsection{Rappresentazione}
-
 La rete di petri è una rappresentazione grafica con una struttura matematica, è modulare e limitata, potendo rappresentare un ciclo continuo, è possibile gestire il ridimensionamento 
 della rete senza perdere le sue proprietà. La rete è un grafo bipartito, formato da due tipi di nodi, i posti $p$ e le transizioni $t$. Si possono unire solamente posti-transizioni 
 tramite archi orientati. 
@@ -125,7 +124,7 @@ si possono rappresentare come un numero di archi pari al peso dell'arco:
     \end{tikzpicture}
 \end{center}
 
-\subsubsection{Evoluzione}
+\subsection{Evoluzione}
 
 Una transizione è abilitata se i posti a monte della transizione contengono almeno abbastanza gettoni da poter essere tutti consumati dai rispettivi archi. 
 
@@ -164,7 +163,7 @@ rappresenti una sequenza valida, le transizioni considerate devono essere abilit
 marcatura. 
 Un singolo posto può abilitare più di una transizione, ma dopo lo scatto di una delle transizioni abilitate, potrebbe non avere gettoni rimanenti per abilitare le altre. 
 
-\subsubsection{Strutture Fondamentali}
+\subsection{Strutture Fondamentali}
 
 Due transizioni si dicono in sequenza se sono collegate da un singolo posto:
 \begin{center}
@@ -256,7 +255,7 @@ I due posti $p_1$ e $p_2$ si dicono concorrenti tra di loro, la transzizione $t$
 
 Una rete di Petri si dice completa se non presenta nessun posto e transizione appese. 
 
-\subsubsection{Sistema Produttori/Consumatori}
+\subsection{Sistema Produttori/Consumatori}
 
 Si considera un sistema semplice formato da uno o più produttori che creano oggetti e li depositano in un buffer condiviso da cui uno o più consumatori possono prelevarli 
 e consumarli. Per rappresentare un consumatore o un produttore si un ciclo che produce uno o più gettoni e lo depositano in un posto esterno al ciclo, oppure  prelevano uno o 
@@ -337,11 +336,13 @@ massimo numero di gettoni presenti nel deposito non può eccedere un limite impo
 In questo caso il deposito presenta un limite massimo di tre gettoni, e nel sistema sono presenti due consumatori e due produttori. Generalmente modelli di sistemi di produttori 
 e consumatori presentano sempre dei cicli simili comunicanti tra di loro. 
 
-\subsection{Proprietà}
+\clearpage
+
+\section{Proprietà}
 
 Una stessa rete presenta proprietà diverse in base ad una diversa marcatura iniziale $M_0$. 
 
-\subsubsection{Raggiungibilità}
+\subsection{Raggiungibilità}
 Una marcatura $M^*$ si dice raggiugibile se esiste almeno una sequenza $S$ di transizioni abilitate tale che sia possibile, da una marcatura iniziale $M$, raggiungere la 
 marcatura $M^*$:
 \begin{equation*}
@@ -357,7 +358,7 @@ $T$ nella marcatura $M^*$. La transizione $M^{**}$ ottenuta facendo scattare la 
     &M^*\in R(N,M_0)\land t\in T\mbox{ t.c. } M^*\left[\right.t>M^{**}\implies M^{**}\in R(N,M_0)
 \end{align*}
 
-\subsubsection{Limitatezza}
+\subsection{Limitatezza}
 
 Un posto $p_i$ di una rete $N$ si dice $k-$limitato se in tutte le marcature raggiungibili, da una marcatura iniziale $M_0$, quel posto presenta al massimo $k$ gettoni al 
 suo interno:
@@ -370,7 +371,7 @@ singolo posto illimitato affinché l'intera rete sia illimitata.
 
 I cicli, analizzati precedentemente, rappresentano un caso semplice di rete limitata, poiché il numero di gettoni presenti nel ciclo rimane costante. 
 
-\subsubsection{Reversibilità}
+\subsection{Reversibilità}
 
 Una rete $N$ si dice reversibile, a partire da una marcatura iniziale $M_0$, se per ogni marcatura $M$ appartenente all'insieme di raggiungibilià, la marcatura iniziale 
 appartiene all'insieme di raggiungibilità della marcatura $M$:
@@ -382,7 +383,7 @@ Per cui una rete si dice reversibile se per ogni marcatura $M$ raggiungibile dev
     \forall M\in R(N,M_0)\implies M\left[\right.S>M_0
 \end{equation*} 
 
-\subsubsection{Conservatitivà}
+\subsection{Conservatitivà}
 
 Una rete $N$ con marcatura iniziale $M_0$ si dice conservativa in riferimento ad un vettore peso $W$ (colonna), maggiore uguale al vettore nullo $0$, di dimensione pari alla 
 cardinalità dell'insieme dei posti $\mbox{dim} W=|P|$, se per ogni marcatura $M$ appartenente all'insieme di raggiungibilità $R$ il prodotto matriciale tra la trasposta del 
@@ -438,7 +439,11 @@ Una rete $N$, con marcatura iniziale $M_0$, si dice raggiungibile se e solo se t
     N:\mbox{viva}\iff \forall t\in T\to t:\mbox{viva} 
 \end{equation*}
 
-\subsection{Analisi Dimamica}
+\clearpage
+
+\section{Analisi di Una Rete}
+
+\subsection{Analisi Dinamica}
 
 Partendo da una rete è possibile creare un grafo di stato o grafo di raggiungibilità, che racchiude le relazioni tra ogni marcatura appartenente all'insieme di raggiungibilità, 
 data una marcatura iniziale $M_0$, tramite li scatti di una singola transizione. Questo grafo è sempre limitato, anche se la rete non lo è. Dal grafo è possible inferire sulle 
@@ -672,6 +677,7 @@ di $k$, allora quella transizione è morta. Se il peso degli archi entranti ed u
         \draw[->](t2.90)--(4,1);
     \end{tikzpicture}
 \end{center} 
+Gli autociclici possono essere espressi come una doppia freccia, invece di due archi separati, quando entrambi i pesi uguali. 
 
 \subsection{Rappresentazione Algebrica}
 
@@ -688,7 +694,7 @@ Analogamente la matrice di uscita $O\in M(|P|,|T|,\mathbb{N})$ (Output), contien
 
 La matrice di incidenza $C$ è definita come la differenza tra la matrice di uscita e la matrice di entrata:
 \begin{equation*}
-    C:=O-I\in M(|P|,|T|,\mathbb{N})
+    C:=O-I\in M(|P|,|T|,\mathbb{Z})
 \end{equation*}
 
 Se nella rete è presente un ciclo, a gettoni costanti, le componenti della matrice di incidenza relative a quegli archi assumono valori nulli. Se un elemento $c_{ij}$ della 
@@ -769,6 +775,15 @@ L'analisi della rappresentazione algebrica di una rete permette di trovare propr
 informazioni contenute nel grafo di incidenza. Questa analisi punta ad individuare delle strutture specifiche nella rete. Alcune di queste strutture si chiamano invarianti, 
 possono essere di posto, $P-$invarianti, di transizione, $T-$invarianti. 
 
+
+Si dicono invarianti canonici, se il minimo comune multiplo dei loro elementi è pari ad uno, per trovare l'invariante più grande si sommano tutti gli invarianti più piccoli 
+trovati. 
+Si definisce il supporto di un invariante $||x||$, l'insieme di elementi associati alla rete corrispondenti ai componenti del vettore $x$. 
+Un invariante si dice a supporto minimo se il suo supporto non contiente il supporto di altri invarianti.   
+Generalemente quando si risolvono i sistemi associati agli invarianti, se è possibile scegliere, ai componenti si assegnano i valori nulli altrimenti $1$, per trovare quelli a 
+supporto minimo e canonici. Gli invarianti sia a supporto minimo che canonici formano una base dell'insieme degli invarianti della rete. 
+
+
 \subsubsection{P-invarianti}
 
 Gli invarianti di posto sono delle strutture associate all'insieme dei posti $P$, dove la somma pesata dei gettoni è costante, si studiano per determinare la conservatività 
@@ -810,8 +825,10 @@ di $|P|$ equazioni:
     \end{cases}
 \end{equation*}
 Si omette la soluzione $x$ uguale al vettore nullo, poiché inutile nell'analisi di una rete di Petri. Le soluzioni accettate sono vettori colonna con componenti intere. Se 
-non sono presenti soluzioni, la rete non è strutturalmente conservativa, se è presente almeno una soluzione è possibile crearne infinite tramite combinazione lineare e la rete 
-è strutturalmente conservativa. 
+non sono presenti soluzioni oppure se le componenti dell'invariante sono minori o uguali a $0$: $x\leq0$, la rete non è strutturalmente conservativa, se è presente almeno una 
+soluzione è possibile crearne infinite tramite combinazione lineare e la rete è strutturalmente conservativa. Se il $P-$invariante è tale che $x\geq0$ la rete è conservativa 
+rispetto a quel vettore peso, se è strettamente positivo, la rete è strutturalmente conservativa, se il vettore corrisponde al vettore identità, la rete si dice strettamente 
+strutturalmente conservativa.  
 
 \subsubsection{T-invarianti}
 
@@ -848,7 +865,532 @@ le componenti del vettore $y$ bisogna risolvare un sistema di $|T|$ equazioni:
 \end{gather*}
 Se il vettore $y$ è maggiore uguale del vettore nullo, ovvero ha componenti tutte positive, la rete si dice reversibile, altrimenti se presenta almeno una componente negativa 
 implicherebbe che per ritornare alla marcatura iniziale bisognerebbe invertire lo scatto di una transizione, ma ciò è impossibile, quindi in questo caso la rete non è 
-reversibile. Se una ammete un $T-$invariante, ne ammette infiniti. Se non ammette $T-$invarianti sicuramente non è reversibile. 
+reversibile. Se una ammete un $T-$invariante, ne ammette infiniti. Se non ammette $T-$invarianti sicuramente non è reversibile. Bisogna comunque verificare che la sequenza di 
+scatti indicata dal $T-$invariante sia abilitata, per dimostrare che la rete è reversibile. 
+
+\clearpage
+
+\section{Modellazione di Un Sistema}
+
+Si modellano sistemi produttivi per la loro semplicità, poiché sono facilmente intuibili. In questi sistemi un materiale grezzo subisce delle lavorazioni fino a diventare un 
+prodotto finito. Per modellare un sistema vengono fornite le informazioni sui passaggi che il grezzo attraversa nel sistema, sulla base di queste informaizoni si 
+modellano le varie parti. 
+
+In generale un sistema produttivo è formato da varie risorse, macchine per la lavorazione, dispositivi per lo spostamento dei materiali, e dei depositi dove conservare 
+i materiali. Ogni passaggio effettuato dal grezzo richiede l'uso di almeno una risorsa disponibile, poiché possono essere impegnate da altri compiti. Le azioni associate a 
+questi passaggi vengono espresse come gli eventi del sistema. 
+
+
+Bisogna tenere conto delle condizioni che permettono lo scatto di una transizione, ovvero l'accadimento di un evento nel sistema. 
+Per cui tutte le risorse vengono rappresentate come dei cicli, poiché se una risorsa è limitata, il sistema produttivo si blocca, ed è necessario un modo per modellare una 
+risorsa che non si esaurisce, ciò viene quindi rappresentato come un ciclo in una rete di Petri. L'uso di un ciclo permette anche di modellare la disponibilatà di una 
+risorsa per effettuare una serie di eventi.  
+
+\subsection{Elementi Fondamentali}
+
+Ad ogni evento viene associata una transizione temporizzata, che rappresenta la possibilità accada un evento, mentre gli stati di una risorsa sono associati a posti collegati 
+alle rispettive transizioni. Gli stati 
+associati ai posti forniscono informazioni sulla disponibilità di un evento e di una o più risorse, possono esprimere che un evento sta accadendo, informano il sistema 
+quando l'attività è conclusa, e restituiscono le risorse usate per quell'evento al termine dell'attività. Ogni attività è rappresentata da un ciclo, per indicare la 
+disponibilità delle risorse utilizzare, e per esprimere i passaggi che compie il grezzo tramite quelle risorse. Quindi per definire una serie di eventi, si segue il 
+percorso di un generico materiale grezzo e si associano tutti gli eventi a rispettive transizioni, con pre-set e post-set determinati dal comportamento del sistema, per ogni 
+possibile percorso che il materiale può attraversare nel sistema, senza saltare passaggi. In questo modo si analizzano algoritmicamente tutte le possibili interazioni tra le 
+risorse presenti nel sistema. Quando un materiale esce dal sistema, non deve essere più considerato nella costruzione del modello. Ogni evento del sistema può richiedere 
+un certo intervallo di tempo per il suo accadimento, per cui deveno essere associati a rispettive transizioni temporizzate. Per cui è necessario distinguere nella rete tra le 
+transizioni istantanee e quelle temporizzate. Si indicano le transizioni temporizzate come dei blocchi vuoti, mentre quelle istantanee sono rappresentate come delle barrette:
+\begin{center}
+    \begin{tikzpicture}
+        \node[transition,rotate=90,label=above:$t_1$](t1)at(0,0){};
+        \node[instant,rotate=90,label=below:$t_2$](t2)at(2,0){};
+        \draw[->](0,1)--(t1.0);
+        \draw[->](t1.180)--(0,-1);
+        \draw[->](2,1)--(t2.0);
+        \draw[->](t2.180)--(2,-1);
+    \end{tikzpicture}
+\end{center}
+La transizione $t_1$ è temporizzata, con associato un intervallo di tempo non necessariamente noto, mentre la transizione $t_2$ è istantanea, ovvero l'evento associato avviene in un itervallo di 
+tempo tendente a zero. 
+Le marcature in un posto vengono consumate da una transizione solamente al termine dell'intervallo di tempo associato ad essa. 
+
+In caso alcune risorse sono sempre disponibili, possono essere rappresentate con un transizione appesa a monte, oppure con un autociclo, rappresentabile come una doppia freccia: 
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,tokens=1,label=left:$p_1$](p1)at(0,0){};
+        \node[place,tokens=1,label=right:$p_2$](p2)at(2,0){};
+        \node[transition,rotate=90,label=above:$t_1$](t1)at(0,-1){};
+        \node[transition,rotate=90,label=below:$t_2$](t2)at(2,-1){};
+        \node[transition,rotate=90,label=below:$t_3$](t3)at(2,1){};
+
+        \draw[<->](p1.270)--(t1.0);
+        \draw[->](t1.180)--(0,-1.5);
+
+        \draw[->](t3.180)--(p2.90);
+        \draw[->](p2.270)--(t2.0);
+        \draw[->](t2.180)--(2,-1.5);
+    \end{tikzpicture}
+\end{center}
+
+Entrambe queste rappresentazioni esprimono lo stessa risorsa sempre disponibile, ma in caso siano presenti transizioni appese nella rete, si perde la limitatezza, per cui è 
+preferibile usare un autociclo. La disponibilità di una risorsa si esprime tramite un posto, che presenta in pre-set la transizione che determina la fine dell'uso di 
+quella risorsa, mentre in post-set la transizione che determina l'uso della risorsa. Per cui lo stato del posto indica se la risorsa è disponibile, oppure è occupata da 
+un'attività:
+\begin{center}
+    \begin{tikzpicture}
+        \node[transition, rotate=90,label=below:$t_1$](t1)at(0,2){};
+        \node[transition, rotate=90,label=below:$t_2$](t2)at(0,0){};
+        \node[place, tokens=1, label=left:$p_1$](p1)at(-1,1){};
+
+        \draw[-](t1.180)--(0,1.5);
+        \draw[dashed](0,1.5)--(0,0.5);
+        \draw[->](0,0.5)--(t2.0);
+        \draw[->](t2.45)--(p1.315);
+        \draw[->](p1.45)--(t1.135);
+        \draw[->](0,2.5)--(t1.0);
+        \draw[->](t2.180)--(0,-0.5);
+    \end{tikzpicture}
+\end{center}
+
+\subsection{Conflitto Strutturale}
+
+Quando è presente una risorsa condivisa nel sistema, il posto associato può creare un conflitto strutturale in caso non sia modellato correttamente. Se il posto è in entrata 
+a due transizioni temporizzate, poiché i gettoni vengono consumati solo dopo l'intervallo di tempo della transizione, è possibile che abiliti entrambi le transizioni ed 
+entrambi lavorino usando lo stesso numero di gettoni, ciò non corrisopnde alla realtà. Poiché una volta che una risorsa è usata in processo, non può essere usata contemporaneamente 
+in un altra attività. Per cui per rappresentare una risorsa condivisa, si usano prima delle transizioni temporizzate, delle transizioni istantane, per indicare che la 
+risorsa non è più disponibile, ed è impegnata da una delle attività, in questo modo l'altra transizione in entrata non è più abilitata. Questo conflitto diventa quindi solo 
+potenziale: 
+\begin{center}
+    \begin{tikzpicture}
+        \node[place, tokens=1,label=above:$A$](a)at(-0.5,0){};
+        \node[place, tokens=1,label=above:$R$](r)at(1,0){};
+        \node[place, tokens=1,label=above:$B$](b)at(2.5,0){};
+        \node[instant,rotate=90,label=above:$t_1$](t1)at(0.25,-1){};
+        \node[instant,rotate=90,label=below:$t_2$](t2)at(1.75,-1){};
+        \node[transition,rotate=90,label=above:$t_3$](t3)at(0.25,-2){};
+        \node[transition,rotate=90,label=below:$t_4$](t4)at(1.75,-2){};
+
+        \draw[->](a.315)--(t1.45);
+        \draw[->](r.225)--(t1.315);
+        \draw[->](r.315)--(t2.45);
+        \draw[->](b.225)--(t2.315);
+        \draw[->](t1.180)--(t3.0);
+        \draw[->](t2.180)--(t4.0);
+        \draw[->](t3.180)--(0.25,-2.5);
+        \draw[->](t4.180)--(1.75,-2.5);
+    \end{tikzpicture}
+\end{center}
+
+Se non viene specificato, il conflitto non viene risolto, ovvero non si modella quale delle due o più transizioni ha la precedenza. 
+
+\subsection{Cella di Assemblatura}
+
+In generale le macchine come tutte le risorse reali sono capacitate, per cui vanno modellate come un ciclo, marcato. All'inizio di ogni modello, bisogna marcare i cicli di 
+produzione e lavorazione, per permettere al sistema di operare. 
+
+Si considera una cella di assemblatura, dove due materiali grezzi $A$ e $B$ vengono inseriti nel sistema tramite rulli trasportatori. All'interno della cella è presente un 
+braccio meccanico, capacitato ad uno, che può spostare i grezzi in due diverse macchine di lavorazione, una per ogni grezzo $M_A$ e $M_B$, anch'esse capacitate ad uno. 
+Quando entrambe le macchine hanno processato un grezzo, possono essere raccolte dal braccio meccanico ed assemblate in un prodotto finito. Prima che il robot posso traspostare 
+altri materiali grezzi, deve spostare il prodotto finito in un buffer di output, capacitatato ad uno, prima che il prodotto possa essere traspostato all'esterno del sistema. 
+
+In questo caso ogni risorsa è capacitata ad uno, per cui il robot all'inizio può prendere uno dei due grezzi, per cui è presente un conflitto strutturale all'inizio. Si 
+modella senza risolvere il conflitto. Se il robot prendere un grezzo quando entrambe le macchine hanno processato sono occupate con un grezzo il sistema si blocca, per cui 
+bisogna modellare il sistema in modo da impedire questo "deadlock". 
+
+Si considerano i materiali grezzi sempre disponibili nel sistema, per cui si rappresentano come degli autocicli, legati a monte della transizione, istantanea, per attivare 
+una delle due sequenza di lavorazione $A$ e $B$. Gli eventi che avvengono processando uno dei due grezzi sono gli stessi tra di loro, per cui si può modellare uno solo di 
+questi processi ed includere una sua copia per rappresentare l'altro, fino alla fine della lavorazione del grezzo nella macchina apposita. Quindi si rappresenta una 
+rete, in parte simmetrica. 
+
+
+Se il robot è disponibile $R$, il grezzo è disponibile $A/B$, e la macchina è disponibile $M_A/M_B$, allora può cominciare la fase di lavorazione del grezzo. Si rappresenta 
+come $3$ posti a monte di una transizione istantanea $t_{R_A}/t_{R_B}$, poiché è presente un conflitto strutturale con l'altrs sequenza di lavorazione dell'altro grezzo:
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,tokens=1,label=above:$M_A$](ma)at(0,0){};
+        \node[place,tokens=1,label=above:$A$](a)at(0.9,0.6){};
+        \node[place,tokens=1,label=above:$R$](r)at(2,0.5){};
+        \node[place,tokens=1,label=above:$B$](b)at(3.1,0.6){};
+        \node[place,tokens=1,label=above:$M_B$](mb)at(4,0){};
+        \node[instant, rotate=90, label=above:$t_{R_A}$](tra)at(1,-1){};
+        \node[instant, rotate=90, label=below:$t_{R_B}$](trb)at(3,-1){};
+
+        \draw[->](ma.0)to[out=0, in=90](tra.45);
+        \draw[<->](a.270)--(tra.0);
+        \draw[->](r.180)to[out=180,in=90](tra.315);
+        \draw[->](r.0)to[out=0,in=90](trb.45);
+        \draw[->](mb.180)to[out=180, in=90](trb.340);
+        \draw[<->](b.270)--(trb.0);
+    \end{tikzpicture}
+\end{center}
+Le transizioni istantanee portano ad un posto $R_A/R_B$, che esprime lo stato del braccio meccanico, occupato nel carico $A/B.pick$, traporto $A/B.mov$ e scarico $A/B.release$ 
+del grezzo $A$ o $B$, e rappresentano il primo evento nella sequenza della lavorazione della macchina. Ognuna delle operazioni del braccio viene espressa come una transizione 
+temporizzata, e solo al termine, ovvero allo scarico $t_{A/B.release}$, il braccio torna di nuovo disponibile allo spostamento di un altro grezzo. 
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,tokens=1,label=above:$M_A$](ma)at(0,0){};
+        \node[place,tokens=1,label=above:$A$](a)at(0.9,0.6){};
+        \node[place,tokens=1,label=above:$R$](r)at(2,0.5){};
+        \node[place,tokens=1,label=above:$B$](b)at(3.1,0.6){};
+        \node[place,tokens=1,label=above:$M_B$](mb)at(4,0){};
+        \node[instant, rotate=90, label=above:$t_{R_A}$](tra)at(1,-1){};
+        \node[instant, rotate=90, label=below:$t_{R_B}$](trb)at(3,-1){};
+
+        \draw[->](ma.0)to[out=0, in=90](tra.45);
+        \draw[<->](a.270)--(tra.0);
+        \draw[->](r.180)to[out=180,in=90](tra.315);
+        \draw[->](r.0)to[out=0,in=90](trb.45);
+        \draw[->](mb.180)to[out=180, in=90](trb.315);
+        \draw[<->](b.270)--(trb.0);
+
+        \node[place,tokens=0,label=left:$R_A$](ra)at(1,-2){};
+        \node[place,tokens=0,label=right:$R_B$](rb)at(3,-2){};
+        \node[transition, rotate=90, label=above:$t_{A.pick}$](rap)at(1,-3){};
+        \node[transition, rotate=90, label=below:$t_{B.pick}$](rbp)at(3,-3){};
+        \node[place,tokens=0,label=left:$A\in R$](ra1)at(1,-4){};
+        \node[place,tokens=0,label=right:$B\in R$](rb1)at(3,-4){};
+        \node[transition, rotate=90, label=above:$t_{A.move}$](ram)at(1,-5){};
+        \node[transition, rotate=90, label=below:$t_{B.move}$](rbm)at(3,-5){};
+        \node[place,tokens=0,label=left:$A\in R$](ra2)at(1,-6){};
+        \node[place,tokens=0,label=right:$B\in R$](rb2)at(3,-6){};
+        \node[transition, rotate=90, label=above:$t_{A.release}$](rar)at(1,-7){};
+        \node[transition, rotate=90, label=below:$t_{B.release}$](rbr)at(3,-7){};
+        \node[place,tokens=0,label=left:$A\in M_A$](maa)at(1,-8){};
+        \node[place,tokens=0,label=right:$B\in M_B$](mbb)at(3,-8){};
+
+        \draw[->](tra.180)--(ra.90);
+        \draw[->](ra.270)--(rap.0);
+        \draw[->](rap.180)--(ra1.90);
+        \draw[->](ra1.270)--(ram.0);
+        \draw[->](ram.180)--(ra2.90);
+        \draw[->](ra2.270)--(rar.0);
+        \draw[->](rar.180)--(maa.90);
+
+        \draw[->](trb.180)--(rb.90);
+        \draw[->](rb.270)--(rbp.0);
+        \draw[->](rbp.180)--(rb1.90);
+        \draw[->](rb1.270)--(rbm.0);
+        \draw[->](rbm.180)--(rb2.90);
+        \draw[->](rb2.270)--(rbr.0);
+        \draw[->](rbr.180)--(mbb.90);
+
+        \draw[->](rar.230)to[out=270,in=270](r.260);
+        \draw[->](rbr.120)to[out=270,in=270](r.280);
+    \end{tikzpicture}
+\end{center}
+Le transizioni in sequenza $t_{A/B.pick},\;t_{A/B.move},\;t_{A/B.release}$ possono essere sostituite da un'unica transizione associata ad un intervallo di tempo pari alla 
+somma dei tre intervalli delle transizioni originali:
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,tokens=1,label=above:$M_A$](ma)at(0,0){};
+        \node[place,tokens=1,label=above:$A$](a)at(0.9,0.6){};
+        \node[place,tokens=1,label=above:$R$](r)at(2,0.5){};
+        \node[place,tokens=1,label=above:$B$](b)at(3.1,0.6){};
+        \node[place,tokens=1,label=above:$M_B$](mb)at(4,0){};
+        \node[instant, rotate=90, label=above:$t_{R_A}$](tra)at(1,-1){};
+        \node[instant, rotate=90, label=below:$t_{R_B}$](trb)at(3,-1){};
+
+        \draw[->](ma.0)to[out=0, in=90](tra.45);
+        \draw[<->](a.270)--(tra.0);
+        \draw[->](r.180)to[out=180,in=90](tra.315);
+        \draw[->](r.0)to[out=0,in=90](trb.45);
+        \draw[->](mb.180)to[out=180, in=90](trb.315);
+        \draw[<->](b.270)--(trb.0);
+
+        \node[place,tokens=0,label=left:$R_A$](ra)at(1,-2){};
+        \node[place,tokens=0,label=right:$R_B$](rb)at(3,-2){};
+        \node[transition, rotate=90, label=above:$t_{A.move}$](rap)at(1,-3){};
+        \node[transition, rotate=90, label=below:$t_{B.move}$](rbp)at(3,-3){};
+        \draw[->](tra.180)--(ra.90);
+        \draw[->](ra.270)--(rap.0);
+        \draw[->](trb.180)--(rb.90);
+        \draw[->](rb.270)--(rbp.0);
+        \draw[->](rap.230)to[out=270,in=270](r.260);
+        \draw[->](rbp.120)to[out=270,in=270](r.280);
+
+        \node[place,tokens=0,label=left:$A\in M_A$](maa)at(1,-4){};
+        \node[place,tokens=0,label=right:$B\in M_B$](mbb)at(3,-4){};
+        \draw[->](rap.180)--(maa.90);
+        \draw[->](rbp.180)--(mbb.90);
+    \end{tikzpicture}
+\end{center}
+
+Quando le macchine presenta al loro interno un grezzo, lo lavorano fino ad un prodotto finito, quest'operazione viene rappresentata come una transizione 
+temporizzata $t_{A/B.make}$ che passa dallo stato $A/B\in M_{A/B}$ allo stato $A_f/B_f\in M_{A/B}$, entrambi espressi come posti. Quando entrambi i posti che rappresentano 
+lo stato del prodotto finito in una macchina sono marcati, ed il braccio meccanico è disponibile, allora il braccio può raccogliere entrambi i prodotti finiti per cominciare 
+il processo di assemblaggio finale. Quest'operazione si rappresenta mediante una transizione $t_{R_{(A_f,B_f)}}$ istantanea, poiché lo stesso braccio è in entrata ad altre due 
+transizioni, ma il conflitto non avverrà mai con questa transizione, poiché può essere abilitata se e solo se le due transizioni in ingresso alle sequenze di lavorazione dei 
+grezzi sono disabilitate. Questo perché in ogni ciclo di lavorazione di un grezzo è presente un singolo gettone, che abilita solo una transizione. 
+Questa transizione porta ad uno stato $R_{(A_f,B_f)}$, ovvero la sequenza di assemblaggio finale. Il braccio meccanico quindi raccogli i due prodotti finiti da $M_A$ e $M_B$, 
+rendendoli nuovamente disponibili, e arriva ad uno stato $(A_f,B_f)\in R$, dove entrambi i prodotti finiti sono all'interno del robot munito di braccio meccanico. 
+
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,tokens=1,label=above:$M_A$](ma)at(0,0){};
+        \node[place,tokens=1,label=above:$A$](a)at(0.9,0.6){};
+        \node[place,tokens=1,label=above:$R$](r)at(2,0.5){};
+        \node[place,tokens=1,label=above:$B$](b)at(3.1,0.6){};
+        \node[place,tokens=1,label=above:$M_B$](mb)at(4,0){};
+        \node[instant, rotate=90, label=above:$t_{R_A}$](tra)at(1,-1){};
+        \node[instant, rotate=90, label=below:$t_{R_B}$](trb)at(3,-1){};
+
+        \draw[->](ma.0)to[out=0, in=90](tra.45);
+        \draw[<->](a.270)--(tra.0);
+        \draw[->](r.180)to[out=180,in=90](tra.315);
+        \draw[->](r.0)to[out=0,in=90](trb.45);
+        \draw[->](mb.180)to[out=180, in=90](trb.315);
+        \draw[<->](b.270)--(trb.0);
+
+        \node[place,tokens=0,label=left:$R_A$](ra)at(1,-2){};
+        \node[place,tokens=0,label=right:$R_B$](rb)at(3,-2){};
+        \node[transition, rotate=90, label=above:$t_{A.move}$](rap)at(1,-3){};
+        \node[transition, rotate=90, label=below:$t_{B.move}$](rbp)at(3,-3){};
+        \draw[->](tra.180)--(ra.90);
+        \draw[->](ra.270)--(rap.0);
+        \draw[->](trb.180)--(rb.90);
+        \draw[->](rb.270)--(rbp.0);
+        \draw[->](rap.230)to[out=270,in=270](r.260);
+        \draw[->](rbp.120)to[out=270,in=270](r.280);
+
+        \node[place,tokens=0,label=left:$A\in M_A$](maa)at(1,-4){};
+        \node[place,tokens=0,label=right:$B\in M_B$](mbb)at(3,-4){};
+        \draw[->](rap.180)--(maa.90);
+        \draw[->](rbp.180)--(mbb.90);
+
+        \node[transition, rotate=90, label=above:$t_{A.make}$](amake)at(1,-5){};
+        \node[transition, rotate=90, label=below:$t_{B.make}$](bmake)at(3,-5){};
+        \node[place,tokens=0,label=left:$A_f\in M_A$](maf)at(1,-6){};
+        \node[place,tokens=0,label=right:$B_f\in M_B$](mbf)at(3,-6){};
+
+        \draw[->](maa.270)--(amake.0);
+        \draw[->](amake.180)--(maf.90);
+        \draw[->](mbb.270)--(bmake.0);
+        \draw[->](bmake.180)--(mbf.90);
+        
+        \node[instant, rotate=90,label=above:$t_{R_{(A_f,B_f)}}$](rabf)at(2,-7){};
+        \draw[->](r.270)--(rabf.0);
+        \draw[->](maf.315)to[out=315, in=90](rabf.45);
+        \draw[->](mbf.225)to[out=225, in=90](rabf.315);
+
+        \node[place,label=left:$R_{(A_f,B_f)}$](rf)at(2,-8){};
+        \draw[->](rabf.180)--(rf.90);
+        \node[transition, rotate=90,label=above:$t_{(A_f,B_f).pick}$](trf)at(2,-9){};
+        \node[place,tokens=0,label=left:${ (A_f, B_f)\in R}$](ttrf)at(2,-10){};
+        \draw[->](rf.270)--(trf.0);
+        \draw[->](trf.180)--(ttrf.90);
+        
+        \draw[->](trf.135)to[out=225,in=225](ma.225);
+        \draw[->](trf.225)to[out=315,in=315](mb.315);
+        
+        \node[transition, rotate=90,label=above:$t_{P.make}$](trp)at(2,-11){};
+        \node[place,tokens=0,label=left:${P\in R}$](rp)at(2,-12){};
+
+        \draw[->](ttrf.270)--(trp.0);
+        \draw[->](trp.180)--(rp.90);
+    \end{tikzpicture}
+\end{center}
+
+A questo 
+punto si rappresenta l'assemblaggio finale come una transizione temporizzata $t_{P.make}$, che porta allo stato $P\in R$, dove $P$ denota il prodotto finale, contenuto ancora 
+nel robot. Il prodotto finito viene riposto nel buffer di uscita $O$, se è disponibile, rendendo nuovamente disponibile il robot per spostare altri grezzi. Il prodotto finito 
+nel buffer finale a questo punto viene trasportato fuori dal sistema, modellato con un altra transizione temporizzata $t_{P.out}$:
+
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,tokens=0,label=above:$M_A$](ma)at(0,0){};
+        \node[place,tokens=1,label=above:$A$](a)at(0.9,0.6){};
+        \node[place,tokens=1,label=above:$R$](r)at(2,0.5){};
+        \node[place,tokens=1,label=above:$B$](b)at(3.1,0.6){};
+        \node[place,tokens=0,label=above:$M_B$](mb)at(4,0){};
+        \node[instant, rotate=90, label=above:$t_{R_A}$](tra)at(1,-1){};
+        \node[instant, rotate=90, label=below:$t_{R_B}$](trb)at(3,-1){};
+
+        \draw[->](ma.0)to[out=0, in=90](tra.45);
+        \draw[<->](a.270)--(tra.0);
+        \draw[->](r.180)to[out=180,in=90](tra.315);
+        \draw[->](r.0)to[out=0,in=90](trb.45);
+        \draw[->](mb.180)to[out=180, in=90](trb.315);
+        \draw[<->](b.270)--(trb.0);
+
+        \node[place,tokens=0,label=left:$R_A$](ra)at(1,-2){};
+        \node[place,tokens=0,label=right:$R_B$](rb)at(3,-2){};
+        \node[transition, rotate=90, label=above:$t_{A.move}$](rap)at(1,-3){};
+        \node[transition, rotate=90, label=below:$t_{B.move}$](rbp)at(3,-3){};
+        \draw[->](tra.180)--(ra.90);
+        \draw[->](ra.270)--(rap.0);
+        \draw[->](trb.180)--(rb.90);
+        \draw[->](rb.270)--(rbp.0);
+        \draw[->](rap.230)to[out=270,in=270](r.260);
+        \draw[->](rbp.120)to[out=270,in=270](r.280);
+
+        \node[place,tokens=1,label=left:$A\in M_A$](maa)at(1,-4){};
+        \node[place,tokens=1,label=right:$B\in M_B$](mbb)at(3,-4){};
+        \draw[->](rap.180)--(maa.90);
+        \draw[->](rbp.180)--(mbb.90);
+
+        \node[transition, rotate=90, label=above:$t_{A.make}$](amake)at(1,-5){};
+        \node[transition, rotate=90, label=below:$t_{B.make}$](bmake)at(3,-5){};
+        \node[place,tokens=0,label=left:$A_f\in M_A$](maf)at(1,-6){};
+        \node[place,tokens=0,label=right:$B_f\in M_B$](mbf)at(3,-6){};
+
+        \draw[->](maa.270)--(amake.0);
+        \draw[->](amake.180)--(maf.90);
+        \draw[->](mbb.270)--(bmake.0);
+        \draw[->](bmake.180)--(mbf.90);
+        
+        \node[instant, rotate=90,label=above:$t_{R_{(A_f,B_f)}}$](rabf)at(2,-7){};
+        \draw[->](r.270)--(rabf.0);
+        \draw[->](maf.315)to[out=315, in=90](rabf.45);
+        \draw[->](mbf.225)to[out=225, in=90](rabf.315);
+
+        \node[place,label=left:$R_{(A_f,B_f)}$](rf)at(2,-8){};
+        \draw[->](rabf.180)--(rf.90);
+        \node[transition, rotate=90,label=above:$t_{(A_f,B_f).pick}$](trf)at(2,-9){};
+        \node[place,tokens=0,label=left:${ (A_f, B_f)\in R}$](ttrf)at(2,-10){};
+        \draw[->](rf.270)--(trf.0);
+        \draw[->](trf.180)--(ttrf.90);
+        
+        \draw[->](trf.135)to[out=225,in=225](ma.225);
+        \draw[->](trf.225)to[out=315,in=315](mb.315);
+        
+        \node[transition, rotate=45,label=above:$t_{P.make}$](trp)at(2,-11){};
+        \node[place,tokens=0,label=below left:${P\in R}$](rp)at(3,-11){};
+
+        \draw[->](ttrf.270)--(trp.45);
+        \draw[->](trp.315)--(rp.180);
+
+        \node[transition, label=below:$t_{P.move}$](tpm)at(4,-11){};
+        \draw[->](rp.0)--(tpm.180);
+        \node[place, tokens=0, label=right:$P\in O$](po)at(5,-10){};
+        \node[place, tokens=1, label=below:$P\notin O$](pio)at(5,-12){};
+        \draw[->](tpm.45)--(po.225);
+        \draw[->](pio.135)--(tpm.315);
+        \draw[->](tpm.60)to[out=45,in=45](r.45);
+
+        \node[transition, label=right:$t_{P.out}$](tpo)at(6,-11){};
+        \draw[->](po.315)--(tpo.135);
+        \draw[->](tpo.225)--(pio.45);
+    \end{tikzpicture}
+\end{center}
+
+Lo stato iniziale del modello viene scelto arbitrariamente. Bisogna inserire gettoni nei cicli altrimenti non sarebbero abilitati. Si evita di partire da un conflitto 
+effettivo, per cui si inseriscono i gettoni in $M_{A/B}$. In questo caso tutte le risorse sono capacitate ad uno, per cui è necessario inserire un ungico gettone in un 
+posto per ogni ciclo. Se si parte da un conflitto effettivo, se non viene specifiato, il simulatore sceglie arbitrariamente quale delle transizioni ha priorità sulle 
+altre. Per com'è strutturata la rete, l'assemblaggio non è un conflitto effettivo, poiché la transizione che denota l'inizio della fase di assemblaggio è abilitata solo se 
+le macchine $A$ e $B$ hanno finito il processamento dei grezzi, quindi non sono abilitate le transizioni in entrata a $M_A/B$. 
+
+\subsection{Elementi dei Modelli}
+\subsubsection{Risoluzione di un Conflitto}
+
+Per risolvere un conflitto effettivo, si può modellare una priorità tra le due transzioni in conflitto. Quando un conflitto viene risolto, non è necessario 
+introdurre delle transizioni istantanee. 
+Si modella la sequenzialità tra le due transizioni inserendo un ciclo controllore, che permette alle transizioni di scattare solamente una dopo l'altra. Questo 
+controllore come ogni ciclo deve essere marcato: 
+
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,tokens=1,label=above:$M_A$](ma)at(0,0){};
+        \node[place,tokens=1,label=above:$R$](r)at(2,1){};
+        \node[place,tokens=1,label=above:$M_B$](mb)at(4,0){};
+        \node[transition, rotate=90, label=above:$t_{R_A}$](tra)at(1,-1){};
+        \node[transition, rotate=90, label=below:$t_{R_B}$](trb)at(3,-1){};
+
+        \draw[<->](ma.0)to[out=0, in=90](tra.45);
+        \draw[->](r.180)to[out=180,in=90](tra.0);
+        \draw[->](r.0)to[out=0,in=90](trb.0);
+        \draw[<->](mb.180)to[out=180, in=90](trb.315);
+
+        \node[place, tokens=1, label=below:$A$](a)at(2,0){};
+        \node[place, tokens=0, label=below:$B$](b)at(2,-2){};
+
+        \draw[->](a.180)to[out=180,in=90](tra.315);
+        \draw[->](tra.225)to[out=270,in=180](b.180);
+        \draw[->](b.0)to[out=0,in=270](trb.135);
+        \draw[->](trb.45)to[out=90,in=0](a.0);
+    \end{tikzpicture}
+\end{center}
+
+In caso $R$ abiliti solo queste due transizioni, si può omettere. Quando si modella l'alternanza, le transizioni possono scattare solo in questo ordine prestabilito, anche 
+indipendentemente dalla disponibilità di $M_{A/B}$. Per cui questo metodo di risoluzione di un conflitto è inefficiente. 
+
+Si definisce un nuovo tipo di connesione tra posto e transizioni, detto arco inibitore, questo arco, uscente da un posto, si collega ad una transizione mediante una punta di 
+freccia circolare. Se la marca presente nel posto è maggiore uguale al peso $k$ dell'arco inibitore, allora la transizione collegata non può scattare, anche se è abilitata. 
+\begin{center}
+    \begin{tikzpicture}
+        \node[place, tokens=1](p)at(0,0){};
+        \node[transition](t)at(1,0){};
+
+        \draw[-{Circle[]}](p.0)--(t.180);
+    \end{tikzpicture}
+\end{center}
+In questo caso la transizione non può scattare. In questo modo si può risolvere un conflitto tra due transizioni. Una transizione ha priorità sull'altra, quindi si include 
+un arco inibitore, di peso pari al peso dell'arco entrante nella transizione che ha priorità. In questo modo solo se la prima transizione non è abilitata, la seconda è in 
+grado di scattare:
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,tokens=1,label=above:$M_A$](ma)at(0,0){};
+        \node[place,tokens=1,label=above:$R$](r)at(2,0){};
+        \node[place,tokens=1,label=above:$M_B$](mb)at(4,0){};
+        \node[transition, rotate=90, label=below:$t_{R_A}$](tra)at(1,-1){};
+        \node[transition, rotate=90, label=below:$t_{R_B}$](trb)at(3,-1){};
+
+        \draw[<->](ma.0)to[out=0, in=90](tra.45);
+        \draw[->](r.180)to[out=180,in=90](tra.0);
+        \draw[->](r.0)to[out=0,in=90](trb.0);
+        \draw[<->](mb.180)to[out=180, in=90](trb.315);
+
+        \draw[-{Circle[]}](ma.270)to[out=270,in=225](trb.225);
+    \end{tikzpicture}
+\end{center}
+In questo modo non si spreca del tempo ad aspettare che la seconda transizione sia abilitata. Questo metodo di risoluzione è più efficiente rispetto alla priorità. 
+
+Se non viene esplicitamente richiesto, non si modella la risoluzione del conflitto, se invece si modella la risoluzione si usano direttamente le transizioni temporizzate. 
+
+\subsubsection{Buffer FIFO e LIFO}
+
+In caso il sistema presenta una pila o una coda, bisogna modellarla o in convenzione FIFO o LIFO. 
+Si modella un buffer nella convenzione First In First Out, tramite archi inibitori, dove la transizione $t_{out}$ determina l'uscita dell'elemento dal buffer
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,label=above:$R$](r)at(0,0){};
+        \node[instant,label=above:$t_1$](t1)at(1,0){};
+        \node[place,label=above:$p_1$](p1)at(2,0){};
+        \node[instant,label=above:$t_2$](t2)at(3,0){};
+        \node[place,label=above:$p_2$](p2)at(4,0){};
+        \node[transition,label=above:$t_{out}$](t0)at(5,0){};
+
+        \draw[->](r.0)--(t1.180);
+        \draw[->](t1.0)--(p1.180);
+        \draw[->](p1.0)--(t2.180);
+        \draw[->](t2.0)--(p2.180);
+        \draw[->](p2.0)--(t0.180);
+
+        \draw[-{Circle[]}](p2.135)to[out=135,in=45](t2.45);
+        \draw[-{Circle[]}](p1.135)to[out=135,in=45](t1.45);
+    \end{tikzpicture}
+\end{center}
+
+Si modella ora un buffer LIFO:
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,label=above:$R$](r)at(0,0){};
+        \node[instant,label=above:$t_1$](t1)at(1,0){};
+        \node[place,label=above:$p_1$](p1)at(2,0){};
+        \node[instant,label=above:$t_2$](t2)at(3,0){};
+        \node[place,label=above:$p_2$](p2)at(4,0){};
+        \node[transition,label=above:$t_{out}$](t01)at(5,0.5){};
+        \node[transition,label=above:$t_{out}$](t02)at(5,-0.5){};
+
+        \draw[->](r.0)--(t1.180);
+        \draw[->](t1.0)--(p1.180);
+        \draw[->](p1.0)--(t2.180);
+        \draw[->](t2.0)--(p2.180);
+        \draw[->](p2.0)--(t01.180);
+
+        \draw[-{Circle[]}](p2.135)to[out=135,in=45](t2.45);
+        \draw[-{Circle[]}](p1.135)to[out=135,in=45](t1.45);
+        \draw[-{Circle[]}](p1.45)to[out=45,in=135](t01.135);
+        \draw[->](p1.315)to[out=315,in=225](t02.225);
+    \end{tikzpicture}
+\end{center}
 
 
 \end{document}
