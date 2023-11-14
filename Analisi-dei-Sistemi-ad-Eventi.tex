@@ -11,6 +11,8 @@
 \usepackage{lmodern}
 \usepackage{braket}
 \usepackage{bookmark}
+\usepackage{rotating}               % For rotatebox
+
 
 
 \usetikzlibrary{petri, positioning, arrows.meta}
@@ -255,7 +257,7 @@ I due posti $p_1$ e $p_2$ si dicono concorrenti tra di loro, la transzizione $t$
 
 Una rete di Petri si dice completa se non presenta nessun posto e transizione appese. 
 
-\subsection{Sistema Produttori/Consumatori}
+\subsection{Esempio: Sistema Produttori/Consumatori}
 
 Si considera un sistema semplice formato da uno o più produttori che creano oggetti e li depositano in un buffer condiviso da cui uno o più consumatori possono prelevarli 
 e consumarli. Per rappresentare un consumatore o un produttore si un ciclo che produce uno o più gettoni e lo depositano in un posto esterno al ciclo, oppure  prelevano uno o 
@@ -897,11 +899,15 @@ percorso di un generico materiale grezzo e si associano tutti gli eventi a rispe
 possibile percorso che il materiale può attraversare nel sistema, senza saltare passaggi. In questo modo si analizzano algoritmicamente tutte le possibili interazioni tra le 
 risorse presenti nel sistema. Quando un materiale esce dal sistema, non deve essere più considerato nella costruzione del modello. Ogni evento del sistema può richiedere 
 un certo intervallo di tempo per il suo accadimento, per cui deveno essere associati a rispettive transizioni temporizzate. Per cui è necessario distinguere nella rete tra le 
-transizioni istantanee e quelle temporizzate. Si indicano le transizioni temporizzate come dei blocchi vuoti, mentre quelle istantanee sono rappresentate come delle barrette:
+transizioni istantanee e quelle temporizzate. Si indicano le transizioni temporizzate come dei blocchi vuoti, mentre quelle istantanee sono rappresentate come delle barrette. Se 
+è noto l'intervallo di una transizione temporizzata $\tau$, viene inserito dentro la transizione:
 \begin{center}
     \begin{tikzpicture}
-        \node[transition,rotate=90,label=above:$t_1$](t1)at(0,0){};
-        \node[instant,rotate=90,label=below:$t_2$](t2)at(2,0){};
+        \node[transition,rotate=90,label=above:$t_1$](t3)at(-2,0){\rotatebox{-90}{$\,\tau\,$}};
+        \node[transition,rotate=90,label=above:$t_2$](t1)at(0,0){};
+        \node[instant,rotate=90,label=below:$t_3$](t2)at(2,0){};
+        \draw[->](-2,1)--(t3.0);
+        \draw[->](t3.180)--(-2,-1);
         \draw[->](0,1)--(t1.0);
         \draw[->](t1.180)--(0,-1);
         \draw[->](2,1)--(t2.0);
@@ -912,14 +918,15 @@ La transizione $t_1$ è temporizzata, con associato un intervallo di tempo non n
 tempo tendente a zero. 
 Le marcature in un posto vengono consumate da una transizione solamente al termine dell'intervallo di tempo associato ad essa. 
 
-In caso alcune risorse sono sempre disponibili, possono essere rappresentate con un transizione appesa a monte, oppure con un autociclo, rappresentabile come una doppia freccia: 
+In caso alcune risorse sono sempre disponibili, possono essere rappresentate con un transizione istantanea appesa a monte, oppure con un autociclo, rappresentabile come una 
+doppia freccia: 
 \begin{center}
     \begin{tikzpicture}
         \node[place,tokens=1,label=left:$p_1$](p1)at(0,0){};
         \node[place,tokens=1,label=right:$p_2$](p2)at(2,0){};
         \node[transition,rotate=90,label=above:$t_1$](t1)at(0,-1){};
         \node[transition,rotate=90,label=below:$t_2$](t2)at(2,-1){};
-        \node[transition,rotate=90,label=below:$t_3$](t3)at(2,1){};
+        \node[instant,rotate=90,label=below:$t_3$](t3)at(2,1){};
 
         \draw[<->](p1.270)--(t1.0);
         \draw[->](t1.180)--(0,-1.5);
@@ -931,9 +938,11 @@ In caso alcune risorse sono sempre disponibili, possono essere rappresentate con
 \end{center}
 
 Entrambe queste rappresentazioni esprimono lo stessa risorsa sempre disponibile, ma in caso siano presenti transizioni appese nella rete, si perde la limitatezza, per cui è 
-preferibile usare un autociclo. La disponibilità di una risorsa si esprime tramite un posto, che presenta in pre-set la transizione che determina la fine dell'uso di 
-quella risorsa, mentre in post-set la transizione che determina l'uso della risorsa. Per cui lo stato del posto indica se la risorsa è disponibile, oppure è occupata da 
-un'attività:
+preferibile usare un autociclo. Altrimenti una risorsa può essere disponibile al passare di un intervallo di tempo finito, in questo caso si modella tramite una 
+transizione temporizzata posta a monte. Se la risorsa non è capacitata ad $1$, si può modellare come un autociclo di peso pari ai gettoni necessari marcato sufficientemente, 
+oppure con una transizione a monte, ma ciò rende la rete illimitata. La disponibilità di una risorsa si esprime tramite un posto, che presenta in pre-set la transizione che 
+determina la fine dell'uso di quella risorsa, mentre in post-set la transizione che determina l'inizio dell'uso della risorsa. Per cui lo stato del posto indica se la risorsa 
+è disponibile, oppure è occupata da un'attività:
 \begin{center}
     \begin{tikzpicture}
         \node[transition, rotate=90,label=below:$t_1$](t1)at(0,2){};
@@ -955,7 +964,7 @@ un'attività:
 Quando è presente una risorsa condivisa nel sistema, il posto associato può creare un conflitto strutturale in caso non sia modellato correttamente. Se il posto è in entrata 
 a due transizioni temporizzate, poiché i gettoni vengono consumati solo dopo l'intervallo di tempo della transizione, è possibile che abiliti entrambi le transizioni ed 
 entrambi lavorino usando lo stesso numero di gettoni, ciò non corrisopnde alla realtà. Poiché una volta che una risorsa è usata in processo, non può essere usata contemporaneamente 
-in un altra attività. Per cui per rappresentare una risorsa condivisa, si usano prima delle transizioni temporizzate, delle transizioni istantane, per indicare che la 
+in un altra attività. Per cui per rappresentare una risorsa condivisa, si usano delle transizioni istantane prima delle transizioni temporizzate, per indicare che la 
 risorsa non è più disponibile, ed è impegnata da una delle attività, in questo modo l'altra transizione in entrata non è più abilitata. Questo conflitto diventa quindi solo 
 potenziale: 
 \begin{center}
@@ -979,9 +988,11 @@ potenziale:
     \end{tikzpicture}
 \end{center}
 
-Se non viene specificato, il conflitto non viene risolto, ovvero non si modella quale delle due o più transizioni ha la precedenza. 
+Se non viene specificato, il conflitto non viene risolto, ovvero non si modella quale delle due o più transizioni ha la precedenza. Generalmente, se è presente una 
+lavorazione in parallelo, con delle risorse condivise, è più efficiente richiedere la disponibilità della risorsa condivisa, all'inizio della lavorazione, in modo da 
+non aspettare la sua disponibilità, e bloccare il resto del processo. 
 
-\subsection{Cella di Assemblatura}
+\subsection{Esempio: Cella di Assemblatura}
 
 In generale le macchine come tutte le risorse reali sono capacitate, per cui vanno modellate come un ciclo, marcato. All'inizio di ogni modello, bisogna marcare i cicli di 
 produzione e lavorazione, per permettere al sistema di operare. 
@@ -1277,8 +1288,7 @@ posto per ogni ciclo. Se si parte da un conflitto effettivo, se non viene specif
 altre. Per com'è strutturata la rete, l'assemblaggio non è un conflitto effettivo, poiché la transizione che denota l'inizio della fase di assemblaggio è abilitata solo se 
 le macchine $A$ e $B$ hanno finito il processamento dei grezzi, quindi non sono abilitate le transizioni in entrata a $M_A/B$. 
 
-\subsection{Elementi dei Modelli}
-\subsubsection{Risoluzione di un Conflitto}
+\subsection{Risoluzione di un Conflitto}
 
 Per risolvere un conflitto effettivo, si può modellare una priorità tra le due transzioni in conflitto. Quando un conflitto viene risolto, non è necessario 
 introdurre delle transizioni istantanee. 
@@ -1344,51 +1354,180 @@ In questo modo non si spreca del tempo ad aspettare che la seconda transizione s
 
 Se non viene esplicitamente richiesto, non si modella la risoluzione del conflitto, se invece si modella la risoluzione si usano direttamente le transizioni temporizzate. 
 
-\subsubsection{Buffer FIFO e LIFO}
+\subsection{Buffer FIFO e LIFO}
 
-In caso il sistema presenta una pila o una coda, bisogna modellarla o in convenzione FIFO o LIFO. 
-Si modella un buffer nella convenzione First In First Out, tramite archi inibitori, dove la transizione $t_{out}$ determina l'uscita dell'elemento dal buffer
+In caso il sistema presenta una pila o una coda, bisogna modellare un magazzino con disciplina FIFO o LIFO. 
+Si modella un buffer nella convenzione First In First Out, tramite archi inibitori, dove la transizione $t_{out}$ determina l'uscita dell'elemento dal buffer. Si 
+considera un buffer di $n$ elementi: 
 \begin{center}
     \begin{tikzpicture}
-        \node[place,label=above:$R$](r)at(0,0){};
-        \node[instant,label=above:$t_1$](t1)at(1,0){};
-        \node[place,label=above:$p_1$](p1)at(2,0){};
-        \node[instant,label=above:$t_2$](t2)at(3,0){};
-        \node[place,label=above:$p_2$](p2)at(4,0){};
-        \node[transition,label=above:$t_{out}$](t0)at(5,0){};
+        \node[place,label=above:$I_G$](r)at(-1,0){};
+        \node[instant](tp)at(0,0){};
+        \node[place,label=above:$G_n$](p0)at(1,0){};
+        \node[instant](ta)at(2,0){};
 
-        \draw[->](r.0)--(t1.180);
+        \node[instant](t1)at(3,0){};
+        \node[place,label=above:$G_2$](p1)at(4,0){};
+        \node[instant](t2)at(5,0){};
+        \node[place,label=above:$G_1$](p2)at(6,0){};
+        \node[transition,label=above:$t_{out}$](t0)at(7,0){};
+
+        \draw[->](r.0)--(tp.180);
+        \draw[->](tp.0)--(p0.180);
+        \draw[->](p0.0)--(ta.180);
         \draw[->](t1.0)--(p1.180);
         \draw[->](p1.0)--(t2.180);
         \draw[->](t2.0)--(p2.180);
         \draw[->](p2.0)--(t0.180);
 
+
+        \draw[-{Circle[]}](p0.135)to[out=135,in=45](tp.45);
         \draw[-{Circle[]}](p2.135)to[out=135,in=45](t2.45);
         \draw[-{Circle[]}](p1.135)to[out=135,in=45](t1.45);
+        \draw[dashed,->](ta.0)--(t1.180);
     \end{tikzpicture}
 \end{center}
 
-Si modella ora un buffer LIFO:
+Si modella ora un buffer LIFO, di $n$ elementi:
 \begin{center}
     \begin{tikzpicture}
-        \node[place,label=above:$R$](r)at(0,0){};
-        \node[instant,label=above:$t_1$](t1)at(1,0){};
-        \node[place,label=above:$p_1$](p1)at(2,0){};
-        \node[instant,label=above:$t_2$](t2)at(3,0){};
-        \node[place,label=above:$p_2$](p2)at(4,0){};
-        \node[transition,label=above:$t_{out}$](t01)at(5,0.5){};
-        \node[transition,label=above:$t_{out}$](t02)at(5,-0.5){};
+        \node[place,label=above:$I_G$](r)at(-1,0){};
+        \node[instant](tp)at(0,0){};
+        \node[place,label=above:$G_n$](p0)at(1,0){};
+        \node[instant](ta)at(2,0){};
+        \node[transition,rotate=90,label=left:$t_{out}$](t00)at(1,-1){};
+        \node[instant](t1)at(3,0){};
+        \node[place,label=above:$G_2$](p1)at(4,0){};
+        \node[instant](t2)at(5,0){};
+        \node[transition,rotate=90,label=left:$t_{out}$](t01)at(4,-1){};
+        \node[place,label=above:$G_1$](p2)at(6,0){};
+        \node[transition,rotate=90,label=left:$t_{out}$](t02)at(6,-1){};
 
-        \draw[->](r.0)--(t1.180);
+        \draw[->](r.0)--(tp.180);
+        \draw[->](tp.0)--(p0.180);
+        \draw[->](p0.0)--(ta.180);
         \draw[->](t1.0)--(p1.180);
         \draw[->](p1.0)--(t2.180);
         \draw[->](t2.0)--(p2.180);
-        \draw[->](p2.0)--(t01.180);
+        \draw[->](p0.270)--(t00.0);
+        \draw[->](p1.270)--(t01.0);
+        \draw[->](p2.270)--(t02.0);
 
+        \draw[dashed,-{Circle[]}](p0.315)to[out=315,in=180](t01.90);
+        \draw[-{Circle[]}](p1.315)to[out=315,in=180](t02.90);
+
+        \draw[-{Circle[]}](p0.135)to[out=135,in=45](tp.45);
         \draw[-{Circle[]}](p2.135)to[out=135,in=45](t2.45);
         \draw[-{Circle[]}](p1.135)to[out=135,in=45](t1.45);
-        \draw[-{Circle[]}](p1.45)to[out=45,in=135](t01.135);
-        \draw[->](p1.315)to[out=315,in=225](t02.225);
+        \draw[dashed,->](ta.0)--(t1.180);
+    \end{tikzpicture}
+\end{center}
+
+\subsection{Diagramma di Gant}
+
+Il grafico di Gant è una rappresentazione grafica dell'uso delle risorse in un sistema. Ogni risorsa si indica come una linea parallela. Si scorrono verso destra, rispetto 
+al tempo, e viene associato un evento in un determianto tempo per ogni scatto di una o più transizioni. Si può identificare nel grafico di Gant quando è presente un conflitto, 
+ovvero quando una stessa risorsa è richiesta per due, o più, processi diversi. Il grafico di Gant è completamente indipendente dalla rete associata ad un sistema. Attraverso 
+questa visualizzazione, si possono individuare tutti i conflitti effettivi della rete, quindi si possono modellare adeguatamente le risoluzioni, se sono richieste. La 
+precedenza nel grafico di Gant viene scelta arbitrariamente. Questa 
+rappresentazione dipende dalla marcatura iniziale del sistema, in caso sia presente un deadlock, la rappresentazione non è periodica. Generalmente un grafico di Gant di un 
+sistema produttivo ciclico, è periodico, per cui è sufficiente rappresentare solo un periodo del sistema. 
+%% esempio grafo (2/11)
+
+\subsection{Scambio}
+
+Un sistema può arrivare ad una situazione dove due processi sono bloccati, poiché richiedono alcune risorse usate nell'altro processo. Se il sistema si blocca se incontra 
+questa situazione, è necessario modellare un metodo in modo in cui il sistema posso continuare ad operare, anche se ragiunta questa situazione. Per modellarlo, bisogna 
+dare priorità ad uno dei processi, e si evita di richiedere la disponibilità della risorsa scambiandola con l'altro processo, e riportando quel processo ad uno stato 
+precedente all'uso della risorsa. 
+
+\begin{center}
+    \begin{tikzpicture}
+        \node[place,tokens=1,label=left:$S\in M_1$](p1)at(0,3){};
+        \node[place,label=right:$ D'\in M_1$](p3)at(3,3){};
+        \node[place,label=left:$S'\in M_2$](p2)at(0,0){};
+        \node[place,tokens=1,label=right:$ D\in M_2$](p4)at(3,0){};
+        \node[place,label=above:$M_1$](m1)at(1.5,3){};
+        \node[place,label=below:$M_2$](m2)at(1.5,0){};
+        \node[transition,rotate=90,label=above:$ S'\to M_2$](t1)at(0,1.5){};
+        \node[transition,rotate=90,label=below:$D'\to M_1$](t2)at(3,1.5){};
+        \node[transition, label=above:$t_{\iff}$](t3)at(1.5,1.5){};
+
+        \draw[->](p1.270)--(t1.0);
+        \draw[->](t1.180)--(p2.90);
+        \draw[<-](p3.270)--(t2.0);
+        \draw[<-](t2.180)--(p4.90);
+        
+        \draw[->](p1.315)--(t3.135);
+        \draw[->](t3.45)--(p3.225);
+        \draw[->](p4.135)--(t3.315);
+        \draw[->](t3.225)--(p2.45);
+
+        \draw[->,dashed](0,4)--(p1.90);
+        \draw[<-,dashed](3,4)--(p3.90);
+        \draw[->,dashed](p2.270)--(0,-1);
+        \draw[<-,dashed](p4.270)--(3,-1);
+
+        \draw[->](t1.315)--(m1.225);
+        \draw[->](m1.315)--(t2.45);
+        \draw[<-](t1.225)--(m2.135);
+        \draw[<-](m2.45)--(t2.135);
+    \end{tikzpicture}
+\end{center}
+In questo esempio è presente una lavorazione in parallelo di due materiali $S$ e $D$, con delle macchine $M_1$ e $M_2$. Nella sequenza di destra, è stata 
+usata la risorsa $M_1$, e per continuare la lavorazione è necessaria la risorsa $M_2$, impegnata nella 
+lavorazione di destra. Le risorse $M_1$ ed $M_2$, sono entrambe non 
+disponibili per entrambe le sequenza, per cui ci si trova in un deadlock. Si prioritizza la lavorazione di sinistra, 
+per cui si inserisce una transizione $t_{\iff}$ che evita la richiesta delle due risorse entrambe occupate. 
+Dando priorità alla lavorazione di sinistra, il processo di destra, arriva da $ D\in M_2$ ad uno stato $ D'\in M_1$ senza dover 
+richiedere la risorsa $M_1$ tramite la transizione $ D'\to M_1$. Mentre il processo di sinistra, arriva da $S\in M_2$ ad uno stato $S'\in M_1$ dove ha già 
+richiesto ed ottenuto la risorsa $M_1$, senza lo scatto della transizione $S'\to M_2$, effettivamente scambiando la risorsa tra i due processi. 
+
+\subsection{Contatore}
+
+In alcuni sistemi, un processo può essere attivato solo dopo avere almeno $n$ elementi disponibili. Per modellarlo è necessario un contatore, che si aggiorni per ogni 
+nuovo elemento, fino alla raggiunta degli $n$ elementi necessari. Per modellare questo contatore, sono necessari $n+1$ posti, che rappresentano il numero di 
+elementi disponibili dal posto $G_0$, che indica non sono presenti elementi, fino al posto $G_{\geq n}$, che indica sono presenti almeno $n$ elementi. Inoltre è necessario un 
+qualche tipo di generatore, per poter modellare l'entrata degli elementi nel sistema, ogni intervallo di tempo. Poiché se fossero sempre disponibili non sarebbe necessario 
+un contatore. 
+
+\begin{center}
+    \begin{tikzpicture}
+        \node[transition, rotate=90, label=above:$t_{in}$](tin)at(0,2){};
+        \node[place, label=left:$G_{in}$](gin)at(0,1){};
+        \draw[->](tin.180)--(gin.90);
+
+        \node[place, tokens=1, label=left:$G_0$](g0)at(0,0){};
+        \node[instant, label=below:$t_{+1}$](t1)at(1,0){};
+        \node[place, label=below:$G_1$](g1)at(2,0){};
+        \node[instant, label=below:$t_{+1}$](t2)at(3,0){};
+        \node[place, label=below:$G_2$](g2)at(4,0){};
+        \node[instant, label=below:$t_{+1}$](t3)at(5,0){};
+        \node[instant, label=below:$t_{+1}$](t4)at(6.5,0){};
+        \node[place, label=right:$G_{\geq n}$](gn)at(7.5,0){};
+        \draw[-](t3.0)--(5.25,0);
+        \draw[dashed](5.25,0)--(6.25,0);
+        \draw[->](6.25,0)--(t4.180);
+
+        \draw[->](gin.315)--(t1.135);
+        \draw[->](g0.0)--(t1.180);
+        \draw[->](t1.0)--(g1.180);
+        \draw[->](gin.330)--(t2.120);
+        \draw[->](g1.0)--(t2.180);
+        \draw[->](t2.0)--(g2.180);
+        \draw[->](gin.340)--(t3.115);
+        \draw[->](g2.0)--(t3.180);
+        \draw[->](t4.0)--(gn.180);
+        \draw[->](gin.350)--(t4.110);
+
+        \node[transition, rotate=90, label=below:$G_{{\geq n}_{in}}$](tgin)at(7.5,-1){};
+        \draw[->](gn.270)--(tgin.0);
+        \draw[->](tgin.90)to[out=180,in=315](g0.315);
+        \draw[->,dashed](tgin.180)--(7.5,-2);
+
+        \node[instant, rotate=45,label=right:$t_{+1}$](tt)at(7.5,1){};
+        \draw[->](gin.0)--(tt.120);
+        \draw[<->](tt.225)--(gn.90);
     \end{tikzpicture}
 \end{center}
 
