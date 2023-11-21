@@ -12,7 +12,7 @@
 \usepackage{braket}
 \usepackage{bookmark}
 \usepackage{rotating}               % For rotatebox
-
+\usepackage[italian]{babel}
 
 
 \usetikzlibrary{petri, positioning, arrows.meta}
@@ -1530,6 +1530,246 @@ un contatore.
         \draw[<->](tt.225)--(gn.90);
     \end{tikzpicture}
 \end{center}
+
+\clearpage
+
+\section{Rete di Code}
+
+\subsection{Nozioni di Statistica}
+
+Prima di descrivere il modello matematico delle reti di Code, è necessario introdurre concetti della statistica usati nel modello. Gli eventi considerati dai modelli sono 
+associati ad un'alea, poiché non è noto a priori come si verica. Si definisce lo spazio campione $\Omega$ l'insieme di tutti gli eventi $\omega$ che possono accadere nel 
+sistema. Si definisce la funzione probabilità $p$ di un evento $\omega$ appartenente allo spazio campione come il rapporto tra il numero dei casi favorevoli ed il numero dei casi 
+totali:
+\begin{gather*}
+    p:\Omega\to[0,1]\\
+    p(\omega)=\displaystyle\frac{n_{\omega}}{n_{\Omega}}
+\end{gather*}
+Poiché gli eventi sono assocati ad un alea, si descrivono mediante una variabile aleatoria, definita come una funzione arbitraria applicata sullo spazio campione, che 
+restituisce un reale:
+\begin{gather*}
+    X:\Omega\to\mathbb{R}
+\end{gather*}
+Questa variabile può essere sia continua che discreta, la cui analisi è più semplice rispetto ad una varibile continua. 
+Si definisce la distribuzione di una variabile aleatoria, una funzione che indica quanto la variabile è uguale o minore di un certo valore:
+\begin{gather*}
+    f_x:X\to[0,1]
+\end{gather*}
+Si definisce la densità di probabilità di un evento, la probabilità con cui la varibile aleatoria assume un certo valore, nel discreto corrisponde ad una somma di probabilità:
+\begin{gather*}
+    F_x(x)=\displaystyle\sum_{y\leq x}p_x(y)\\
+    F_x(x)=\displaystyle\int_{-\infty}^xf_x(y)dy
+\end{gather*}
+Si definisce la media d'insieme la media di tutti i valori di uno spazio campione:
+\begin{gather*}
+    n:=\displaystyle\frac{\displaystyle\sum_{\omega\in\Omega}\omega}{\dim\Omega}
+\end{gather*}
+Si definisce invece il valore aspettato di un insieme la media pesata dei valori dell'insieme:
+\begin{gather*}
+    N:=\displaystyle\sum_{\omega\in\Omega}\omega p_\omega
+\end{gather*}
+
+\subsection{Teoria delle Code}
+
+Si definisce coda di un sistema, lo spazio finito di attesa e l'insieme dei serventi. Un sistema che presenta una coda, oltre alla coda contiene una sorgente, da dove 
+arrivano i clienti, ed un'uscita, non modellata, da dove escono:
+\begin{center}
+    \begin{tikzpicture}
+        \draw[-](0,0)--(1,0)--(1,1)--(0,1)--(0,0);
+        \node[draw, minimum width=1cm, minimum height=0.5cm](c)at(2,0.5){coda};
+        \node[place](s)at(3.5,0.5){ser.};
+        \draw[->](1,0.5)--(c.180);
+        \draw[->](c.0)--(s.180);
+        \draw[->](s.0)--(4.5,0.5)node[right]{uscita};
+        \draw[dashed](1.25,0)--(1.25,1)--(4,1)--(4,0)--(1.5,0);
+    \end{tikzpicture}
+\end{center} 
+
+Il sistema di code viene gestito tramite disciplina FIFO. Dato un sistema, si definiscono variaibli esogene, variabili esterne al sista, ovvero segnali di input, mentre 
+si definiscono variabili endogene, variaibli interne al sistema, ovvero variabili di stato. 
+
+I sistemi di code vengono analizzati dal punto di vista temporale, per determinare se è conveniente usufruire del servizio è necessario individuare il tempo medio di attesa, 
+ed il tempo medio di servizio, poiché il tempo di attesa deve essere proporzionale alla richiesta. Quest'analisi si interessa solamente di individuare le grandezze di 
+interessa, non di svolgere un'analisi su di esse. 
+
+In queste analisi il tempo, è una variabile aleatoria continua. Si definisce una serie di grandezze:
+\begin{itemize}
+    \item $t_a$: Tempo d'arrivo, il tempo tra due entrate diverse dentro al sistema;
+    \item $t_s$: Tempo di servizio, indica il tempo in cui un servente è impegnato da un cliente;
+    \item $t_q$: Tempo di attesa nella coda di un cliente, prima di essere servito;
+    \item $t_w$: Tempo speso da un cliente all'interno del sistema;
+    \item $s$: Numero di serventi nel sistema;
+    \item $n$: Numero totale di clienti nel sistema;
+    \item Disciplina di serizio (FIFO);
+    \item Dimensione della popolazione di serventi;
+    \item Comportamento del cliente dopo il servizio;
+    \item $l$: Lunghezza della coda. 
+\end{itemize}
+Queste variaibli non sono tutte indipendenti, si può notare facilmente come il tempo speso nel sistema, corrisponde alla somma tra il tempo di attesa ed il tempo di 
+servizio:
+\begin{equation}
+    t_w=t_a+t_s
+\end{equation}
+Analogamente la lunahezza della coda, è dato dalla differenza tra il numero dei clienti totali nel sistema meno la popolazione dei serventi, solo quando il numero dei 
+clienti è minore dei serventi totali presenti nel sistema:
+\begin{equation}
+    l=\begin{cases}
+        n-s&n\geq s\\
+        0&n<0
+    \end{cases}
+\end{equation}
+
+Per lavorare con le variabili aleatorie, non si considera l'intera funzione che definisce l'alea, si usano la varianza, la differenza dal valore medio, e la media, il valore medio 
+assunto dalla distribuzione. Si considerano per semplicità distribuzioni esponenziali per il tempo di attesa $t_a$ e per il tempo di servizio $t_s$, dove la media e la 
+varianza assumono lo stesso valore. Si definiscono quindi la frequenza degli arrivi $\lambda$, e la velocità di servizio $\mu$:
+\begin{gather}
+    \lambda=\displaystyle\frac{1}{E\{t_a\}}\\
+    \mu=\displaystyle\frac{1}{E\{t_s\}}
+\end{gather}
+Mentre il fattore $E\{\cdot\}$ indica il valore atteso della distribuzione. Lavorando con distribuzioni note, si semplifica il calcolo della probabilità $P_n$. 
+
+
+\subsection{Sistemi di Nascita e Morte}
+
+Nell successive analisi si considerano solamente sistemi di nascita e morte, ovvero sistemi dove non avvengon osalti multipli, solo salti tra stati adiacenti tra di loro. 
+La presenza di salti multipli dipende dall'intervallo di osservazione, per cui utilizzando un intervallo di osservazione $\Delta t$ infinitesimo, si può verificare solamente 
+un entrata o un uscita per ogni istante $\Delta t$. Per cui si possono verificare solo i seguenti salti, adiacenti in uno stato $n$:
+\begin{center}
+    \begin{tikzpicture}
+        \node[place](n0)at(0,0){$n-1$};
+        \node[place](n1)at(1.5,0){$n$};
+        \node[place](n2)at(3,0){$n+1$};
+        \draw[->](n0.315)to[out=315,in=225](n1.225)node[below left]{$\lambda_{n-1}$};
+        \draw[->](n1.315)to[out=315,in=225](n2.225)node[below left]{$\lambda_{n}$};
+        \draw[->](n2.135)to[out=135,in=45](n1.45)node[above right]{$\mu_{n+1}$};
+        \draw[->](n1.135)to[out=135,in=45](n0.45)node[above right]{$\mu_n$};
+    \end{tikzpicture}
+\end{center}
+Dove $\mu_n$ e $\lambda_n$ indicano la velocità di servizio e la frequenza di arrivo allo stato $n$. Si vogliono considerare tutti i possibili eventi che possono 
+avvenire in un singolo istante $\Delta t\to0$, partendo da un tempo $t$ in uno stato $n$, la variabile aleatoria discreta. L'obiettivo finale di quest'analisi è individuare 
+il valore attesto della distribuzione di probabilità $P_n(t)$. Si considerano tutti i possibili modi di arrivare allo stato $n$:
+\\
+\begin{tabular}{|c|c|c|}
+    \hline
+    Stato $t$ & Evento in $\Delta t$ & Probabilità $P_n$ \\
+    \hline
+    $n-1$ & Nascita & $P_{n-1}(t)\lambda_{n-1}\Delta +o(\Delta t)$\\
+    \hline
+    $n+1$ & Morte & $P_{n+1}(t)\mu{n+1}\Delta t+o(\Delta t)$\\
+    \hline
+    $?$ & Salti multipli & $o(\Delta t)$\\
+    \hline
+    $n$ & Nessun salto & $P_n\left[1-\lambda_n\Delta t-\mu_n\Delta t\right]+o(\Delta t)$\\
+    \hline
+\end{tabular} 
+\\
+Per ricordare che il tempo di osservazione è infinitesimo, si inserisce l'elemento $o(\Delta t)$, infinitesimo di ordine superiore a $\Delta t$, che tende a $0$ più 
+velocemente di $\Delta t$. La probabilità di che un evento rimanga allo stato $n$, corrisponde alla probabilità che non avvenga nessun tipo di salto da $n$. Si 
+esprime quindi la probabilità di essere allo stato $n$, ovvero la somma delle probabilità di una nascita dallo stato $n-1$, di una morte da $n+1$, di salti multipli e che 
+non avvenga nulla allo stato $n$:
+\begin{gather*}
+    P_n(t+\Delta t)=P_{n-1}(t)\lambda_{n-1}\Delta t+P_{n+1}(t)\mu_{m+1}\Delta t+P_n(t)[1-(\lambda_n+\mu_n)\Delta t]+o(\Delta t)\\
+    \displaystyle\frac{P_n(t+\Delta t)-P_n(t)}{\Delta t}=P_{n-1}(t)\lambda_{n-1}+P_{n+1}(t)\mu_{m+1}-P_n(\lambda_n+\mu_n)+\frac{0(\Delta t)}{\Delta t}
+\end{gather*}
+Si applica il limite $\Delta t\to0$, poiché non sono ammessi nel sistema salti multipli: 
+\begin{gather*}
+    \lim_{\Delta to0}\displaystyle\displaystyle\frac{P_n(t+\Delta t)-P_n(t)}{\Delta t}=\frac{dP_n(t)}{dt}=P_{n-1}(t)\lambda_{n-1}+P_{n+1}(t)\mu_{m+1}-P_n(\lambda_n+\mu_n)+\cancelto{0}{\frac{0(\Delta t)}{\Delta t}}
+\end{gather*}
+Si considerano sistemi stazionari, con una risposta a regime permanente, non nulla e costante. Ovvero sistemi asintoticamente stabili, dove il transitorio tende a zero. 
+Per cui per tempi abbastanza grandi, la probabilità assume valori costanti:
+\begin{gather*}
+    \displaystyle\lim_{t\to\infty}P_n(t)=P_n
+\end{gather*}
+Assumendo valori costanti, la sua derivata è nulla, perciò:
+\begin{gather*}
+    0=P_{n-1}\lambda_{n-1}+P_{n+1}\mu_{m+1}-P_n(\lambda_n+\mu_n)
+\end{gather*}
+Si dimostra la relazione ottenuta da quest'equazione tramite induzione. Si considera il passo induttivo per $n=0$, poiché non puà esistere uno stato $n<0$, non può esistere 
+la probabilità $P_{n<0}$:
+\begin{gather*}
+    P_1\mu_1-P_0\lambda_0-P_0\mu_0=0
+\end{gather*}
+Analogamente non si può ritornare ad uno stato $n<0$, la velocità di servizio per lo stato $n=0$ è nulla:
+\begin{gather*}
+    P_1\mu_1-P_0\lambda_0=0\\
+    P_1=\displaystyle\frac{\lambda_0}{\mu_1}P_0
+\end{gather*}
+Per uno stato $n=1$ si ottiene la seguente equazione:
+\begin{gather*}
+    P_0\lambda_0+P_2\mu_2-P_1\lambda_1-P_1\mu_1=0
+\end{gather*}
+Considerando la relazione ottenuta precedentemenre si ottiene:
+\begin{gather*}
+    P_2\mu_2-P_1\lambda_1=0\\
+    P_2=\displaystyle\frac{\lambda_1}{\mu_2}P_1=\frac{\lambda_1\lambda_0}{\mu_2\mu_1}P_0
+\end{gather*}
+Per cui per uno stato $n$ generico:
+\begin{gather*}
+    P_n\mu_n-P_{n-1}\lambda_{n-1}=0\\
+    P_n=\displaystyle\frac{\lambda_{n-1}}{\mu_{n}}P_{n-1}
+\end{gather*}
+Si ottiene quindi la seguente formula generale per ottenere la distribuzione di probabilità per uno stato $n$:
+\begin{gather*}
+    P_n=\displaystyle\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}P_0
+\end{gather*}
+Essendo una distribuzione di probabilità, la somma di tutte le probabilità di tutti i possibili stati deve assumere valore unitario:
+\begin{gather*}
+    \displaystyle\sum_{n=0}^{\infty}P_n=1\\
+    P_0+\displaystyle\sum_{n=1}^{\infty}P_n=1\\
+    P_0+\displaystyle\sum_{n=1}^{\infty}\left[\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}P_0\right]=1
+\end{gather*}
+La probabilità $P_0$ assume valore costante, per cui è possibile esprimerla come:
+\begin{gather*}
+    P_0=\displaystyle\frac{1}{1+\displaystyle\sum_{n=1}^{\infty}\left[\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}\right]}
+\end{gather*}
+
+Si considera un sistema dove i tempi di arrivo e di attesa sono distribuiti esponenzialmente, con un singolo servente, ed una coda illimitata. Tramite la notazione di Kendal 
+si esprime come: $M/M/1$. Poiché i tempi sono distribuzioni note, si possono espimrere la frequenza d'arrivo e la velocità di servizio come:
+\begin{gather*}
+    \begin{cases}
+        \lambda_n=\lambda &\forall n\in[0,+\infty]\\
+        \mu_n=\mu&\forall n\in[1,+\infty]        
+    \end{cases}
+\end{gather*}
+
+La produttoria diventa quindi:
+\begin{gather*}
+    P_0=\displaystyle\frac{1}{1+\displaystyle\sum_{n=1}^{\infty}\left[\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}\right]}=\frac{1}{1+\displaystyle\sum_{n=1}^{\infty}\left(\frac{\lambda}{\mu}\right)^n}
+\end{gather*}
+Si considera la serie geometrica di ragione $\lambda/\mu<1$:
+\begin{gather*}
+    \displaystyle\sum_{n=0}^{\infty}\left(\frac{\lambda}{\mu}\right)^n=1+\sum_{n=0}^{\infty}\left(\frac{\lambda}{\mu}\right)^n=\frac{1}{1-\displaystyle\frac{\lambda}{\mu}}
+\end{gather*}
+La probabilità che il sistema contenga $0$ clienti è quindi:
+\begin{gather*}
+    P_0=\displaystyle\frac{1}{\displaystyle\frac{1}{1-\displaystyle\frac{\lambda}{\mu}}}=1-\frac{\lambda}{\mu}
+\end{gather*}
+Per cui la probabilità che il sistema stia lavorando, ovvero abbia più di $0$ clienti si ottiene come il complementare della relazione precedente:
+\begin{gather*}
+    1-P_0=\displaystyle\frac{\lambda}{\mu}=\rho
+\end{gather*}
+
+Data la probabilità $0$, si esprimre la probabilità per uno stato generico $n$:
+\begin{gather*}
+    P_n=\displaystyle\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}\left(1-\rho\right)=\rho^n\left(1-\rho\right)
+\end{gather*}
+Si calcola ora il valore atteso $N$ di questa distribuzione $P_n$, ovvero la media dei clienti presenti nel sistema in un qualunque istante:
+\begin{gather*}
+    N=\displaystyle\sum_{n=0}^{\infty}nP_n=\sum_{n=0}^{\infty}n\rho^nP_0
+\end{gather*}
+Si porta un fattore $\rho$ ed il fattore $P_0$, costanti, fuori dalla sommatoria, e si ottiene la derivata di $\rho^n$ dentro la sommatoria:
+\begin{gather*}
+    N=\rho P_0\displaystyle\sum_{n=0}^{\infty}n\rho^{n-1}=\rho P_0\displaystyle\sum_{n=0}^{\infty}\frac{d}{d\rho}\rho^n
+\end{gather*}
+Poiché la derivata è un'operazione lineare, si può portare fuori dalla sommatoria, una serie geometrica di ragione $\rho<1$, per cui converge:
+\begin{gather*}
+    N=\rho P_0\displaystyle\sum_{n=0}^{\infty}\frac{d}{d\rho}\rho^n=\rho P_0\frac{d}{d\rho}\left(\sum_{n=0}^{\infty}\rho^n\right)=\rho P_0\frac{d}{d\rho}\left(\frac{1}{1-\rho}\right)\\
+    N=\displaystyle\frac{\rho(1-\rho)}{(1-\rho)^2}=\frac{\rho}{1-\rho}=\frac{\displaystyle\frac{\lambda}{\mu}}{1-\displaystyle\frac{\lambda}{\mu}}=\frac{\lambda}{\mu-\lambda}
+\end{gather*}
+
+
+
+
 
 
 \end{document}
