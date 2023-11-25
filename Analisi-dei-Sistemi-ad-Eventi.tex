@@ -15,6 +15,9 @@
 \usepackage[italian]{babel}
 
 
+%% numerare equazioni nella versione finale
+
+
 \usetikzlibrary{petri, positioning, arrows.meta}
 \hypersetup{
     colorlinks=true,
@@ -1628,7 +1631,6 @@ varianza assumono lo stesso valore. Si definiscono quindi la frequenza degli arr
 \end{gather}
 Mentre il fattore $E\{\cdot\}$ indica il valore atteso della distribuzione. Lavorando con distribuzioni note, si semplifica il calcolo della probabilità $P_n$. 
 
-
 \subsection{Sistemi di Nascita e Morte}
 
 Nell successive analisi si considerano solamente sistemi di nascita e morte, ovvero sistemi dove non avvengon osalti multipli, solo salti tra stati adiacenti tra di loro. 
@@ -1648,21 +1650,23 @@ un entrata o un uscita per ogni istante $\Delta t$. Per cui si possono verificar
 Dove $\mu_n$ e $\lambda_n$ indicano la velocità di servizio e la frequenza di arrivo allo stato $n$. Si vogliono considerare tutti i possibili eventi che possono 
 avvenire in un singolo istante $\Delta t\to0$, partendo da un tempo $t$ in uno stato $n$, la variabile aleatoria discreta. L'obiettivo finale di quest'analisi è individuare 
 il valore attesto della distribuzione di probabilità $P_n(t)$. Si considerano tutti i possibili modi di arrivare allo stato $n$:
-\\
-\begin{tabular}{|c|c|c|}
-    \hline
-    Stato $t$ & Evento in $\Delta t$ & Probabilità $P_n$ \\
-    \hline
-    $n-1$ & Nascita & $P_{n-1}(t)\lambda_{n-1}\Delta +o(\Delta t)$\\
-    \hline
-    $n+1$ & Morte & $P_{n+1}(t)\mu{n+1}\Delta t+o(\Delta t)$\\
-    \hline
-    $?$ & Salti multipli & $o(\Delta t)$\\
-    \hline
-    $n$ & Nessun salto & $P_n\left[1-\lambda_n\Delta t-\mu_n\Delta t\right]+o(\Delta t)$\\
-    \hline
-\end{tabular} 
-\\
+
+\begin{center}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Stato in $t$ & Evento in $\Delta t$ & Probabilità $P_n$ \\
+        \hline
+        $n-1$ & Nascita & $P_{n-1}(t)\lambda_{n-1}\Delta +o(\Delta t)$\\
+        \hline
+        $n+1$ & Morte & $P_{n+1}(t)\mu{n+1}\Delta t+o(\Delta t)$\\
+        \hline
+        $?$ & Salti multipli & $o(\Delta t)$\\
+        \hline
+        $n$ & Nessun salto & $P_n\left[1-\lambda_n\Delta t-\mu_n\Delta t\right]+o(\Delta t)$\\
+        \hline
+    \end{tabular} 
+\end{center}
+
 Per ricordare che il tempo di osservazione è infinitesimo, si inserisce l'elemento $o(\Delta t)$, infinitesimo di ordine superiore a $\Delta t$, che tende a $0$ più 
 velocemente di $\Delta t$. La probabilità di che un evento rimanga allo stato $n$, corrisponde alla probabilità che non avvenga nessun tipo di salto da $n$. Si 
 esprime quindi la probabilità di essere allo stato $n$, ovvero la somma delle probabilità di una nascita dallo stato $n-1$, di una morte da $n+1$, di salti multipli e che 
@@ -1723,6 +1727,8 @@ La probabilità $P_0$ assume valore costante, per cui è possibile esprimerla co
     P_0=\displaystyle\frac{1}{1+\displaystyle\sum_{n=1}^{\infty}\left[\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}\right]}
 \end{gather*}
 
+\subsection{Sistemi M/M/1}
+
 Si considera un sistema dove i tempi di arrivo e di attesa sono distribuiti esponenzialmente, con un singolo servente, ed una coda illimitata. Tramite la notazione di Kendal 
 si esprime come: $M/M/1$. Poiché i tempi sono distribuzioni note, si possono espimrere la frequenza d'arrivo e la velocità di servizio come:
 \begin{gather*}
@@ -1748,6 +1754,7 @@ Per cui la probabilità che il sistema stia lavorando, ovvero abbia più di $0$ 
 \begin{gather*}
     1-P_0=\displaystyle\frac{\lambda}{\mu}=\rho
 \end{gather*}
+Questo fattore $\rho$ si chiama fattore di utilizzo del servente. 
 
 Data la probabilità $0$, si esprimre la probabilità per uno stato generico $n$:
 \begin{gather*}
@@ -1763,9 +1770,127 @@ Si porta un fattore $\rho$ ed il fattore $P_0$, costanti, fuori dalla sommatoria
 \end{gather*}
 Poiché la derivata è un'operazione lineare, si può portare fuori dalla sommatoria, una serie geometrica di ragione $\rho<1$, per cui converge:
 \begin{gather*}
-    N=\rho P_0\displaystyle\sum_{n=0}^{\infty}\frac{d}{d\rho}\rho^n=\rho P_0\frac{d}{d\rho}\left(\sum_{n=0}^{\infty}\rho^n\right)=\rho P_0\frac{d}{d\rho}\left(\frac{1}{1-\rho}\right)\\
-    N=\displaystyle\frac{\rho(1-\rho)}{(1-\rho)^2}=\frac{\rho}{1-\rho}=\frac{\displaystyle\frac{\lambda}{\mu}}{1-\displaystyle\frac{\lambda}{\mu}}=\frac{\lambda}{\mu-\lambda}
+    N=\rho P_0\displaystyle\sum_{n=0}^{\infty}\frac{d}{d\rho}\rho^n=\rho P_0\frac{d}{d\rho}\left(\sum_{n=0}^{\infty}\rho^n\right)=\rho P_0\frac{d}{d\rho}\left(\frac{1}{1-\rho}\right)=\frac{\rho(1-\rho)}{(1-\rho)^2}=\frac{\rho}{1-\rho}=\frac{\displaystyle\frac{\lambda}{\mu}}{1-\displaystyle\frac{\lambda}{\mu}}
 \end{gather*}
+\begin{equation}
+    N=\displaystyle\frac{\lambda}{\mu-\lambda}
+\end{equation}
+
+Questa relazione corrisponde ad una delle tre leggi di Little. 
+Per determinare le altre due leggi si considera il valore atteso del tempo di attraversamento del sistema $W$, pari alla somma del valore atteso del tempo di 
+servizio ed il tempo speso in coda:
+\begin{gather*}
+    W=W_q+W_s
+\end{gather*}
+Il tempo di attesa nella coda dipende dal sistema, mentre il valore atteso del tempo di servizio corrisponde al reciproco della velocità di servizio:
+\begin{gather*}
+    W=W_q+\displaystyle\frac{1}{\mu}
+\end{gather*}
+Il tempo medio in cui un cliente sta nel sistema è direttamente proporzionale al numero di clienti nel sistema. Il valore atteso dei clienti nel sistema corrisponde alla 
+frequenza di arrivo moltiplicata per il valore atteso del tempo di attraversamento del sistema, poiché il numero di clienti in coda è nullo in caso la frequenza di arrivo 
+sia nulla, indipendentemente dal tempo di attraversamento del sistema:
+\begin{gather*}
+    N=\lambda W\\
+    W =\displaystyle\frac{N}{\lambda}=W_q+\frac{1}{\mu}
+\end{gather*}
+\begin{equation}
+    W_q=\displaystyle\frac{1}{\mu-\lambda}-\frac{1}{\mu}
+\end{equation}
+
+L'ultima legge di Little lega il valore atteso della lunghezza della coda $l$ del sistema al valore atteso del tempo passato in coda $t_q$, ovvero mette in relazione diretta il numero 
+dei clienti in coda $L$ con il tempo speso in coda $W_q$. Questo valore atteso dipende solo dalla velocità degli arrivi in coda, per cui si può esprimere come la frequenza di 
+arrivo moltiplicata per il tempo madio passato in coda:
+\begin{gather*}
+    L=\lambda W_q=\lambda\left(\displaystyle\frac{1}{\mu-\lambda}-\frac{1}{\mu}\right)=\frac{\lambda}{\mu-\lambda}-\frac{\lambda}{\mu}
+\end{gather*}
+\begin{equation}
+    L=N-\rho
+\end{equation}
+
+\subsection{Sistemi M/M/1/k}
+
+Si considera un sistema a coda con un massimo di $k$ clienti, per cui la coda ha una lunghezza massima di $k-1$, ovvero il numero massimo di clienti nel sistema, meno il numero 
+di serventi del sistema. Come nell'analisi precedente li tempo di arrivo e di servizio sono distribuiti esponenzialmente con parametro caratteristico $\gamma$ e $\mu$, ma 
+bisogna considerare quando non può più accettare clienti, quando arriva allo stato $n=k$. La velocità di servizio è indipendente dal numero di clienti nella coda per cui si 
+esprime come, ma è comunque definita per ogni stato accessibile del sistema: 
+\begin{gather*}
+    \mu_n=\mu,n=1,\cdots,k
+\end{gather*}
+Mentre la frequenza di arrivo si annulla quando all'interno del sistema sono presenti esattamente $k$ clienti:
+\begin{gather*}
+    \lambda_n=\begin{cases}
+        \gamma&0\leq n<k\\
+        0 &n\geq k
+    \end{cases}
+\end{gather*}
+Quando il sistema può accettare clienti, la frequenza di arrivo è distribuita esponenzialmente con parametro caratteristico $\gamma$, mentre quando non può accettare più 
+clienti la frequenza si annulla. Per cui la frequenza $\gamma$ è una frequenza più grande che descrive la frequenza di arrivo dall'esterno, indipendentemente dallo stato 
+del sistema, mentre la frequenza $\lambda$ di arrivo effettivo è minore, poiché da un valore $n=k$ si annulla. Dato che la frequenza $\gamma$ non considera quando può lavorare 
+il servente, consdiera anche i clienti che vengono rifiutati dal sistema. 
+
+Si considera l'ipotesi di funzionamento dei sistemi stazionari, ma si include questa distinzione della frequeza di arrivo:
+\begin{gather*}
+    P_n=\begin{cases}
+        \displaystyle\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^{n}\mu_j}=\left(\frac{\gamma}{\mu}\right)^n &n\leq k\\
+        0 &n>k
+    \end{cases}
+\end{gather*}
+Per cui la probabilità che il sistema si trovi allo stato $n=0$ si ottiene tramite la seguente espressione:
+\begin{gather*}
+    P_0=\displaystyle\frac{1}{\displaystyle1+\sum_{n=0}^k\left(\frac{\gamma}{\mu}\right)^n}=\frac{1}{\displaystyle\sum_{n=0}^k\left(\frac{\gamma}{\mu}\right)^n}
+\end{gather*}
+Poiché la sommatoria si annulla per valori $n>k$, per cui non è necessario dimostrare la convergenza con $\gamma/\mu<1$ poiché il sistema è limitato: 
+\begin{gather*}
+    \displaystyle\sum_{n=0}^{\infty}\left(\frac{\gamma}{\mu}\right)^n=1+\cdots+\left(\frac{\gamma}{\mu}\right)^k+0+\cdots
+\end{gather*}
+Questa sommatoria si può esprimere mediante la differenza tra due serie geometriche:
+\begin{gather*}
+    \displaystyle\sum_{n=0}^k\left(\frac{\gamma}{\mu}\right)^n=\sum_{n=0}^{\infty}\left(\frac{\gamma}{\mu}\right)^n-\sum_{n=k+1}^{\infty}\left(\frac{\gamma}{\mu}\right)^n\\
+    l=n-(k+1)\\
+    \displaystyle\frac{1}{\displaystyle1-\frac{\gamma}{\mu}}-\sum_{l=0}^{\infty}\left(\frac{\gamma}{\mu}\right)^{l+k+1}=\displaystyle\frac{1}{\displaystyle1-\frac{\gamma}{\mu}}-\left(\frac{\gamma}{\mu}\right)^{k+1}\frac{1}{\displaystyle1-\frac{\gamma}{\mu}}\\
+    \displaystyle\sum_{n=0}^k\left(\frac{\gamma}{\mu}\right)^n=\frac{1}{\displaystyle1-\frac{\gamma}{\mu}}\left(1-\left(\frac{\gamma}{\mu}\right)^{k+1}\right)
+\end{gather*}
+Per cui la probabilità $P_0$ corrisponde si può esprimere come:
+\begin{gather}
+    P_0=\displaystyle\frac{1-\displaystyle\frac{\gamma}{\mu}}{1-\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}
+\end{gather}
+
+Si vuole determinare ora il valore atteso $N$ del numero di clienti $n$ nel sistema:
+\begin{gather*}
+    N=\displaystyle\sum_{n=0}^knP_n=\sum_{n=0}^kn\left(\frac{\gamma}{\mu}\right)^nP_0=P_0\frac{\gamma}{\mu}\sum_{n=0}^kn\left(\frac{\gamma}{\mu}\right)^{n-1}=P_0\frac{\gamma}{\mu}\sum_{n=0}^k\frac{d}{d\displaystyle\frac{\gamma}{\mu}}\left[\left(\frac{\gamma}{\mu}\right)^n\right]
+\end{gather*}
+Estraendo la derivata dalla sommatoria si ottiene la stessa sommatoria precedente, sostituendo il risultato precedentemente ottenuto diventa: 
+\begin{gather*}
+    N=P_0\displaystyle\frac{\gamma}{\mu}\frac{d}{\displaystyle d\frac{\gamma}{\mu}}\sum_{n=0}^k\left(\frac{\gamma}{\mu}\right)^n=P_0\frac{\gamma}{\mu}\frac{d}{\displaystyle d\frac{\gamma}{\mu}}\left[\frac{1-\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}{1-\displaystyle\frac{\gamma}{\mu}}\right]\\
+    \displaystyle P_0\frac{\gamma}{\mu}\frac{d}{\displaystyle d\frac{\gamma}{\mu}}\left[\frac{1}{1-\displaystyle\frac{\gamma}{\mu}}-\frac{\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}{1-\displaystyle\frac{\gamma}{\mu}}\right]=P_0\frac{\gamma}{\mu}\left(\frac{1}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}-\frac{(k+1)\displaystyle\left(\frac{\gamma}{\mu}\right)^k-\left(\frac{\gamma}{\mu}\right)^{k+1}}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}\right)\\
+    P_0\frac{\gamma}{\mu}\left(\frac{1}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}-\left(\frac{\gamma}{\mu}\right)^k\frac{(k+1)\left(1-\displaystyle\frac{\gamma}{\mu}\right)}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}\right)=P_0\frac{\gamma}{\mu}\left(\frac{1-\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}-(k+1)\frac{\displaystyle\left(\frac{\gamma}{\mu}\right)^k}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}\right)
+\end{gather*}
+Sostituendo il valore di $P_0$ ottenuto precedentemente si ottiene: 
+\begin{equation}
+    N=\displaystyle\frac{\displaystyle\frac{\gamma}{\mu}}{1-\displaystyle\frac{\gamma}{\mu}}-(k+1)\frac{\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}{1-\left(\displaystyle\frac{\gamma}{\mu}\right)^{k+1}}
+\end{equation}
+
+Si vuole esprimere la frequenza degli arrivi $\lambda$ rispetto alla frequenza effettiva $\gamma$ tramite un fattore di perdita $1-\varepsilon$, che indica quale percentuale 
+degli arrivi sono rifiutati dal sistema. 
+\begin{gather*}
+    \lambda=\varepsilon\gamma
+\end{gather*}
+La frequenza degli arrivi corrisponde alla velocità di servizio moltiplicata per il fattore di utilizzo del servente $\rho$, esprimibile come il complementare di $P_0$:
+\begin{gather*}
+    \lambda=\mu\rho=\mu(1-P_0)=\mu\left[1-\displaystyle\frac{1-\displaystyle\frac{\gamma}{\mu}}{1-\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}\right]=\mu\left[\displaystyle\frac{\displaystyle\frac{\gamma}{\mu}-\left(\frac{\gamma}{\mu}\right)^{k+1}}{1-\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}\right]\\
+    \lambda=\mu\displaystyle\frac{\gamma}{\mu}\left[\displaystyle\frac{\displaystyle1-\left(\frac{\gamma}{\mu}\right)^{k}}{1-\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}\right]=\gamma\varepsilon
+\end{gather*}
+Per cui la percentuale di clienti persi per un sistema $M/M/1/k$ si esprime tramite la seguente espressione:
+\begin{gather}
+    \varepsilon=\displaystyle\frac{\displaystyle1-\left(\frac{\gamma}{\mu}\right)^{k}}{1-\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}<1
+\end{gather}
+
+Si perdono dei clienti ogni volta che ne arriva uno nuovo nello stato $n=k$. Da questo relazione si può ottenere la probabilità che il sistema si trovi nello stato 
+$n=k$, ovvero il fattore di perdita del sistema:
+\begin{equation}
+    P_k=1-\varepsilon
+\end{equation}
+Poiché la percentuale dei clienti persi corrisponde alla probabilità che il sistema si trova in uno stato dove non può accettare clienti $n=k$.
 
 
 
