@@ -1677,7 +1677,7 @@ non avvenga nulla allo stato $n$:
 \end{gather*}
 Si applica il limite $\Delta t\to0$, poiché non sono ammessi nel sistema salti multipli: 
 \begin{gather*}
-    \lim_{\Delta to0}\displaystyle\displaystyle\frac{P_n(t+\Delta t)-P_n(t)}{\Delta t}=\frac{dP_n(t)}{dt}=P_{n-1}(t)\lambda_{n-1}+P_{n+1}(t)\mu_{m+1}-P_n(\lambda_n+\mu_n)+\cancelto{0}{\frac{0(\Delta t)}{\Delta t}}
+    \lim_{\Delta \to0}\displaystyle\displaystyle\frac{P_n(t+\Delta t)-P_n(t)}{\Delta t}=\frac{dP_n(t)}{dt}=P_{n-1}(t)\lambda_{n-1}+P_{n+1}(t)\mu_{m+1}-P_n(\lambda_n+\mu_n)+\cancelto{0}{\frac{0(\Delta t)}{\Delta t}}
 \end{gather*}
 Si considerano sistemi stazionari, con una risposta a regime permanente, non nulla e costante. Ovvero sistemi asintoticamente stabili, dove il transitorio tende a zero. 
 Per cui per tempi abbastanza grandi, la probabilità assume valori costanti:
@@ -1713,9 +1713,9 @@ Per cui per uno stato $n$ generico:
     P_n=\displaystyle\frac{\lambda_{n-1}}{\mu_{n}}P_{n-1}
 \end{gather*}
 Si ottiene quindi la seguente formula generale per ottenere la distribuzione di probabilità per uno stato $n$:
-\begin{gather*}
+\begin{gather}
     P_n=\displaystyle\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}P_0
-\end{gather*}
+\end{gather}
 Essendo una distribuzione di probabilità, la somma di tutte le probabilità di tutti i possibili stati deve assumere valore unitario:
 \begin{gather*}
     \displaystyle\sum_{n=0}^{\infty}P_n=1\\
@@ -1723,9 +1723,9 @@ Essendo una distribuzione di probabilità, la somma di tutte le probabilità di 
     P_0+\displaystyle\sum_{n=1}^{\infty}\left[\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}P_0\right]=1
 \end{gather*}
 La probabilità $P_0$ assume valore costante, per cui è possibile esprimerla come:
-\begin{gather*}
+\begin{gather}
     P_0=\displaystyle\frac{1}{1+\displaystyle\sum_{n=1}^{\infty}\left[\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}\right]}
-\end{gather*}
+\end{gather}
 
 \subsection{Sistemi M/M/1}
 
@@ -1779,9 +1779,9 @@ Poiché la derivata è un'operazione lineare, si può portare fuori dalla sommat
 Questa relazione corrisponde ad una delle tre leggi di Little. 
 Per determinare le altre due leggi si considera il valore atteso del tempo di attraversamento del sistema $W$, pari alla somma del valore atteso del tempo di 
 servizio ed il tempo speso in coda:
-\begin{gather*}
+\begin{gather}
     W=W_q+W_s
-\end{gather*}
+\end{gather}
 Il tempo di attesa nella coda dipende dal sistema, mentre il valore atteso del tempo di servizio corrisponde al reciproco della velocità di servizio:
 \begin{gather*}
     W=W_q+\displaystyle\frac{1}{\mu}
@@ -1807,14 +1807,14 @@ arrivo moltiplicata per il tempo madio passato in coda:
     L=N-\rho
 \end{equation}
 
-\subsection{Sistemi M/M/1/k}
+\subsection{Sistemi M/M/1/K}
 
 Si considera un sistema a coda con un massimo di $k$ clienti, per cui la coda ha una lunghezza massima di $k-1$, ovvero il numero massimo di clienti nel sistema, meno il numero 
 di serventi del sistema. Come nell'analisi precedente li tempo di arrivo e di servizio sono distribuiti esponenzialmente con parametro caratteristico $\gamma$ e $\mu$, ma 
 bisogna considerare quando non può più accettare clienti, quando arriva allo stato $n=k$. La velocità di servizio è indipendente dal numero di clienti nella coda per cui si 
 esprime come, ma è comunque definita per ogni stato accessibile del sistema: 
 \begin{gather*}
-    \mu_n=\mu,n=1,\cdots,k
+    \mu_n=\mu\,\forall n=1,\cdots,k
 \end{gather*}
 Mentre la frequenza di arrivo si annulla quando all'interno del sistema sono presenti esattamente $k$ clienti:
 \begin{gather*}
@@ -1892,9 +1892,67 @@ $n=k$, ovvero il fattore di perdita del sistema:
 \end{equation}
 Poiché la percentuale dei clienti persi corrisponde alla probabilità che il sistema si trova in uno stato dove non può accettare clienti $n=k$.
 
+\subsection{Sistemi M/M/S}
 
+Questo tipo di sistemi presenta una distribuzione esponenziale del tempo di arrivo e di attesa. Il sistema è illimitato, ma in questo caso è presente un numero $s$ di 
+serventi. Questi serventi si considerano tutti uguali, e possono lavorare in parallelo tra di loro, per cui l velocità di servizio dipende dal numero di serventi 
+occupati, quindi dallo stato $n$. La velocità effettiva $\mu_n$ corrisponde a $n$ volte la velocità $\mu$, quando sono presenti meno di $s$ clienti, altrimenti il sistema 
+lavora ad una velocità massima equivalente al prodotto tra il numero dei serventi e la velocità $\mu$:
+\begin{gather*}
+    \mu_n=\begin{cases}
+        n\mu &n<s\\ s\mu& n\geq s
+    \end{cases}
+\end{gather*}
 
+La cosa è illimitata, per cui deve essere verificata la condizione di stazionarietà: 
+\begin{equation*}
+    \lambda<s\mu
+\end{equation*}
 
+Si considera la probabilità che non sia presente nessun cliente nel sistema:
+\begin{gather*}
+    P_0=\displaystyle\frac{1}{\displaystyle\sum_{n=0}^{\infty}\left[\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}\right]}
+\end{gather*}
+Si considera solamente il denominatore del denominatore, poiché solo la velocità di servizio dipende dallo stato:
+\begin{gather*}
+    \displaystyle\sum_{n=0}^{\infty}\prod_{0=1}^n\mu_j=\sum_{n=0}^{s-1}\prod_{j=1}^n\mu_j+\sum_{n=s}^{\infty}\prod_{j=1}^n\mu_j\\
+    0+1\mu+\cdots+(s-1)!\mu^{s-1}+s!\mu^s+(s!\mu^s)s\mu+(s!\mu^s)(s\mu)^2+\cdots\\
+    \displaystyle\sum_{n=0}^{s-1}n!\mu^n+\sum_{n=s}^{\infty}s!s^{n-s}\mu^n\\
+    \displaystyle\sum_{n=0}^{\infty}\left(\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\lambda_j}\right)=\sum_{n=0}^{s-1}\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^n+\sum_{n=s}^{\infty}\frac{1}{s!s^{n-s}}\left(\frac{\lambda}{\mu}\right)^n\\
+    \displaystyle\sum_{n=s}^{\infty}\frac{1}{s!s^{n-s}}\left(\frac{\lambda}{\mu}\right)^n\mbox{ per }n-s=l\to\frac{1}{s!}\sum_{l=0}^{\infty}\frac{1}{s^l}\left(\frac{\lambda}{\mu}\right)^{l+s}\\
+    \frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\sum_{l=0}^{\infty}\left(\frac{\lambda}{\mu}\right)^l=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\frac{s\mu}{s\mu-\lambda}
+\end{gather*}
+Per cui la probabilità si epsimere tramite la esguente espressione:
+\begin{gather}
+    P_0=\displaystyle\frac{1}{\displaystyle\sum_{n=0}^{s-1}\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^n+\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\frac{s\mu}{s\mu-\lambda}}
+\end{gather}
+Si esprime la probabilità di trovarsi in uno stato $n$, in base al fatto se tutti i serventi sitano lavorando o solo un numero $n<s$:
+\begin{gather*}
+   P_n=\begin{cases}
+    \displaystyle\frac{1}{n!}\left(\frac{\lambda}{\mu}\right)^nP_0&n<s\\
+    \displaystyle\frac{1}{s!}\frac{1}{s^{n-s}}\left(\frac{\lambda}{\mu}\right)^nP_0&n\geq s
+   \end{cases} 
+\end{gather*}
+La probabilità di trovarsi allo stato $s$ può essere calcolata analogamente con entrambe le espressioni:
+\begin{gather*}
+    \displaystyle\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^sP_0=\frac{1}{s!}\frac{1}{s^{s-s}}\left(\frac{\lambda}{\mu}\right)^sP_0
+\end{gather*}
+
+Si vuole determinare il valore atteso della lunghezza della coda:
+\begin{gather*}
+    L=\displaystyle\sum_{l=0}^{\infty}lP_l=\sum_{n=s}^{\infty}(n-s)P_{n-s}
+\end{gather*}
+La probabilità di trovarsi allo stato $P_{n-s}$ coincide con la probabilità che nel sistema siano presenti $n$ clienti $P_n$. Per cui si applica un'altra sostituzione $k=n-s$:
+\begin{gather*}
+    \displaystyle\sum_{k=0}^{\infty}kP_{k+s}=\sum_{k=0}^{\infty}k\frac{1}{s!}\frac{1}{s^k}\left(\frac{\lambda}{\mu}\right)^{k+s}P_0=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}P_0\sum_{k=0}^{\infty}k\left(\frac{\lambda}{s\mu}\right)^{k}\\
+    \displaystyle\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\sum_{k=0}^{\infty}k\left(\frac{\lambda}{s\mu}\right)^{k-1}=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\sum_{k=0}^{\infty}\frac{d}{d\frac{\lambda}{s\mu}}\left(\frac{\lambda}{s\mu}\right)^{k}
+    =\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\frac{d}{d\frac{\lambda}{s\mu}}\sum_{k=0}^{\infty}\left(\frac{\lambda}{s\mu}\right)^{k}\\
+    \frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\frac{d}{d\frac{\lambda}{s\mu}}\frac{1}{1-\displaystyle\frac{\lambda}{s\mu}}=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}P_0\frac{\displaystyle\frac{\lambda}{s\mu}}{\left(1-\displaystyle\frac{\lambda}{s\mu}\right)^2}
+\end{gather*}
+Per cui il valore atteso è calcolabile come:
+\begin{gather}
+    L=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\displaystyle\frac{\lambda}{s\mu}}{\left(1-\displaystyle\frac{\lambda}{s\mu}\right)^2}\frac{1}{\displaystyle\sum_{n=0}^{s-1}\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^n+\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\frac{s\mu}{s\mu-\lambda}}
+\end{gather}
 
 
 \end{document}
