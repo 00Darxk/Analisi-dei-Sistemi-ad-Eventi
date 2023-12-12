@@ -3,7 +3,7 @@
 \usepackage{cancel}
 \usepackage{tikz}
 \usepackage{amsmath}
-\usepackage{geometry}
+\usepackage[includehead,nomarginpar]{geometry}
 \usepackage{graphicx}
 \usepackage{amsfonts} 
 \usepackage{verbatim}
@@ -13,10 +13,16 @@
 \usepackage{bookmark}
 \usepackage{rotating}               % For rotatebox
 \usepackage[italian]{babel}
+\usepackage{fancyhdr}
+\usepackage{romanbarpagenumber}
+\usepackage{pgfgantt}
 
+\setlength{\headheight}{12.0pt}
+\addtolength{\topmargin}{-12.0pt}
 
 %% numerare equazioni nella versione finale
-
+%% segnati con un doppio segno percentuale ("%%") le correzioni o inserimenti da apportare al testo
+%% formulario
 
 \usetikzlibrary{petri, positioning, arrows.meta}
 \hypersetup{
@@ -39,6 +45,13 @@
 
 \begin{document}
 
+\pagenumbering{Roman}
+
+\pagestyle{fancy}
+\fancyhead{}\fancyfoot{}
+\fancyhead[C]{Analisi dei Sistemi ad Eventi - Giacomo Sturm}
+\fancyfoot[C]{\thepage}
+
 \maketitle
 
 \vspace{10mm}
@@ -52,6 +65,8 @@
 \tableofcontents
 
 \clearpage
+
+\pagenumbering{arabic}
 
 \section{Introduzione}
 
@@ -984,8 +999,8 @@ potenziale:
         \draw[->](r.225)--(t1.315);
         \draw[->](r.315)--(t2.45);
         \draw[->](b.225)--(t2.315);
-        \draw[->](t1.180)--(t3.0);
-        \draw[->](t2.180)--(t4.0);
+        \draw[dashed,->](t1.180)--(t3.0);
+        \draw[dashed,->](t2.180)--(t4.0);
         \draw[->](t3.180)--(0.25,-2.5);
         \draw[->](t4.180)--(1.75,-2.5);
     \end{tikzpicture}
@@ -1435,7 +1450,7 @@ questa visualizzazione, si possono individuare tutti i conflitti effettivi della
 precedenza nel grafico di Gant viene scelta arbitrariamente. Questa 
 rappresentazione dipende dalla marcatura iniziale del sistema, in caso sia presente un deadlock, la rappresentazione non è periodica. Generalmente un grafico di Gant di un 
 sistema produttivo ciclico, è periodico, per cui è sufficiente rappresentare solo un periodo del sistema. 
-%% esempio grafo (2/11)
+%% esempio grafo (2/11) https://texdoc.org/serve/pgfgantt/0
 
 \subsection{Scambio}
 
@@ -1536,7 +1551,7 @@ un contatore.
 
 \clearpage
 
-\section{Rete di Code}
+\section{Reti di Code}
 
 \subsection{Nozioni di Statistica}
 
@@ -1892,7 +1907,7 @@ $n=k$, ovvero il fattore di perdita del sistema:
 \end{equation}
 Poiché la percentuale dei clienti persi corrisponde alla probabilità che il sistema si trova in uno stato dove non può accettare clienti $n=k$.
 
-\subsection{Sistemi M/M/S}
+\subsection{Sistemi M/M/s}
 
 Questo tipo di sistemi presenta una distribuzione esponenziale del tempo di arrivo e di attesa. Il sistema è illimitato, ma in questo caso è presente un numero $s$ di 
 serventi. Questi serventi si considerano tutti uguali, e possono lavorare in parallelo tra di loro, per cui l velocità di servizio dipende dal numero di serventi 
@@ -1953,6 +1968,196 @@ Per cui il valore atteso è calcolabile come:
 \begin{gather}
     L=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\displaystyle\frac{\lambda}{s\mu}}{\left(1-\displaystyle\frac{\lambda}{s\mu}\right)^2}\frac{1}{\displaystyle\sum_{n=0}^{s-1}\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^n+\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\frac{s\mu}{s\mu-\lambda}}
 \end{gather}
+
+\subsection{Rete Aperta}
+
+Si definisce una rete di code l'interconnesione di un insieme di $M$ stazioni, numerate da uno ad $M$. Le espressioni per le grandezze ottenute precedentemente possono essere 
+usate solamente per una singola stazione. 
+
+
+Una rete viene chiamata aperta se è presente un esplicito scambio con l'esterno, tutti i clienti che entrano dal sistema, dovranno necessariamente uscire dal sistema. 
+L'entrata dei clienti nel sistema è determinata da una frequenza di arrivo al sistema completo $\lambda$, se escono lo stesso numero di clienti dal sistema, allora 
+la velocità di servizio complessiva del sistema $\mu$ dovrà essere maggiore della frequenza di arrivo del sistema affinché sia in grado di processare tutti i clienti in 
+arrivo.  
+
+La frequenza di arrivo distribuita esponenzialmente con parametro caratteristico $\lambda$ corrisponde ad una distribuzione poissiana del tempo di interarrivo al 
+sistema. 
+
+
+In un sistema $M/M/S$ l'uscita è distribuita esponenzialmente esattmamente come l'arrivo, con lo stesso parametro caratteristico $\lambda$, poiché in una rete aperta 
+il numero di clienti in entrata corrisponde al numero di clienti in uscita al sistema. Inoltre si considera la coda illimitata, per cui tutti i clienti in entrata vengono 
+serviti in un tempo finito per poi uscire dal sistema. 
+Per cui in una serie di stazioni connesse tra di loro l'entrata della stazione a valle corrisponde all'entrata della stazione a monte. Le stazioni sono collegate tra di loro 
+da archi pesati, che indicano con quale percentuale l'uscita dalla stazione a monte arrivi ad una delle stazioni collegate a valle. 
+Dati più archi entranti in una singola stazione, la sua frequenza di arrivo corrisponde alla somma tra tutte le grandezze in entrata. 
+Il peso degli archi rappresenta la probabilità di instradamento $P_{ij}$ dalla stazione $i$ alla stazione $j$. La somma di tutte le probbabilità queste probabilità, rappresenta 
+l'intero spazio campione, per cui dovrà essere pari ad uno, si considera l'uscita verso l'esterno $P_{i0}$. Può essere presente un autociclo, per cui si include la probabilità 
+$P_{ii}$. L'espressione è quindi: 
+
+\begin{gather}
+    \displaystyle\sum_{j=0}^{M}P_{ij}=1
+\end{gather} 
+
+Per trattare una rete di code aperta, si considerano cinque ipotesi fondamentali, per definire che l'interconnesione tra due singole stazione rappresenta una rete aperta. Per 
+una singola coda la variabile di stato rappresenta il numero di clienti in coda $n$, invece per due stazioni collegate tra di loro la variabile di stato è un vettore di 
+dimensione pari al numero di stazioni presenti nel sistema. Per cui per una rete composta da $M$ stazioni, la variabile di stato $n$ è un vettore:
+\begin{gather}
+    n=\begin{pmatrix}
+       n_1\\
+       \vdots\\
+       n_M 
+    \end{pmatrix}
+\end{gather}
+
+Per poter determinare il valore della varibile di stato, è necessario conoscere la sua distribuzione di probabilità $P_n$. 
+
+Una rete si dice aperta se rispetta queste cinque ipotesi:
+\begin{itemize}
+    \item Il tempo di arrivo $t_a$ di ogni stazione $j$ è distribuito esponenzialmente (o poisoniano) con parametro caratteristico $\lambda_j$ per $j=1,\cdots,M$;
+    \item Il tempo di servizio $t_s$ di ogni stazione $j$ è distribuito esponenzialmente con parametro caratteristico $\mu_j$ per $j=1,\cdots, M$;
+    \item La disciplina di servizio è FIFO;
+    \item Ogni stazione è una coda illimitata, per garantire la distribuzione esponenziale, per cui ogni stazione è un sistema del tipo $M/M/1$ o $M/M/s$;
+    \item La probabilità di instradamento complessiva da una stazione $i$ verso tutte le possibli stazioni $j$ è pari ad uno: $\displaystyle\sum_{j=0}^{M}P_{ij}=1$.
+\end{itemize} 
+
+\subsubsection{Teorema di Jackson}
+
+Il teorema di Jackson, fornisce, se sono soddisfatte le ipotesi di una rete aperta, un'espressione della distribuzione di probabilità dell'intero sistema e di ogni singola 
+stazione. 
+Inoltre il teorema è applicabile se sono soddisfatte altre due ipotesi. 
+Si considera la frequenza di arrivo effettiva $\lambda_j'$ ad ogni singola stazione, espressa dalla frequenza di arrivo dall'esterno $\lambda_j$ e da tutte le altre stazioni 
+connesse $i$, rappresentato dalla loro frequenza di uscita dal sistema, pari alla frequenza di arrivo, moltiplicata per la probabilità di instradamento alla stazione $j$:
+\begin{equation}
+    \lambda_j'=\lambda_j+\displaystyle\sum_{i=0}^{M}P_{ij}\lambda_i'
+\end{equation}
+Per ogni stazione $j$, poiché sono sistemi $M/M/s$ o $M/M/1$, si possono trattare le stazioni come fossero indipendenti, esprimendo la loro distribuzione tramite 
+la seguente espressione, dove le interconnesioni tra le stazioni sono contenute nella frequenza effettiva $\lambda_j'$: 
+\begin{equation}
+    f_j(n_j)=\begin{cases}
+        \displaystyle\frac{1}{n_j!}\left(\frac{\lambda_j'}{\mu_j}\right)^{n_j}f_j(0)&n_j<s_j\\
+        \displaystyle\frac{1}{s_j!s_j^{n_j-s_j}}\left(\frac{\lambda_j'}{\mu_j}\right)^{n_j}f_j(0)&n_j\geq s_j
+    \end{cases}
+\end{equation}
+
+Si enunciano quindi le ulteriori ipotesi del teorema di Jackson:
+\begin{itemize}
+    \item Il sistema deve essere stazionario, per cui ogni stazione deve essere stazionaria: $\lambda_j'<s_j\mu_j$;
+    \item Per ogni stazione $j$, la somma delle sue distribuzioni per ogni stato $n_j$ è pari ad uno: $\displaystyle\sum_{n_j=0}^{+\infty}f_j(n_j)=1$.
+\end{itemize}
+Se queste ipotesi, insieme alle ipotesi di una rete aperta, sono soddisfatte, allora la probabilità di trovarsi in uno stato $n$, è pari alla produttoria di tutte le 
+distribuzioni di ogni stazione $j$ allo stato associato $n_j$:
+\begin{equation*}
+    P(n)=P(n_1,\cdots,n_M)=\displaystyle\prod_{j=1}^Mf_j(n_j)
+\end{equation*} 
+Inoltre la distribuzione di stato di ogni stazione $j$ coincide con la sua probabilità di trovarsi allo stato $j$:
+\begin{equation*}
+    P_j(n_j)=f_j(n_j)
+\end{equation*}
+Allora la distribuzione di probabilità probabilità del è data dalla produttoria su tutte le stazioni, della loro distribuzione probabilità di probabilità: 
+\begin{equation}
+    P(n)=\displaystyle\prod_{j=1}^MP_j(n_j)
+\end{equation}
+
+Per cui si possono trattare le stazioni come fossero indipendenti, poiché la dipendenza è racchiusa dalla frequenza d'arrivo effettiva $\lambda_j'$ e possono essere usate le 
+espressioni ottenute precedentemente per determinare le grandezze di interesse di ogni singola stazione, considerando la frequenza effettiva $\lambda_j'$ al posto della 
+frequenza di arrivo $\lambda_j$. 
+
+
+Il valore atteso del numero dei clienti $N$ può essere banalmente calcolato come la somma del valore atteso del numero dei clienti su ogni stazione $j$:
+\begin{equation}
+    N=\displaystyle\sum_{j=1}^MN_j
+\end{equation}
+Per ottenere il valore atteso del tempo di attraversamento è sufficiente applicare la legge di Little $W=N/\lambda$, dove si calcola la frequenza di arrivo esterna al sistema, 
+come la somma della frequenza di arrivo esterna ad ogni stazione $\lambda_j$:
+\begin{equation*}
+    \lambda=\displaystyle\sum_{j=1}^M\lambda_j
+\end{equation*}
+
+Per determinare invece il valore atteso del tempo di attraversamento di una singola stazione $j$, poiché sono interconnesse tra di loro, bisogna considerare che lo stesso 
+cliente potrebbere passare per la stessa stazione $j$ più di una volta. Per cui solo se il cliente attraversa la stazione $j$ una sola volta si può calcolare 
+il valore atteso del tempo di attraversamento come $W_j=1/(s_j\mu_j-\lambda_j')$. Per quantificare questo fenomeno si introduce il "vist count" $\nu_j$, che indica quante volte 
+uno stesso cliente attraversa la stessa stazione $j$. Per calcolare questa percentuale (o contatore) si considerano gli arrivi effettivi alla singola stazione ed all'intero 
+sistema, per cui si calcola come il rapporto tra la frequenza di arrivo effettiva alla stazione $j$ per la frequenza di arrivo complessiva:
+\begin{equation}
+    \nu_j=\displaystyle\frac{\lambda_j'}{\lambda}
+\end{equation}
+Per cui il valore atteso del tempo di attraversamento di una singola stazione $j$ si ottiene come la grandezza ottenuta considerando la stazione indipendente, moltiplicato 
+per il suo "visit count" $\nu_j$:
+\begin{equation}
+    W_j=\nu_jW\big|_j=\displaystyle\frac{\nu_j}{s_j\mu_j-\lambda_j'}
+\end{equation}
+
+Si può quindi esprimere il valore atteso del tempo di attraversamento dell'intero sistema come la somma di tutti i valori medi di ogni stazione $j$:
+\begin{equation}
+    W=\displaystyle\sum_{j=1}^MW_j=\sum_{j=1}^M\nu_jW\big|_j=\sum_{j=1}^M\frac{\nu_j}{\mu_j-\lambda_j'}
+\end{equation}
+
+\subsection{Produttività}
+
+Data una rete di code, o una singola stazione, si definisce la produttività reale $X_R$, la frequenza con cui crea prodotti. Poiché è un sistema stazionario, la stessa 
+quantità di prodotti o clienti che entra, esce dal sistema, per cui la produttività reale corrisponde alla frequenza di arrivo al sistema dall'esterno. Per cui per una rete di 
+code aperta si ottiene la seguente espressione per la produttività reale:
+\begin{equation}
+    X_R=\lambda=\displaystyle\sum_{j=1}^M\lambda_j
+\end{equation}
+Per ogni stazione $j$ invece si posono individuare due diverse produttività reali. Si possono consideare solamente i prodotti finiti dalla stazione, ovvero non si considerano 
+i prodotti e clienti che attraversano la stazione più di una volta, per cui questa produttività si esprime come:
+\begin{equation*}
+    X_{R_j}=\displaystyle\frac{\lambda_j'}{\nu_j}=\frac{\lambda_j'}{\frac{\lambda_j'}{\lambda_j}}=\lambda_j
+\end{equation*}
+La produttività reale di una stazione $j$, considerando solo i prodotti finiti, coincide agli arrivi dall'esterno, questo era facilmente individuabile poiché essendo la 
+stazione stazionaria il numero di clienti in entrata coincide con il numero di clienti in uscita. 
+
+Invece se si considerano tutte le uscite dalla stazione nel calcolo della produttività, allora coincide con la frequenza di arrivo effettiva, includendo i clienti che 
+entrano nella stazione più di una volta:
+\begin{equation*}
+    X_{R_j}=\lambda_j'
+\end{equation*}
+
+La produttività teorica di una stazione rappresenta la massima velocità a cui i prodotti possono uscire dal sistema. Per un sistema $M/M/s$ è quindi:
+\begin{equation*}
+    X_{T_j}=s_j\mu_j
+\end{equation*}
+Analogamente alla produttività reale, questo valore considera anche i clienti che hanno attraversato la stazione più di una volta, per cui per ottenere la produttività che 
+tiene conto solamente dei prodotti finiti da una stazione $j$, si divide per il suo "visit count":
+\begin{equation*}
+    X_{T_j}=\displaystyle\frac{s_j\mu_j}{\nu_j}
+\end{equation*}
+Questa grandezza considera quindi solo i prodotti che sono entrati ed usciti dal sistema dall'esterno, senza attraversare nuovamete la stazione. 
+
+Per cui per ogni stazione si ottengono le seguenti relazioni:
+\begin{center}
+    \begin{tabular}{c|c|c|}
+        & Finiti & Tutti\\
+        \hline
+        $X_{R_j}$ & $\lambda_j$ & $\lambda_j'$\\
+        \hline
+        $X_{T_j}$ & $\frac{s_j\mu_j}{\nu_j}$ & $s_j\mu_j$\\
+        \hline
+    \end{tabular}
+\end{center}
+La produttività reale del sistema coincide alla somma delle produttività di ogni singola stazione, mentre la produttività teoretica della rete, corrisponde al minimo valore 
+teoretico di produttività delle stazioni, poiché anche aumentando gli arrivi dall'esterno, il sistema non può processare una frequenza di clienti maggiore della 
+velocità di processamento più piccola. Questa stazione viene chiamata collo di bottiglia, poiché costringe il sistema a rallentare. 
+\begin{equation}
+    X_T=\min_{j=1,\cdots,M}\{X_{T_j}\}=\min_{j=1,\cdots,M}\left\{\displaystyle\frac{s_j\mu_j}{\nu_j}\right\}
+\end{equation}
+
+La produttività reale non potrà mai oltrepassare la prduttività teoretica, per mantenere verificata la condizione di stazionarietà:
+\begin{equation*}
+    X_R< X_T
+\end{equation*}
+La massima produttività reale raggiungibile si esprime quindi come:
+\begin{equation}
+    X_{R_{\max}}=X_T-\varepsilon
+\end{equation}
+Dove $\varepsilon$ è una frequenza arbitrarimaente piccola, ma non è consigliato scegliere valori ristretti poiché alla minima fluttuazione degli arrivi esterni si potrebbe 
+perdere la condizione di stazionarietà del sistema. 
+
+Per cui per aumentare la produttività reale di un sistema, si aumentano gli arrivi dall'esterno fino a raggiunere un valore minore della produttività teoretica del collo di 
+bottiglia del sistema. Mentre per aumentare la produttività teoretica si aumenta la velocità di servizio del collo di bottiglia fino a che la sua produttività teoretica non assuma 
+un valore pari alla seconda produttività teoretica minore del sistema. Poiché per alterare il "visit count" o il numero dei serventi bisognerebbe alterare la struttura del 
+sistema. 
 
 
 \end{document}
