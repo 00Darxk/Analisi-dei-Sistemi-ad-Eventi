@@ -70,23 +70,23 @@
 
 \section{Introduzione}
 
-Verrano forniti due modelli di sistemi, reali o astratti, un modello matematico, reti di Code, ed un modello logico, reti di Petri. Quest'ultimo è un modello grafico, simile ad 
+Verranno forniti due modelli di sistemi, reali o astratti, un modello matematico, reti di Code, ed un modello logico, reti di Petri. Quest'ultimo è un modello grafico, simile ad 
 un diagramma di flusso. La rete di Petri analizza le interazioni tra gli elementi del sistema, mentre la rete di Code analizza nel tempo queste interazioni ingresso-uscita. 
 In questi modelli si analizza l'evoluzione di una variabile di stato, da individuare nel sistema analizzato, per studiare la funzione obiettivo. La variazione della variabile 
 di stato si studia tramite derivata continua o discreta, oppure si campiona il suo valore ad intervalli fissi. L'analisi ad eventi consiste nel misurare solamente se succede 
 qualcosa al sistema, se avviene un evento, ovvero non c'è spreco di memoria campionando lo stesso valore. Per determinare un evento si controlla se la variabile di stato 
 considerata è cambiata, questa variabile può essere sia deterministica oppure aleatoria. In caso sia aleatoria, conoscere la sua distribuzione di probabilità non è sufficiente 
-per determinarne l'evouzione, sono necessaria la media, il valore centrale della distribuzione, e la varianza, la distanza dal valore centrale nella distribuzione. 
+per determinarne l'evoluzione, sono necessaria la media, il valore centrale della distribuzione, e la varianza, la distanza dal valore centrale nella distribuzione. 
 
 
 
-Si usano sistemi manufatturieri come esempi, poiché sono comuni e seplici da studiare. Viene definita una coda un luogo dove i clienti o utenti aspettano il servizio. Quando un 
+Si usano sistemi manifatturieri come esempi, poiché sono comuni e semplici da studiare. Viene definita una coda un luogo dove i clienti o utenti aspettano il servizio. Quando un 
 cliente entra nel sistema, se è disponibile un servente, viene servito, se non è disponibile si mette in coda. Viene definito tempo di processamento il tempo 
 necessario per un cliente affinché sia servito. Si considerano i clienti usciti dal sistema dopo essere stati serviti. Si considera per ipotesi la coda ordinate in FIFO (First 
 In First Out), ovvero si considera il primo cliente entrato in coda, il primo servito, se sono disponibili serventi. La coda del modello può essere illimitata oppure 
 limitata con un massimo numero clienti $k$. Si indica il numero dei serventi con $s$. Si definisce la variabile di stato di questo sistema il valore intero $n$ che 
-rappresenta il numero di clienti all'interno del sistema, il suo valore massimo corrisponde alla massima capienza dei servneti e della coda: $n\in[0,s+k]$. Questo valore 
-si incremente o decrementa di uno ogni volta che un cliente entra o esce dal sistema. In uno stesso istante non può avvenire più di un evento, ovvero la variabile può 
+rappresenta il numero di clienti all'interno del sistema, il suo valore massimo corrisponde alla massima capienza dei serventi e della coda: $n\in[0,s+k]$. Questo valore 
+si incrementa o decrementa di uno ogni volta che un cliente entra o esce dal sistema. In uno stesso istante non può avvenire più di un evento, ovvero la variabile può 
 variare di uno in ogni istante. Si chiamano questi eventi di incremento e decremento processi di nascita e morte. Questo sistema è descritto da una legge di transizione:
 \begin{equation*}
     \begin{cases}
@@ -98,14 +98,14 @@ Quest'equazione rappresenta la legge di evoluzione del sistema. Un evento rappre
 dal tempo, noto solo il cambiamento della variabile di stato ad ogni evento, per cui rappresenta un modello logico. Se ad ogni evento viene assegnato una durata di tempo il 
 modello diventa temporizzato, in maniera asincrona, ovvero ogni evento corrisponde ad intervalli di tempo diversi. L'obiettivo del modello è determinare l'evoluzione del sistema, 
 questo può comprendere il numero di clienti, il tempo di servizio, differenza tra il tempo di entrata ed il tempo di uscita di un cliente, il tempo di attesa. Conoscendo il 
-tempo di processamento si può deterinare se il sistemaè sotto o sovra-utilizzato.
+tempo di processamento si può determinare se il sistema sotto o sovra-utilizzato.
 
 \clearpage
 
 \section{Reti di Petri}
 
 La rete di Petri è un modello logico per rappresentare sistemi ad eventi deterministici (DES), può rappresentare comportamenti complessi come la sincronizzazione, il succedersi 
-asincrono di eventi che avvengono in intervalli di tempo diversi, operazioni concorrenti che avvengono totalemente indipendentemente tra di loro, conflitti ed altre 
+asincrono di eventi che avvengono in intervalli di tempo diversi, operazioni concorrenti che avvengono totalmente indipendentemente tra di loro, conflitti ed altre 
 caratteristiche di sistemi ad eventi. 
 
 La rete di petri è una rappresentazione grafica con una struttura matematica, è modulare e limitata, potendo rappresentare un ciclo continuo, è possibile gestire il ridimensionamento 
@@ -159,7 +159,7 @@ Una transizione è abilitata se i posti a monte della transizione contengono alm
 \end{center}
 
 In questo esempio la transizione $t_2$ è abilitata, poiché l'arco consuma tre gettoni e nel posto immediatamente a monte della transizione sono presenti tre gettoni. 
-Ad ogni transizione può essere associato un tempo di processamento, in modo da temmporizzare il sistema. Se il pre-set di una transizione è vuoto, allora quella transizione 
+Ad ogni transizione può essere associato un tempo di processamento, in modo da temporizzare il sistema. Se il pre-set di una transizione è vuoto, allora quella transizione 
 è sempre abilitata. 
 
 Il numero di stati possibili in una qualsiasi configurazione corrisponde al numero di transizioni abilitate in quella data configurazione. Questi stati possibili possono 
@@ -169,8 +169,7 @@ Si definiscono posti con un pre-set nullo appesi ed il numero di gettoni al loro
 appesi, allora sicuramente si bloccherà, incontra un "deadlock". 
 
 
-L'evoluzione di un sistema viene determinata dall'accadimento di eventi abilitati, ognuno con una sua abilità di accadere. La possibilità che un evento accada dipende dall'
-abilitazione di una transizione, l'effetto del suo accadimento corrisponde allo scatto di una transizione. L'abilitazione di una transizione dipende solamente dal peso dell'
+L'evoluzione di un sistema viene determinata dall'accadimento di eventi abilitati, ognuno con una sua abilità di accadere. La possibilità che un evento accada dipende dall'abilitazione di una transizione, l'effetto del suo accadimento corrisponde allo scatto di una transizione. L'abilitazione di una transizione dipende solamente dal peso dell'
 arco in entrata e dai gettoni nel pre-set, è abilitata se il numero dei gettoni nel pre-set è almeno uguale al peso dei rispettivi archi. 
 Lo scatto di una transizione provoca un "flusso" di gettoni, questo flusso non è continuo, poiché i gettoni in entrata alla transizione vengono consumati e ne vengono creati 
 di nuovi sulla base del peso dell'arco in uscita, numero indipendente dal numero dei gettoni consumati. 
@@ -270,7 +269,7 @@ Due o più posti si dicono concorrenti se presentano in pre-set la stessa transi
         \draw[->](0.05,-0.05)--(p2.180);
     \end{tikzpicture}
 \end{center}
-I due posti $p_1$ e $p_2$ si dicono concorrenti tra di loro, la transzizione $t$ si identifica come transizione di inizio concorrenza. 
+I due posti $p_1$ e $p_2$ si dicono concorrenti tra di loro, la transizione $t$ si identifica come transizione di inizio concorrenza. 
 
 
 Una rete di Petri si dice completa se non presenta nessun posto e transizione appese. 
@@ -363,7 +362,7 @@ e consumatori presentano sempre dei cicli simili comunicanti tra di loro.
 Una stessa rete presenta proprietà diverse in base ad una diversa marcatura iniziale $M_0$. 
 
 \subsection{Raggiungibilità}
-Una marcatura $M^*$ si dice raggiugibile se esiste almeno una sequenza $S$ di transizioni abilitate tale che sia possibile, da una marcatura iniziale $M$, raggiungere la 
+Una marcatura $M^*$ si dice raggiungibile se esiste almeno una sequenza $S$ di transizioni abilitate tale che sia possibile, da una marcatura iniziale $M$, raggiungere la 
 marcatura $M^*$:
 \begin{equation*}
     M\left[S>M^*\right.
@@ -697,14 +696,14 @@ di $k$, allora quella transizione è morta. Se il peso degli archi entranti ed u
         \draw[->](t2.90)--(4,1);
     \end{tikzpicture}
 \end{center} 
-Gli autociclici possono essere espressi come una doppia freccia, invece di due archi separati, quando entrambi i pesi uguali. 
+Gli autocicli possono essere espressi come una doppia freccia, invece di due archi separati, quando entrambi i pesi uguali. 
 
 \subsection{Rappresentazione Algebrica}
 
 Una qualsiasi rete di petri può essere rappresentata in riferimento a $3$ matrici:
 
 
-La matrice di ingresso $I$ (Input) è una matrice avente tante righe quanti sono i posti nella rete e tante colonne quante sono le transizioni. Gli elemnenti della matrice 
+La matrice di ingresso $I$ (Input) è una matrice avente tante righe quanti sono i posti nella rete e tante colonne quante sono le transizioni. Gli elementi della matrice 
 sono interi positivi o nulli: $I\in M(|P|,|T|,\mathbb{N})$. L'elemento $i_{ij}$ della matrice $I:=(i_{ij})$ viene definito come il peso dell'arco che collega il $i-$esimo posto 
 alla $j-$esima transizione. Per cui questa matrice racchiude tutti i pesi degli archi entranti nelle transizioni. 
 
@@ -932,7 +931,7 @@ transizioni istantanee e quelle temporizzate. Si indicano le transizioni tempori
         \draw[->](t2.180)--(2,-1);
     \end{tikzpicture}
 \end{center}
-La transizione $t_1$ è temporizzata, con associato un intervallo di tempo non necessariamente noto, mentre la transizione $t_2$ è istantanea, ovvero l'evento associato avviene in un itervallo di 
+La transizione $t_1$ è temporizzata, con associato un intervallo di tempo non necessariamente noto, mentre la transizione $t_2$ è istantanea, ovvero l'evento associato avviene in un intervallo di 
 tempo tendente a zero. 
 Le marcature in un posto vengono consumate da una transizione solamente al termine dell'intervallo di tempo associato ad essa. 
 
@@ -981,8 +980,8 @@ determina la fine dell'uso di quella risorsa, mentre in post-set la transizione 
 
 Quando è presente una risorsa condivisa nel sistema, il posto associato può creare un conflitto strutturale in caso non sia modellato correttamente. Se il posto è in entrata 
 a due transizioni temporizzate, poiché i gettoni vengono consumati solo dopo l'intervallo di tempo della transizione, è possibile che abiliti entrambi le transizioni ed 
-entrambi lavorino usando lo stesso numero di gettoni, ciò non corrisopnde alla realtà. Poiché una volta che una risorsa è usata in processo, non può essere usata contemporaneamente 
-in un altra attività. Per cui per rappresentare una risorsa condivisa, si usano delle transizioni istantane prima delle transizioni temporizzate, per indicare che la 
+entrambi lavorino usando lo stesso numero di gettoni, ciò non corrisponde alla realtà. Poiché una volta che una risorsa è usata in processo, non può essere usata contemporaneamente 
+in un altra attività. Per cui per rappresentare una risorsa condivisa, si usano delle transizioni istantanee prima delle transizioni temporizzate, per indicare che la 
 risorsa non è più disponibile, ed è impegnata da una delle attività, in questo modo l'altra transizione in entrata non è più abilitata. Questo conflitto diventa quindi solo 
 potenziale: 
 \begin{center}
@@ -1010,15 +1009,15 @@ Se non viene specificato, il conflitto non viene risolto, ovvero non si modella 
 lavorazione in parallelo, con delle risorse condivise, è più efficiente richiedere la disponibilità della risorsa condivisa, all'inizio della lavorazione, in modo da 
 non aspettare la sua disponibilità, e bloccare il resto del processo. 
 
-\subsection{Esempio: Cella di Assemblatura}
+\subsection{Esempio: Cella di Assemblaggio}
 
 In generale le macchine come tutte le risorse reali sono capacitate, per cui vanno modellate come un ciclo, marcato. All'inizio di ogni modello, bisogna marcare i cicli di 
 produzione e lavorazione, per permettere al sistema di operare. 
 
-Si considera una cella di assemblatura, dove due materiali grezzi $A$ e $B$ vengono inseriti nel sistema tramite rulli trasportatori. All'interno della cella è presente un 
+Si considera una cella di assemblaggio, dove due materiali grezzi $A$ e $B$ vengono inseriti nel sistema tramite rulli trasportatori. All'interno della cella è presente un 
 braccio meccanico, capacitato ad uno, che può spostare i grezzi in due diverse macchine di lavorazione, una per ogni grezzo $M_A$ e $M_B$, anch'esse capacitate ad uno. 
-Quando entrambe le macchine hanno processato un grezzo, possono essere raccolte dal braccio meccanico ed assemblate in un prodotto finito. Prima che il robot posso traspostare 
-altri materiali grezzi, deve spostare il prodotto finito in un buffer di output, capacitatato ad uno, prima che il prodotto possa essere traspostato all'esterno del sistema. 
+Quando entrambe le macchine hanno processato un grezzo, possono essere raccolte dal braccio meccanico ed assemblate in un prodotto finito. Prima che il robot posso trasportare 
+altri materiali grezzi, deve spostare il prodotto finito in un buffer di output, capacitato ad uno, prima che il prodotto possa essere trasportato all'esterno del sistema. 
 
 In questo caso ogni risorsa è capacitata ad uno, per cui il robot all'inizio può prendere uno dei due grezzi, per cui è presente un conflitto strutturale all'inizio. Si 
 modella senza risolvere il conflitto. Se il robot prendere un grezzo quando entrambe le macchine hanno processato sono occupate con un grezzo il sistema si blocca, per cui 
@@ -1031,7 +1030,7 @@ rete, in parte simmetrica.
 
 
 Se il robot è disponibile $R$, il grezzo è disponibile $A/B$, e la macchina è disponibile $M_A/M_B$, allora può cominciare la fase di lavorazione del grezzo. Si rappresenta 
-come $3$ posti a monte di una transizione istantanea $t_{R_A}/t_{R_B}$, poiché è presente un conflitto strutturale con l'altrs sequenza di lavorazione dell'altro grezzo:
+come $3$ posti a monte di una transizione istantanea $t_{R_A}/t_{R_B}$, poiché è presente un conflitto strutturale con l'altra sequenza di lavorazione dell'altro grezzo:
 \begin{center}
     \begin{tikzpicture}
         \node[place,tokens=1,label=above:$M_A$](ma)at(0,0){};
@@ -1050,7 +1049,7 @@ come $3$ posti a monte di una transizione istantanea $t_{R_A}/t_{R_B}$, poiché 
         \draw[<->](b.270)--(trb.0);
     \end{tikzpicture}
 \end{center}
-Le transizioni istantanee portano ad un posto $R_A/R_B$, che esprime lo stato del braccio meccanico, occupato nel carico $A/B.pick$, traporto $A/B.mov$ e scarico $A/B.release$ 
+Le transizioni istantanee portano ad un posto $R_A/R_B$, che esprime lo stato del braccio meccanico, occupato nel carico $A/B.pick$, trasporto $A/B.mov$ e scarico $A/B.release$ 
 del grezzo $A$ o $B$, e rappresentano il primo evento nella sequenza della lavorazione della macchina. Ognuna delle operazioni del braccio viene espressa come una transizione 
 temporizzata, e solo al termine, ovvero allo scarico $t_{A/B.release}$, il braccio torna di nuovo disponibile allo spostamento di un altro grezzo. 
 \begin{center}
@@ -1301,14 +1300,14 @@ nel buffer finale a questo punto viene trasportato fuori dal sistema, modellato 
 \end{center}
 
 Lo stato iniziale del modello viene scelto arbitrariamente. Bisogna inserire gettoni nei cicli altrimenti non sarebbero abilitati. Si evita di partire da un conflitto 
-effettivo, per cui si inseriscono i gettoni in $M_{A/B}$. In questo caso tutte le risorse sono capacitate ad uno, per cui è necessario inserire un ungico gettone in un 
-posto per ogni ciclo. Se si parte da un conflitto effettivo, se non viene specifiato, il simulatore sceglie arbitrariamente quale delle transizioni ha priorità sulle 
+effettivo, per cui si inseriscono i gettoni in $M_{A/B}$. In questo caso tutte le risorse sono capacitate ad uno, per cui è necessario inserire un unico gettone in un 
+posto per ogni ciclo. Se si parte da un conflitto effettivo, se non viene specificato, il simulatore sceglie arbitrariamente quale delle transizioni ha priorità sulle 
 altre. Per com'è strutturata la rete, l'assemblaggio non è un conflitto effettivo, poiché la transizione che denota l'inizio della fase di assemblaggio è abilitata solo se 
 le macchine $A$ e $B$ hanno finito il processamento dei grezzi, quindi non sono abilitate le transizioni in entrata a $M_A/B$. 
 
 \subsection{Risoluzione di un Conflitto}
 
-Per risolvere un conflitto effettivo, si può modellare una priorità tra le due transzioni in conflitto. Quando un conflitto viene risolto, non è necessario 
+Per risolvere un conflitto effettivo, si può modellare una priorità tra le due transizioni in conflitto. Quando un conflitto viene risolto, non è necessario 
 introdurre delle transizioni istantanee. 
 Si modella la sequenzialità tra le due transizioni inserendo un ciclo controllore, che permette alle transizioni di scattare solamente una dopo l'altra. Questo 
 controllore come ogni ciclo deve essere marcato: 
@@ -1339,7 +1338,7 @@ controllore come ogni ciclo deve essere marcato:
 In caso $R$ abiliti solo queste due transizioni, si può omettere. Quando si modella l'alternanza, le transizioni possono scattare solo in questo ordine prestabilito, anche 
 indipendentemente dalla disponibilità di $M_{A/B}$. Per cui questo metodo di risoluzione di un conflitto è inefficiente. 
 
-Si definisce un nuovo tipo di connesione tra posto e transizioni, detto arco inibitore, questo arco, uscente da un posto, si collega ad una transizione mediante una punta di 
+Si definisce un nuovo tipo di connessione tra posto e transizioni, detto arco inibitore, questo arco, uscente da un posto, si collega ad una transizione mediante una punta di 
 freccia circolare. Se la marca presente nel posto è maggiore uguale al peso $k$ dell'arco inibitore, allora la transizione collegata non può scattare, anche se è abilitata. 
 \begin{center}
     \begin{tikzpicture}
@@ -1444,7 +1443,7 @@ Si modella ora un buffer LIFO, di $n$ elementi:
 \subsection{Diagramma di Gant}
 
 Il grafico di Gant è una rappresentazione grafica dell'uso delle risorse in un sistema. Ogni risorsa si indica come una linea parallela. Si scorrono verso destra, rispetto 
-al tempo, e viene associato un evento in un determianto tempo per ogni scatto di una o più transizioni. Si può identificare nel grafico di Gant quando è presente un conflitto, 
+al tempo, e viene associato un evento in un determinato tempo per ogni scatto di una o più transizioni. Si può identificare nel grafico di Gant quando è presente un conflitto, 
 ovvero quando una stessa risorsa è richiesta per due, o più, processi diversi. Il grafico di Gant è completamente indipendente dalla rete associata ad un sistema. Attraverso 
 questa visualizzazione, si possono individuare tutti i conflitti effettivi della rete, quindi si possono modellare adeguatamente le risoluzioni, se sono richieste. La 
 precedenza nel grafico di Gant viene scelta arbitrariamente. Questa 
@@ -1455,7 +1454,7 @@ sistema produttivo ciclico, è periodico, per cui è sufficiente rappresentare s
 \subsection{Scambio}
 
 Un sistema può arrivare ad una situazione dove due processi sono bloccati, poiché richiedono alcune risorse usate nell'altro processo. Se il sistema si blocca se incontra 
-questa situazione, è necessario modellare un metodo in modo in cui il sistema posso continuare ad operare, anche se ragiunta questa situazione. Per modellarlo, bisogna 
+questa situazione, è necessario modellare un metodo in modo in cui il sistema posso continuare ad operare, anche se raggiunta questa situazione. Per modellarlo, bisogna 
 dare priorità ad uno dei processi, e si evita di richiedere la disponibilità della risorsa scambiandola con l'altro processo, e riportando quel processo ad uno stato 
 precedente all'uso della risorsa. 
 
@@ -1495,7 +1494,7 @@ precedente all'uso della risorsa.
 In questo esempio è presente una lavorazione in parallelo di due materiali $S$ e $D$, con delle macchine $M_1$ e $M_2$. Nella sequenza di destra, è stata 
 usata la risorsa $M_1$, e per continuare la lavorazione è necessaria la risorsa $M_2$, impegnata nella 
 lavorazione di destra. Le risorse $M_1$ ed $M_2$, sono entrambe non 
-disponibili per entrambe le sequenza, per cui ci si trova in un deadlock. Si prioritizza la lavorazione di sinistra, 
+disponibili per entrambe le sequenza, per cui ci si trova in un deadlock. Si priorizza la lavorazione di sinistra, 
 per cui si inserisce una transizione $t_{\iff}$ che evita la richiesta delle due risorse entrambe occupate. 
 Dando priorità alla lavorazione di sinistra, il processo di destra, arriva da $ D\in M_2$ ad uno stato $ D'\in M_1$ senza dover 
 richiedere la risorsa $M_1$ tramite la transizione $ D'\to M_1$. Mentre il processo di sinistra, arriva da $S\in M_2$ ad uno stato $S'\in M_1$ dove ha già 
@@ -1556,24 +1555,24 @@ un contatore.
 \subsection{Nozioni di Statistica}
 
 Prima di descrivere il modello matematico delle reti di Code, è necessario introdurre concetti della statistica usati nel modello. Gli eventi considerati dai modelli sono 
-associati ad un'alea, poiché non è noto a priori come si verica. Si definisce lo spazio campione $\Omega$ l'insieme di tutti gli eventi $\omega$ che possono accadere nel 
+associati ad un'alea, poiché non è noto a priori come si verifica. Si definisce lo spazio campione $\Omega$ l'insieme di tutti gli eventi $\omega$ che possono accadere nel 
 sistema. Si definisce la funzione probabilità $p$ di un evento $\omega$ appartenente allo spazio campione come il rapporto tra il numero dei casi favorevoli ed il numero dei casi 
 totali:
 \begin{gather*}
     p:\Omega\to[0,1]\\
     p(\omega)=\displaystyle\frac{n_{\omega}}{n_{\Omega}}
 \end{gather*}
-Poiché gli eventi sono assocati ad un alea, si descrivono mediante una variabile aleatoria, definita come una funzione arbitraria applicata sullo spazio campione, che 
+Poiché gli eventi sono associati ad un alea, si descrivono mediante una variabile aleatoria, definita come una funzione arbitraria applicata sullo spazio campione, che 
 restituisce un reale:
 \begin{gather*}
     X:\Omega\to\mathbb{R}
 \end{gather*}
-Questa variabile può essere sia continua che discreta, la cui analisi è più semplice rispetto ad una varibile continua. 
+Questa variabile può essere sia continua che discreta, la cui analisi è più semplice rispetto ad una variabile continua. 
 Si definisce la distribuzione di una variabile aleatoria, una funzione che indica quanto la variabile è uguale o minore di un certo valore:
 \begin{gather*}
     f_x:X\to[0,1]
 \end{gather*}
-Si definisce la densità di probabilità di un evento, la probabilità con cui la varibile aleatoria assume un certo valore, nel discreto corrisponde ad una somma di probabilità:
+Si definisce la densità di probabilità di un evento, la probabilità con cui la variabile aleatoria assume un certo valore, nel discreto corrisponde ad una somma di probabilità:
 \begin{gather*}
     F_x(x)=\displaystyle\sum_{y\leq x}p_x(y)\\
     F_x(x)=\displaystyle\int_{-\infty}^xf_x(y)dy
@@ -1603,8 +1602,8 @@ arrivano i clienti, ed un'uscita, non modellata, da dove escono:
     \end{tikzpicture}
 \end{center} 
 
-Il sistema di code viene gestito tramite disciplina FIFO. Dato un sistema, si definiscono variaibli esogene, variabili esterne al sista, ovvero segnali di input, mentre 
-si definiscono variabili endogene, variaibli interne al sistema, ovvero variabili di stato. 
+Il sistema di code viene gestito tramite disciplina FIFO. Dato un sistema, si definiscono variabili esogene, variabili esterne al sistema, ovvero segnali di input, mentre 
+si definiscono variabili endogene, variabili interne al sistema, ovvero variabili di stato. 
 
 I sistemi di code vengono analizzati dal punto di vista temporale, per determinare se è conveniente usufruire del servizio è necessario individuare il tempo medio di attesa, 
 ed il tempo medio di servizio, poiché il tempo di attesa deve essere proporzionale alla richiesta. Quest'analisi si interessa solamente di individuare le grandezze di 
@@ -1618,17 +1617,17 @@ In queste analisi il tempo, è una variabile aleatoria continua. Si definisce un
     \item $t_w$: Tempo speso da un cliente all'interno del sistema;
     \item $s$: Numero di serventi nel sistema;
     \item $n$: Numero totale di clienti nel sistema;
-    \item Disciplina di serizio (FIFO);
+    \item Disciplina di sevizio (FIFO);
     \item Dimensione della popolazione di serventi;
     \item Comportamento del cliente dopo il servizio;
     \item $l$: Lunghezza della coda. 
 \end{itemize}
-Queste variaibli non sono tutte indipendenti, si può notare facilmente come il tempo speso nel sistema, corrisponde alla somma tra il tempo di attesa ed il tempo di 
+Queste variabili non sono tutte indipendenti, si può notare facilmente come il tempo speso nel sistema, corrisponde alla somma tra il tempo di attesa ed il tempo di 
 servizio:
 \begin{equation}
     t_w=t_a+t_s
 \end{equation}
-Analogamente la lunahezza della coda, è dato dalla differenza tra il numero dei clienti totali nel sistema meno la popolazione dei serventi, solo quando il numero dei 
+Analogamente la lunghezza della coda, è dato dalla differenza tra il numero dei clienti totali nel sistema meno la popolazione dei serventi, solo quando il numero dei 
 clienti è minore dei serventi totali presenti nel sistema:
 \begin{equation}
     l=\begin{cases}
@@ -1648,7 +1647,7 @@ Mentre il fattore $E\{\cdot\}$ indica il valore atteso della distribuzione. Lavo
 
 \subsection{Sistemi di Nascita e Morte}
 
-Nell successive analisi si considerano solamente sistemi di nascita e morte, ovvero sistemi dove non avvengon osalti multipli, solo salti tra stati adiacenti tra di loro. 
+Nelle successive analisi si considerano solamente sistemi di nascita e morte, ovvero sistemi dove non avvengono salti multipli, solo salti tra stati adiacenti tra di loro. 
 La presenza di salti multipli dipende dall'intervallo di osservazione, per cui utilizzando un intervallo di osservazione $\Delta t$ infinitesimo, si può verificare solamente 
 un entrata o un uscita per ogni istante $\Delta t$. Per cui si possono verificare solo i seguenti salti, adiacenti in uno stato $n$:
 \begin{center}
@@ -1717,7 +1716,7 @@ Per uno stato $n=1$ si ottiene la seguente equazione:
 \begin{gather*}
     P_0\lambda_0+P_2\mu_2-P_1\lambda_1-P_1\mu_1=0
 \end{gather*}
-Considerando la relazione ottenuta precedentemenre si ottiene:
+Considerando la relazione ottenuta precedentemente si ottiene:
 \begin{gather*}
     P_2\mu_2-P_1\lambda_1=0\\
     P_2=\displaystyle\frac{\lambda_1}{\mu_2}P_1=\frac{\lambda_1\lambda_0}{\mu_2\mu_1}P_0
@@ -1745,7 +1744,7 @@ La probabilità $P_0$ assume valore costante, per cui è possibile esprimerla co
 \subsection{Sistemi M/M/1}
 
 Si considera un sistema dove i tempi di arrivo e di attesa sono distribuiti esponenzialmente, con un singolo servente, ed una coda illimitata. Tramite la notazione di Kendal 
-si esprime come: $M/M/1$. Poiché i tempi sono distribuzioni note, si possono espimrere la frequenza d'arrivo e la velocità di servizio come:
+si esprime come: $M/M/1$. Poiché i tempi sono distribuzioni note, si possono esprimere la frequenza d'arrivo e la velocità di servizio come:
 \begin{gather*}
     \begin{cases}
         \lambda_n=\lambda &\forall n\in[0,+\infty]\\
@@ -1771,7 +1770,7 @@ Per cui la probabilità che il sistema stia lavorando, ovvero abbia più di $0$ 
 \end{gather*}
 Questo fattore $\rho$ si chiama fattore di utilizzo del servente. 
 
-Data la probabilità $0$, si esprimre la probabilità per uno stato generico $n$:
+Data la probabilità $0$, si esprimere la probabilità per uno stato generico $n$:
 \begin{gather*}
     P_n=\displaystyle\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\mu_j}\left(1-\rho\right)=\rho^n\left(1-\rho\right)
 \end{gather*}
@@ -1814,7 +1813,7 @@ sia nulla, indipendentemente dal tempo di attraversamento del sistema:
 
 L'ultima legge di Little lega il valore atteso della lunghezza della coda $l$ del sistema al valore atteso del tempo passato in coda $t_q$, ovvero mette in relazione diretta il numero 
 dei clienti in coda $L$ con il tempo speso in coda $W_q$. Questo valore atteso dipende solo dalla velocità degli arrivi in coda, per cui si può esprimere come la frequenza di 
-arrivo moltiplicata per il tempo madio passato in coda:
+arrivo moltiplicata per il tempo medio passato in coda:
 \begin{gather*}
     L=\lambda W_q=\lambda\left(\displaystyle\frac{1}{\mu-\lambda}-\frac{1}{\mu}\right)=\frac{\lambda}{\mu-\lambda}-\frac{\lambda}{\mu}
 \end{gather*}
@@ -1841,9 +1840,9 @@ Mentre la frequenza di arrivo si annulla quando all'interno del sistema sono pre
 Quando il sistema può accettare clienti, la frequenza di arrivo è distribuita esponenzialmente con parametro caratteristico $\gamma$, mentre quando non può accettare più 
 clienti la frequenza si annulla. Per cui la frequenza $\gamma$ è una frequenza più grande che descrive la frequenza di arrivo dall'esterno, indipendentemente dallo stato 
 del sistema, mentre la frequenza $\lambda$ di arrivo effettivo è minore, poiché da un valore $n=k$ si annulla. Dato che la frequenza $\gamma$ non considera quando può lavorare 
-il servente, consdiera anche i clienti che vengono rifiutati dal sistema. 
+il servente, considera anche i clienti che vengono rifiutati dal sistema. 
 
-Si considera l'ipotesi di funzionamento dei sistemi stazionari, ma si include questa distinzione della frequeza di arrivo:
+Si considera l'ipotesi di funzionamento dei sistemi stazionari, ma si include questa distinzione della frequenza di arrivo:
 \begin{gather*}
     P_n=\begin{cases}
         \displaystyle\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^{n}\mu_j}=\left(\frac{\gamma}{\mu}\right)^n &n\leq k\\
@@ -1937,11 +1936,11 @@ Si considera solamente il denominatore del denominatore, poiché solo la velocit
     \displaystyle\sum_{n=s}^{\infty}\frac{1}{s!s^{n-s}}\left(\frac{\lambda}{\mu}\right)^n\mbox{ per }n-s=l\to\frac{1}{s!}\sum_{l=0}^{\infty}\frac{1}{s^l}\left(\frac{\lambda}{\mu}\right)^{l+s}\\
     \frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\sum_{l=0}^{\infty}\left(\frac{\lambda}{\mu}\right)^l=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\frac{s\mu}{s\mu-\lambda}
 \end{gather*}
-Per cui la probabilità si epsimere tramite la esguente espressione:
+Per cui la probabilità si esprimere tramite la seguente espressione:
 \begin{gather}
     P_0=\displaystyle\frac{1}{\displaystyle\sum_{n=0}^{s-1}\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^n+\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\frac{s\mu}{s\mu-\lambda}}
 \end{gather}
-Si esprime la probabilità di trovarsi in uno stato $n$, in base al fatto se tutti i serventi sitano lavorando o solo un numero $n<s$:
+Si esprime la probabilità di trovarsi in uno stato $n$, in base alla condizione se tutti i serventi stiano lavorando o solo un numero $n<s$:
 \begin{gather*}
    P_n=\begin{cases}
     \displaystyle\frac{1}{n!}\left(\frac{\lambda}{\mu}\right)^nP_0&n<s\\
@@ -1971,7 +1970,7 @@ Per cui il valore atteso è calcolabile come:
 
 \subsection{Rete Aperta}
 
-Si definisce una rete di code l'interconnesione di un insieme di $M$ stazioni, numerate da uno ad $M$. Le espressioni per le grandezze ottenute precedentemente possono essere 
+Si definisce una rete di code l'interconnessione di un insieme di $M$ stazioni, numerate da uno ad $M$. Le espressioni per le grandezze ottenute precedentemente possono essere 
 usate solamente per una singola stazione. 
 
 
@@ -1984,13 +1983,13 @@ La frequenza di arrivo distribuita esponenzialmente con parametro caratteristico
 sistema. 
 
 
-In un sistema $M/M/S$ l'uscita è distribuita esponenzialmente esattmamente come l'arrivo, con lo stesso parametro caratteristico $\lambda$, poiché in una rete aperta 
+In un sistema $M/M/S$ l'uscita è distribuita esponenzialmente esattamente come l'arrivo, con lo stesso parametro caratteristico $\lambda$, poiché in una rete aperta 
 il numero di clienti in entrata corrisponde al numero di clienti in uscita al sistema. Inoltre si considera la coda illimitata, per cui tutti i clienti in entrata vengono 
 serviti in un tempo finito per poi uscire dal sistema. 
 Per cui in una serie di stazioni connesse tra di loro l'entrata della stazione a valle corrisponde all'entrata della stazione a monte. Le stazioni sono collegate tra di loro 
 da archi pesati, che indicano con quale percentuale l'uscita dalla stazione a monte arrivi ad una delle stazioni collegate a valle. 
 Dati più archi entranti in una singola stazione, la sua frequenza di arrivo corrisponde alla somma tra tutte le grandezze in entrata. 
-Il peso degli archi rappresenta la probabilità di instradamento $P_{ij}$ dalla stazione $i$ alla stazione $j$. La somma di tutte le probbabilità queste probabilità, rappresenta 
+Il peso degli archi rappresenta la probabilità di instradamento $P_{ij}$ dalla stazione $i$ alla stazione $j$. La somma di tutte le probabilità queste probabilità, rappresenta 
 l'intero spazio campione, per cui dovrà essere pari ad uno, si considera l'uscita verso l'esterno $P_{i0}$. Può essere presente un autociclo, per cui si include la probabilità 
 $P_{ii}$. L'espressione è quindi: 
 
@@ -1998,7 +1997,7 @@ $P_{ii}$. L'espressione è quindi:
     \displaystyle\sum_{j=0}^{M}P_{ij}=1
 \end{gather} 
 
-Per trattare una rete di code aperta, si considerano cinque ipotesi fondamentali, per definire che l'interconnesione tra due singole stazione rappresenta una rete aperta. Per 
+Per trattare una rete di code aperta, si considerano cinque ipotesi fondamentali, per definire che l'interconnessione tra due singole stazione rappresenta una rete aperta. Per 
 una singola coda la variabile di stato rappresenta il numero di clienti in coda $n$, invece per due stazioni collegate tra di loro la variabile di stato è un vettore di 
 dimensione pari al numero di stazioni presenti nel sistema. Per cui per una rete composta da $M$ stazioni, la variabile di stato $n$ è un vettore:
 \begin{gather}
@@ -2009,15 +2008,15 @@ dimensione pari al numero di stazioni presenti nel sistema. Per cui per una rete
     \end{pmatrix}
 \end{gather}
 
-Per poter determinare il valore della varibile di stato, è necessario conoscere la sua distribuzione di probabilità $P_n$. 
+Per poter determinare il valore della variabile di stato, è necessario conoscere la sua distribuzione di probabilità $P_n$. 
 
 Una rete si dice aperta se rispetta queste cinque ipotesi:
 \begin{itemize}
-    \item Il tempo di arrivo $t_a$ di ogni stazione $j$ è distribuito esponenzialmente (o poisoniano) con parametro caratteristico $\lambda_j$ per $j=1,\cdots,M$;
+    \item Il tempo di arrivo $t_a$ di ogni stazione $j$ è distribuito esponenzialmente (o poissoniano) con parametro caratteristico $\lambda_j$ per $j=1,\cdots,M$;
     \item Il tempo di servizio $t_s$ di ogni stazione $j$ è distribuito esponenzialmente con parametro caratteristico $\mu_j$ per $j=1,\cdots, M$;
     \item La disciplina di servizio è FIFO;
     \item Ogni stazione è una coda illimitata, per garantire la distribuzione esponenziale, per cui ogni stazione è un sistema del tipo $M/M/1$ o $M/M/s$;
-    \item La probabilità di instradamento complessiva da una stazione $i$ verso tutte le possibli stazioni $j$ è pari ad uno: $\displaystyle\sum_{j=0}^{M}P_{ij}=1$.
+    \item La probabilità di instradamento complessiva da una stazione $i$ verso tutte le possibili stazioni $j$ è pari ad uno: $\displaystyle\sum_{j=0}^{M}P_{ij}=1$.
 \end{itemize} 
 
 \subsubsection{Teorema di Jackson}
@@ -2031,7 +2030,7 @@ connesse $i$, rappresentato dalla loro frequenza di uscita dal sistema, pari all
     \lambda_j'=\lambda_j+\displaystyle\sum_{i=0}^{M}P_{ij}\lambda_i'
 \end{equation}
 Per ogni stazione $j$, poiché sono sistemi $M/M/s$ o $M/M/1$, si possono trattare le stazioni come fossero indipendenti, esprimendo la loro distribuzione tramite 
-la seguente espressione, dove le interconnesioni tra le stazioni sono contenute nella frequenza effettiva $\lambda_j'$: 
+la seguente espressione, dove le interconnessioni tra le stazioni sono contenute nella frequenza effettiva $\lambda_j'$: 
 \begin{equation}
     f_j(n_j)=\begin{cases}
         \displaystyle\frac{1}{n_j!}\left(\frac{\lambda_j'}{\mu_j}\right)^{n_j}f_j(0)&n_j<s_j\\
@@ -2074,8 +2073,8 @@ come la somma della frequenza di arrivo esterna ad ogni stazione $\lambda_j$:
 \end{equation*}
 
 Per determinare invece il valore atteso del tempo di attraversamento di una singola stazione $j$, poiché sono interconnesse tra di loro, bisogna considerare che lo stesso 
-cliente potrebbere passare per la stessa stazione $j$ più di una volta. Per cui solo se il cliente attraversa la stazione $j$ una sola volta si può calcolare 
-il valore atteso del tempo di attraversamento come $W_j=1/(s_j\mu_j-\lambda_j')$. Per quantificare questo fenomeno si introduce il "vist count" $\nu_j$, che indica quante volte 
+cliente potrebbe passare per la stessa stazione $j$ più di una volta. Per cui solo se il cliente attraversa la stazione $j$ una sola volta si può calcolare 
+il valore atteso del tempo di attraversamento come $W_j=1/(s_j\mu_j-\lambda_j')$. Per quantificare questo fenomeno si introduce il "visit count" $\nu_j$, che indica quante volte 
 uno stesso cliente attraversa la stessa stazione $j$. Per calcolare questa percentuale (o contatore) si considerano gli arrivi effettivi alla singola stazione ed all'intero 
 sistema, per cui si calcola come il rapporto tra la frequenza di arrivo effettiva alla stazione $j$ per la frequenza di arrivo complessiva:
 \begin{equation}
@@ -2100,7 +2099,7 @@ code aperta si ottiene la seguente espressione per la produttività reale:
 \begin{equation}
     X_R=\lambda=\displaystyle\sum_{j=1}^M\lambda_j
 \end{equation}
-Per ogni stazione $j$ invece si posono individuare due diverse produttività reali. Si possono consideare solamente i prodotti finiti dalla stazione, ovvero non si considerano 
+Per ogni stazione $j$ invece si possono individuare due diverse produttività reali. Si possono considerare solamente i prodotti finiti dalla stazione, ovvero non si considerano 
 i prodotti e clienti che attraversano la stazione più di una volta, per cui questa produttività si esprime come:
 \begin{equation*}
     X_{R_j}=\displaystyle\frac{\lambda_j'}{\nu_j}=\frac{\lambda_j'}{\frac{\lambda_j'}{\lambda_j}}=\lambda_j
@@ -2123,7 +2122,7 @@ tiene conto solamente dei prodotti finiti da una stazione $j$, si divide per il 
 \begin{equation*}
     X_{T_j}=\displaystyle\frac{s_j\mu_j}{\nu_j}
 \end{equation*}
-Questa grandezza considera quindi solo i prodotti che sono entrati ed usciti dal sistema dall'esterno, senza attraversare nuovamete la stazione. 
+Questa grandezza considera quindi solo i prodotti che sono entrati ed usciti dal sistema dall'esterno, senza attraversare nuovamente la stazione. 
 
 Per cui per ogni stazione si ottengono le seguenti relazioni:
 \begin{center}
@@ -2143,7 +2142,7 @@ velocità di processamento più piccola. Questa stazione viene chiamata collo di
     X_T=\min_{j=1,\cdots,M}\{X_{T_j}\}=\min_{j=1,\cdots,M}\left\{\displaystyle\frac{s_j\mu_j}{\nu_j}\right\}
 \end{equation}
 
-La produttività reale non potrà mai oltrepassare la prduttività teoretica, per mantenere verificata la condizione di stazionarietà:
+La produttività reale non potrà mai oltrepassare la produttività teoretica, per mantenere verificata la condizione di stazionarietà:
 \begin{equation*}
     X_R< X_T
 \end{equation*}
@@ -2151,13 +2150,74 @@ La massima produttività reale raggiungibile si esprime quindi come:
 \begin{equation}
     X_{R_{\max}}=X_T-\varepsilon
 \end{equation}
-Dove $\varepsilon$ è una frequenza arbitrarimaente piccola, ma non è consigliato scegliere valori ristretti poiché alla minima fluttuazione degli arrivi esterni si potrebbe 
+Dove $\varepsilon$ è una frequenza arbitrariamente piccola, ma non è consigliato scegliere valori ristretti poiché alla minima fluttuazione degli arrivi esterni si potrebbe 
 perdere la condizione di stazionarietà del sistema. 
 
-Per cui per aumentare la produttività reale di un sistema, si aumentano gli arrivi dall'esterno fino a raggiunere un valore minore della produttività teoretica del collo di 
+Per cui per aumentare la produttività reale di un sistema, si aumentano gli arrivi dall'esterno fino a raggiungere un valore minore della produttività teoretica del collo di 
 bottiglia del sistema. Mentre per aumentare la produttività teoretica si aumenta la velocità di servizio del collo di bottiglia fino a che la sua produttività teoretica non assuma 
 un valore pari alla seconda produttività teoretica minore del sistema. Poiché per alterare il "visit count" o il numero dei serventi bisognerebbe alterare la struttura del 
 sistema. 
+
+\subsection{Equazioni di Equilibrio}
+
+L'equazione di equilibrio è legata intrinsecamente ai processi di nascita e morte, poiché indica la relazione tra la probabilità dell'entrata e dell'uscita in un determinato 
+stato $n$, e per ogni stazione $j$ non sono consentiti salti multipli. L'uscita da uno stato $n$ può avvenire tramite una nascita o una morte, in una qualsiasi delle stazioni della rete. Dato uno stato $n$ generico, si considerano  
+solamente le nascite, ovvero gli arrivi dall'esterno $\lambda_j$, e le morti, ovvero quando una stazione processa un cliente con velocità $\mu_j$, per ogni stazione $j$. 
+Si escludono le uscite che ritornano alla stazione $n$, ovvero la probabilità complementare alla probabilità di instradamento dalla stazione $j$ alla stazione $j$:
+\begin{gather*} 
+    n=(n_1,\cdots,n_M)\\
+    \displaystyle\sum_{j=1}^M\left(\lambda_j+(1-P_{jj})\min\{n_j,s_j\}\mu_j\right)P(n_1,\cdots,n_M)
+\end{gather*}
+
+Per determinare la probabilità di entrare in uno stato $n$ si considerano tutti gli stati adiacenti e si controlla per ciascuno se rappresentano uno stato ammissibile, in 
+base agli archi uscenti dalla stazione $j$. Considerando tutte le entrate dall'esterno da stati adiacenti ad $n$ si ottiene la seguente espressione:
+\begin{gather*}
+    \displaystyle\sum_{j=1}^M\lambda_jP(n_1,\cdots,n_j-1,\cdots,n_M)=\lambda_1P(n_1-1,n_2,\cdots,n_M)+\cdots+\lambda_MP(n_1,\cdots,n_{M-1},n_M-1)
+\end{gather*}
+Considerando ora tutte le entrate da una stazione $j$ ad una stazione $k$, bisogna escludere la probabilità che il cliente uscente ritorni alla stazione $j$ poiché non 
+cambierebbe lo stato, per cui bisogna sottrarre il peso dell'arco dell'autociclo. 
+\begin{gather*}
+    \displaystyle\sum_{j=1}^M\sum_{k=1}^M\frac{\min\{s_j,n_j\}\mu_j}{\nu_j}P(n_1,\cdots,n_j+1,\cdots,n_k-1,\cdots,n_M)
+\end{gather*}
+
+Per esprimere lo stato adiacente in maniera compatta si indica con $n_{jk}$ lo stato che differisce da $n$, presentando in $j$ un cliente in più, mentre in $k$ un cliente in 
+meno:
+\begin{gather*}
+    n=(n_1,\cdots,n_M)\\
+    n_{jk}=(n_1,\cdots,n_j+1,\cdots,n_k-1,\cdots,n_M)\\
+    n_{j0}=(n_1,\cdots,n_j+1,\cdots,n_M)\\
+    n_{0k}=(n_1,\cdots,n_k-1,\cdots,n_M)
+\end{gather*}
+Affinché sia lecito considerare lo stato $n_{0k}$ e $n_{jk}$, è necessario sia presente almeno un cliente nella stazione $k$ nello stato $n$:
+\begin{gather*}
+    n_k\geq1
+\end{gather*}
+
+Si indica la velocità di servizio della morte da una stazione con il fattore $r_j$:
+\begin{gather*}
+    r_j=\min\{n_j,s_j\}\mu_j
+\end{gather*}
+Per cui la probabilità di uscire da uno stato $n$ si ottiene tramite l'espressione:
+\begin{equation*}
+    \displaystyle\sum_{j=1}^M[\lambda_j+(1-P_{jj})r_j]P(n)
+\end{equation*}
+Per esprimere la probabilità di entrare nello stato $n$ si considerano tre casi, quando esce un cliente da uno stato $n_{j0}$, quando entra un cliente dall'esterno in 
+uno stato $n_{k0}$: 
+\begin{gather*}
+    \displaystyle\sum_{j=1}^M\left[P_{j0}r_jP(n_{j0})\right]+\displaystyle\sum_{k=1}^M\left[\lambda_kP(n_{0k})\right]
+\end{gather*}
+Per esprimere quando un cliente si sposta da una stazione $j$ ad una stazione $k$, partendo da uno stato $n_{jk}$, si considera la sua probabilità di instradamento:
+\begin{gather*}
+    \displaystyle\sum_{j=1}^M\sum_{k=1}^MP_{jk}r_jP(n_{jk})
+\end{gather*}
+Per cui si esprime la probabilità di entrare in uno stato $n$ tramite:
+\begin{equation*}
+    \displaystyle\sum_{j=1}^M\left[P_{j0}r_jP(n_{j0})\right]+\displaystyle\sum_{k=1}^M\left[\lambda_kP(n_{0k})\right]+\sum_{j=1}^M\sum_{k=1}^M\left[P_{jk}r_jP(n_{jk})\right]
+\end{equation*}
+La condizione di equilibrio è quindi rappresentata dalla seguente eguaglianza, che lega la probabilità di uscita da uno stato $n$ e di entrata in uno stato $n$:
+\begin{equation}
+    \displaystyle\sum_{j=1}^M[\lambda_j+(1-P_{jj})r_j]P(n)=\sum_{j=1}^M\left[P_{j0}r_jP(n_{j0})\right]+\displaystyle\sum_{k=1}^M\left[\lambda_kP(n_{0k})\right]+\sum_{j=1}^M\sum_{k=1}^M\left[P_{jk}r_jP(n_{jk})\right]
+\end{equation}
 
 
 \end{document}
