@@ -36,6 +36,7 @@
         }
 
 \renewcommand{\contentsname}{Indice}
+\newcommand{\df}{\mathrm{d}}
 
 \numberwithin{equation}{subsection}
 
@@ -166,12 +167,12 @@ Il numero di stati possibili in una qualsiasi configurazione corrisponde al nume
 essere rappresentati con un grafo di stato, in base alla rete e alla marcatura iniziale considerata $x_0$. 
 
 Si definiscono posti con un pre-set nullo appesi ed il numero di gettoni al loro interno può o rimanere costante o diminuire. Per cui se il sistema si basa solamente su posti 
-appesi, allora sicuramente si bloccherà, incontra un "deadlock". 
+appesi, allora sicuramente si bloccherà, incontra un ``deadlock". 
 
 
 L'evoluzione di un sistema viene determinata dall'accadimento di eventi abilitati, ognuno con una sua abilità di accadere. La possibilità che un evento accada dipende dall'abilitazione di una transizione, l'effetto del suo accadimento corrisponde allo scatto di una transizione. L'abilitazione di una transizione dipende solamente dal peso dell'
 arco in entrata e dai gettoni nel pre-set, è abilitata se il numero dei gettoni nel pre-set è almeno uguale al peso dei rispettivi archi. 
-Lo scatto di una transizione provoca un "flusso" di gettoni, questo flusso non è continuo, poiché i gettoni in entrata alla transizione vengono consumati e ne vengono creati 
+Lo scatto di una transizione provoca un ``flusso" di gettoni, questo flusso non è continuo, poiché i gettoni in entrata alla transizione vengono consumati e ne vengono creati 
 di nuovi sulla base del peso dell'arco in uscita, numero indipendente dal numero dei gettoni consumati. 
 
 L'evoluzione comprende quattro passaggi ciclici: data una marcatura corrente si individua l'insieme delle transizioni abilitate, si sceglie casualmente, se non è specificato, 
@@ -662,8 +663,8 @@ la transizione diventa morta.
         \node[place, tokens=1, label=left:$p_1$](p1)at(0.25,0){};
         \node[transition, rotate=90, label=below:$t_1$](t1)at(1.5,0){};
 
-        \draw[->](t1.40)to[out=110,in=70](p1.90);
-        \draw[<-](t1.140)to[out=250,in=290](p1.270);
+        \draw[->](t1.45)to[out=135,in=45](p1.45);
+        \draw[<-](t1.135)to[out=225,in=315](p1.315);
 
         \draw[->](1.5,-1)--(t1.180);
         \draw[->](t1.0)--(1.5,1);
@@ -1021,7 +1022,7 @@ altri materiali grezzi, deve spostare il prodotto finito in un buffer di output,
 
 In questo caso ogni risorsa è capacitata ad uno, per cui il robot all'inizio può prendere uno dei due grezzi, per cui è presente un conflitto strutturale all'inizio. Si 
 modella senza risolvere il conflitto. Se il robot prendere un grezzo quando entrambe le macchine hanno processato sono occupate con un grezzo il sistema si blocca, per cui 
-bisogna modellare il sistema in modo da impedire questo "deadlock". 
+bisogna modellare il sistema in modo da impedire questo ``deadlock". 
 
 Si considerano i materiali grezzi sempre disponibili nel sistema, per cui si rappresentano come degli autocicli, legati a monte della transizione, istantanea, per attivare 
 una delle due sequenza di lavorazione $A$ e $B$. Gli eventi che avvengono processando uno dei due grezzi sono gli stessi tra di loro, per cui si può modellare uno solo di 
@@ -1436,6 +1437,7 @@ Si modella ora un buffer LIFO, di $n$ elementi:
         \draw[-{Circle[]}](p0.135)to[out=135,in=45](tp.45);
         \draw[-{Circle[]}](p2.135)to[out=135,in=45](t2.45);
         \draw[-{Circle[]}](p1.135)to[out=135,in=45](t1.45);
+        \draw[dashed](p0.330)to[out=330,in=180](t02.90);
         \draw[dashed,->](ta.0)--(t1.180);
     \end{tikzpicture}
 \end{center}
@@ -1655,10 +1657,11 @@ un entrata o un uscita per ogni istante $\Delta t$. Per cui si possono verificar
         \node[place](n0)at(0,0){$n-1$};
         \node[place](n1)at(1.5,0){$n$};
         \node[place](n2)at(3,0){$n+1$};
-        \draw[->](n0.315)to[out=315,in=225](n1.225)node[below left]{$\lambda_{n-1}$};
-        \draw[->](n1.315)to[out=315,in=225](n2.225)node[below left]{$\lambda_{n}$};
-        \draw[->](n2.135)to[out=135,in=45](n1.45)node[above right]{$\mu_{n+1}$};
-        \draw[->](n1.135)to[out=135,in=45](n0.45)node[above right]{$\mu_n$};
+        %% fix labels
+        \draw[->](n0.315)to[out=315,in=225](n1.225)node[below right]{$\lambda_{n-1}$};
+        \draw[->](n1.315)to[out=315,in=225](n2.225)node[below right]{$\lambda_{n}$};
+        \draw[->](n2.135)to[out=135,in=45](n1.45)node[above left]{$\mu_{n+1}$};
+        \draw[->](n1.135)to[out=135,in=45](n0.45)node[above left]{$\mu_n$};
     \end{tikzpicture}
 \end{center}
 Dove $\mu_n$ e $\lambda_n$ indicano la velocità di servizio e la frequenza di arrivo allo stato $n$. Si vogliono considerare tutti i possibili eventi che possono 
@@ -1687,11 +1690,11 @@ esprime quindi la probabilità di essere allo stato $n$, ovvero la somma delle p
 non avvenga nulla allo stato $n$:
 \begin{gather*}
     P_n(t+\Delta t)=P_{n-1}(t)\lambda_{n-1}\Delta t+P_{n+1}(t)\mu_{m+1}\Delta t+P_n(t)[1-(\lambda_n+\mu_n)\Delta t]+o(\Delta t)\\
-    \displaystyle\frac{P_n(t+\Delta t)-P_n(t)}{\Delta t}=P_{n-1}(t)\lambda_{n-1}+P_{n+1}(t)\mu_{m+1}-P_n(\lambda_n+\mu_n)+\frac{0(\Delta t)}{\Delta t}
+    \displaystyle\frac{P_n(t+\Delta t)-P_n(t)}{\Delta t}=P_{n-1}(t)\lambda_{n-1}+P_{n+1}(t)\mu_{m+1}-P_n(\lambda_n+\mu_n)+\frac{o(\Delta t)}{\Delta t}
 \end{gather*}
 Si applica il limite $\Delta t\to0$, poiché non sono ammessi nel sistema salti multipli: 
 \begin{gather*}
-    \lim_{\Delta \to0}\displaystyle\displaystyle\frac{P_n(t+\Delta t)-P_n(t)}{\Delta t}=\frac{dP_n(t)}{dt}=P_{n-1}(t)\lambda_{n-1}+P_{n+1}(t)\mu_{m+1}-P_n(\lambda_n+\mu_n)+\cancelto{0}{\frac{0(\Delta t)}{\Delta t}}
+    \lim_{\Delta \to0}\displaystyle\displaystyle\frac{P_n(t+\Delta t)-P_n(t)}{\Delta t}=\frac{\df P_n(t)}{\df t}=P_{n-1}(t)\lambda_{n-1}+P_{n+1}(t)\mu_{m+1}-P_n(\lambda_n+\mu_n)+\cancelto{0}{\frac{o(\Delta t)}{\Delta t}}
 \end{gather*}
 Si considerano sistemi stazionari, con una risposta a regime permanente, non nulla e costante. Ovvero sistemi asintoticamente stabili, dove il transitorio tende a zero. 
 Per cui per tempi abbastanza grandi, la probabilità assume valori costanti:
@@ -1780,11 +1783,11 @@ Si calcola ora il valore atteso $N$ di questa distribuzione $P_n$, ovvero la med
 \end{gather*}
 Si porta un fattore $\rho$ ed il fattore $P_0$, costanti, fuori dalla sommatoria, e si ottiene la derivata di $\rho^n$ dentro la sommatoria:
 \begin{gather*}
-    N=\rho P_0\displaystyle\sum_{n=0}^{\infty}n\rho^{n-1}=\rho P_0\displaystyle\sum_{n=0}^{\infty}\frac{d}{d\rho}\rho^n
+    N=\rho P_0\displaystyle\sum_{n=0}^{\infty}n\rho^{n-1}=\rho P_0\displaystyle\sum_{n=0}^{\infty}\frac{\df}{\df\rho}\rho^n
 \end{gather*}
 Poiché la derivata è un'operazione lineare, si può portare fuori dalla sommatoria, una serie geometrica di ragione $\rho<1$, per cui converge:
 \begin{gather*}
-    N=\rho P_0\displaystyle\sum_{n=0}^{\infty}\frac{d}{d\rho}\rho^n=\rho P_0\frac{d}{d\rho}\left(\sum_{n=0}^{\infty}\rho^n\right)=\rho P_0\frac{d}{d\rho}\left(\frac{1}{1-\rho}\right)=\frac{\rho(1-\rho)}{(1-\rho)^2}=\frac{\rho}{1-\rho}=\frac{\displaystyle\frac{\lambda}{\mu}}{1-\displaystyle\frac{\lambda}{\mu}}
+    N=\rho P_0\displaystyle\sum_{n=0}^{\infty}\frac{\df}{\df\rho}\rho^n=\rho P_0\frac{\df}{\df\rho}\left(\sum_{n=0}^{\infty}\rho^n\right)=\rho P_0\frac{\df}{\df\rho}\left(\frac{1}{1-\rho}\right)=\frac{\rho(1-\rho)}{(1-\rho)^2}=\frac{\rho}{1-\rho}=\frac{\displaystyle\frac{\lambda}{\mu}}{1-\displaystyle\frac{\lambda}{\mu}}
 \end{gather*}
 \begin{equation}
     N=\displaystyle\frac{\lambda}{\mu-\lambda}
@@ -1871,12 +1874,12 @@ Per cui la probabilità $P_0$ corrisponde si può esprimere come:
 
 Si vuole determinare ora il valore atteso $N$ del numero di clienti $n$ nel sistema:
 \begin{gather*}
-    N=\displaystyle\sum_{n=0}^knP_n=\sum_{n=0}^kn\left(\frac{\gamma}{\mu}\right)^nP_0=P_0\frac{\gamma}{\mu}\sum_{n=0}^kn\left(\frac{\gamma}{\mu}\right)^{n-1}=P_0\frac{\gamma}{\mu}\sum_{n=0}^k\frac{d}{d\displaystyle\frac{\gamma}{\mu}}\left[\left(\frac{\gamma}{\mu}\right)^n\right]
+    N=\displaystyle\sum_{n=0}^knP_n=\sum_{n=0}^kn\left(\frac{\gamma}{\mu}\right)^nP_0=P_0\frac{\gamma}{\mu}\sum_{n=0}^kn\left(\frac{\gamma}{\mu}\right)^{n-1}=P_0\frac{\gamma}{\mu}\sum_{n=0}^k\frac{\df}{\df\displaystyle\frac{\gamma}{\mu}}\left[\left(\frac{\gamma}{\mu}\right)^n\right]
 \end{gather*}
 Estraendo la derivata dalla sommatoria si ottiene la stessa sommatoria precedente, sostituendo il risultato precedentemente ottenuto diventa: 
 \begin{gather*}
-    N=P_0\displaystyle\frac{\gamma}{\mu}\frac{d}{\displaystyle d\frac{\gamma}{\mu}}\sum_{n=0}^k\left(\frac{\gamma}{\mu}\right)^n=P_0\frac{\gamma}{\mu}\frac{d}{\displaystyle d\frac{\gamma}{\mu}}\left[\frac{1-\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}{1-\displaystyle\frac{\gamma}{\mu}}\right]\\
-    \displaystyle P_0\frac{\gamma}{\mu}\frac{d}{\displaystyle d\frac{\gamma}{\mu}}\left[\frac{1}{1-\displaystyle\frac{\gamma}{\mu}}-\frac{\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}{1-\displaystyle\frac{\gamma}{\mu}}\right]=P_0\frac{\gamma}{\mu}\left(\frac{1}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}-\frac{(k+1)\displaystyle\left(\frac{\gamma}{\mu}\right)^k-\left(\frac{\gamma}{\mu}\right)^{k+1}}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}\right)\\
+    N=P_0\displaystyle\frac{\gamma}{\mu}\frac{\df}{\displaystyle \df\frac{\gamma}{\mu}}\sum_{n=0}^k\left(\frac{\gamma}{\mu}\right)^n=P_0\frac{\gamma}{\mu}\frac{\df}{\displaystyle \df\frac{\gamma}{\mu}}\left[\frac{1-\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}{1-\displaystyle\frac{\gamma}{\mu}}\right]\\
+    \displaystyle P_0\frac{\gamma}{\mu}\frac{\df}{\displaystyle \df\frac{\gamma}{\mu}}\left[\frac{1}{1-\displaystyle\frac{\gamma}{\mu}}-\frac{\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}{1-\displaystyle\frac{\gamma}{\mu}}\right]=P_0\frac{\gamma}{\mu}\left(\frac{1}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}-\frac{(k+1)\displaystyle\left(\frac{\gamma}{\mu}\right)^k-\left(\frac{\gamma}{\mu}\right)^{k+1}}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}\right)\\
     P_0\frac{\gamma}{\mu}\left(\frac{1}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}-\left(\frac{\gamma}{\mu}\right)^k\frac{(k+1)\left(1-\displaystyle\frac{\gamma}{\mu}\right)}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}\right)=P_0\frac{\gamma}{\mu}\left(\frac{1-\displaystyle\left(\frac{\gamma}{\mu}\right)^{k+1}}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}-(k+1)\frac{\displaystyle\left(\frac{\gamma}{\mu}\right)^k}{\displaystyle\left(1-\frac{\gamma}{\mu}\right)^2}\right)
 \end{gather*}
 Sostituendo il valore di $P_0$ ottenuto precedentemente si ottiene: 
@@ -1943,8 +1946,8 @@ Per cui la probabilità si esprimere tramite la seguente espressione:
 Si esprime la probabilità di trovarsi in uno stato $n$, in base alla condizione se tutti i serventi stiano lavorando o solo un numero $n<s$:
 \begin{gather*}
    P_n=\begin{cases}
-    \displaystyle\frac{1}{n!}\left(\frac{\lambda}{\mu}\right)^nP_0&n<s\\
-    \displaystyle\frac{1}{s!}\frac{1}{s^{n-s}}\left(\frac{\lambda}{\mu}\right)^nP_0&n\geq s
+    \displaystyle\frac{\strut 1}{\strut n!}\left(\frac{\lambda}{\mu}\right)^nP_0&n<s\\
+    \displaystyle\frac{\strut1}{\strut s!}\frac{\strut 1}{\strut s^{n-s}}\left(\frac{\lambda}{\mu}\right)^nP_0&n\geq s
    \end{cases} 
 \end{gather*}
 La probabilità di trovarsi allo stato $s$ può essere calcolata analogamente con entrambe le espressioni:
@@ -1959,16 +1962,16 @@ Si vuole determinare il valore atteso della lunghezza della coda:
 La probabilità di trovarsi allo stato $P_{n-s}$ coincide con la probabilità che nel sistema siano presenti $n$ clienti $P_n$. Per cui si applica un'altra sostituzione $k=n-s$:
 \begin{gather*}
     \displaystyle\sum_{k=0}^{\infty}kP_{k+s}=\sum_{k=0}^{\infty}k\frac{1}{s!}\frac{1}{s^k}\left(\frac{\lambda}{\mu}\right)^{k+s}P_0=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}P_0\sum_{k=0}^{\infty}k\left(\frac{\lambda}{s\mu}\right)^{k}\\
-    \displaystyle\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\sum_{k=0}^{\infty}k\left(\frac{\lambda}{s\mu}\right)^{k-1}=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\sum_{k=0}^{\infty}\frac{d}{d\frac{\lambda}{s\mu}}\left(\frac{\lambda}{s\mu}\right)^{k}
-    =\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\frac{d}{d\frac{\lambda}{s\mu}}\sum_{k=0}^{\infty}\left(\frac{\lambda}{s\mu}\right)^{k}\\
-    \frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\frac{d}{d\frac{\lambda}{s\mu}}\frac{1}{1-\displaystyle\frac{\lambda}{s\mu}}=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}P_0\frac{\displaystyle\frac{\lambda}{s\mu}}{\left(1-\displaystyle\frac{\lambda}{s\mu}\right)^2}
+    \displaystyle\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\sum_{k=0}^{\infty}k\left(\frac{\lambda}{s\mu}\right)^{k-1}=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\sum_{k=0}^{\infty}\frac{\df}{\df\frac{\lambda}{s\mu}}\left(\frac{\lambda}{s\mu}\right)^{k}
+    =\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\frac{\df}{\df\frac{\lambda}{s\mu}}\sum_{k=0}^{\infty}\left(\frac{\lambda}{s\mu}\right)^{k}\\
+    \frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\lambda}{s\mu}P_0\frac{\df}{\df\frac{\lambda}{s\mu}}\frac{1}{1-\displaystyle\frac{\lambda}{s\mu}}=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}P_0\frac{\displaystyle\frac{\lambda}{s\mu}}{\left(1-\displaystyle\frac{\lambda}{s\mu}\right)^2}
 \end{gather*}
 Per cui il valore atteso è calcolabile come:
 \begin{gather}
     L=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^{s}\frac{\displaystyle\frac{\lambda}{s\mu}}{\left(1-\displaystyle\frac{\lambda}{s\mu}\right)^2}\frac{1}{\displaystyle\sum_{n=0}^{s-1}\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^n+\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\frac{s\mu}{s\mu-\lambda}}
 \end{gather}
 
-\subsection{Rete Aperta}
+\subsection{Rete di Code Aperte}
 
 Si definisce una rete di code l'interconnessione di un insieme di $M$ stazioni, numerate da uno ad $M$. Le espressioni per le grandezze ottenute precedentemente possono essere 
 usate solamente per una singola stazione. 
@@ -2033,8 +2036,8 @@ Per ogni stazione $j$, poiché sono sistemi $M/M/s$ o $M/M/1$, si possono tratta
 la seguente espressione, dove le interconnessioni tra le stazioni sono contenute nella frequenza effettiva $\lambda_j'$: 
 \begin{equation}
     f_j(n_j)=\begin{cases}
-        \displaystyle\frac{1}{n_j!}\left(\frac{\lambda_j'}{\mu_j}\right)^{n_j}f_j(0)&n_j<s_j\\
-        \displaystyle\frac{1}{s_j!s_j^{n_j-s_j}}\left(\frac{\lambda_j'}{\mu_j}\right)^{n_j}f_j(0)&n_j\geq s_j
+        \displaystyle\frac{\strut 1}{\strut n_j!}\left(\frac{\lambda_j'}{\mu_j}\right)^{n_j}f_j(0)&n_j<s_j\\
+        \displaystyle\frac{\strut 1}{\strut s_j!s_j^{n_j-s_j}}\left(\frac{\lambda_j'}{\mu_j}\right)^{n_j}f_j(0)&n_j\geq s_j
     \end{cases}
 \end{equation}
 
@@ -2074,14 +2077,14 @@ come la somma della frequenza di arrivo esterna ad ogni stazione $\lambda_j$:
 
 Per determinare invece il valore atteso del tempo di attraversamento di una singola stazione $j$, poiché sono interconnesse tra di loro, bisogna considerare che lo stesso 
 cliente potrebbe passare per la stessa stazione $j$ più di una volta. Per cui solo se il cliente attraversa la stazione $j$ una sola volta si può calcolare 
-il valore atteso del tempo di attraversamento come $W_j=1/(s_j\mu_j-\lambda_j')$. Per quantificare questo fenomeno si introduce il "visit count" $\nu_j$, che indica quante volte 
+il valore atteso del tempo di attraversamento come $W_j=1/(s_j\mu_j-\lambda_j')$. Per quantificare questo fenomeno si introduce il ``visit count" $\nu_j$, che indica quante volte 
 uno stesso cliente attraversa la stessa stazione $j$. Per calcolare questa percentuale (o contatore) si considerano gli arrivi effettivi alla singola stazione ed all'intero 
 sistema, per cui si calcola come il rapporto tra la frequenza di arrivo effettiva alla stazione $j$ per la frequenza di arrivo complessiva:
 \begin{equation}
     \nu_j=\displaystyle\frac{\lambda_j'}{\lambda}
 \end{equation}
 Per cui il valore atteso del tempo di attraversamento di una singola stazione $j$ si ottiene come la grandezza ottenuta considerando la stazione indipendente, moltiplicato 
-per il suo "visit count" $\nu_j$:
+per il suo ``visit count" $\nu_j$:
 \begin{equation}
     W_j=\nu_jW\big|_j=\displaystyle\frac{\nu_j}{s_j\mu_j-\lambda_j'}
 \end{equation}
@@ -2118,7 +2121,7 @@ La produttività teorica di una stazione rappresenta la massima velocità a cui 
     X_{T_j}=s_j\mu_j
 \end{equation*}
 Analogamente alla produttività reale, questo valore considera anche i clienti che hanno attraversato la stazione più di una volta, per cui per ottenere la produttività che 
-tiene conto solamente dei prodotti finiti da una stazione $j$, si divide per il suo "visit count":
+tiene conto solamente dei prodotti finiti da una stazione $j$, si divide per il suo ``visit count":
 \begin{equation*}
     X_{T_j}=\displaystyle\frac{s_j\mu_j}{\nu_j}
 \end{equation*}
@@ -2155,7 +2158,7 @@ perdere la condizione di stazionarietà del sistema.
 
 Per cui per aumentare la produttività reale di un sistema, si aumentano gli arrivi dall'esterno fino a raggiungere un valore minore della produttività teoretica del collo di 
 bottiglia del sistema. Mentre per aumentare la produttività teoretica si aumenta la velocità di servizio del collo di bottiglia fino a che la sua produttività teoretica non assuma 
-un valore pari alla seconda produttività teoretica minore del sistema. Poiché per alterare il "visit count" o il numero dei serventi bisognerebbe alterare la struttura del 
+un valore pari alla seconda produttività teoretica minore del sistema. Poiché per alterare il ``visit count" o il numero dei serventi bisognerebbe alterare la struttura del 
 sistema. 
 
 \subsection{Equazioni di Equilibrio}
@@ -2214,10 +2217,91 @@ Per cui si esprime la probabilità di entrare in uno stato $n$ tramite:
 \begin{equation*}
     \displaystyle\sum_{j=1}^M\left[P_{j0}r_jP(n_{j0})\right]+\displaystyle\sum_{k=1}^M\left[\lambda_kP(n_{0k})\right]+\sum_{j=1}^M\sum_{k=1}^M\left[P_{jk}r_jP(n_{jk})\right]
 \end{equation*}
-La condizione di equilibrio è quindi rappresentata dalla seguente eguaglianza, che lega la probabilità di uscita da uno stato $n$ e di entrata in uno stato $n$:
+La condizione di equilibrio è quindi rappresentata dalla seguente eguaglianza, che lega la probabilità di uscita da uno stato $n$ a quella di entrata in uno stato $n$:
 \begin{equation}
     \displaystyle\sum_{j=1}^M[\lambda_j+(1-P_{jj})r_j]P(n)=\sum_{j=1}^M\left[P_{j0}r_jP(n_{j0})\right]+\displaystyle\sum_{k=1}^M\left[\lambda_kP(n_{0k})\right]+\sum_{j=1}^M\sum_{k=1}^M\left[P_{jk}r_jP(n_{jk})\right]
 \end{equation}
 
+\subsection{Reti di Code Chiuse e Teorema di Gordon}
+
+Questo tipo di reti sono sistemi di stazioni interconnesse, dove gli arrivi dall'esterno non sono distribuiti esponenzialmente. Ovvero $\lambda$ 
+non rappresenta più il parametro caratteristico di una distribuzione esponenziale. 
+Una rete si dice chiusa se il numero numero di clienti all'interno del sistema è costante. Si rappresenta con una stazione di ingresso-uscita che 
+introduce nel sistema un cliente non appena ne esce uno, per mantenere costante il numero di clienti nel sistema. 
+Una rete si dice chiusa se rispetta le seguenti condizioni:
+\begin{itemize}
+    \item Il valore atteso del numero dei clienti è costante $N=\mbox{cost.}$;
+    \item Il tempo di servizio è distribuito esponenzialmente con parametro caratteristico $\mu$;
+    \item I clienti vengono serviti con disciplina FIFO. 
+\end{itemize}
+
+Nelle reti aperte la probabilità di instradamento da una stazione $i$ ad una $j$ considerava anche le uscite verso l'esterno, ma nelle reti chiuse 
+le stazioni possono comunicare con l'esterno solo attraverso la stazione ingresso-uscita. Per cui per ogni stazione $i$, deve valere la seguente 
+condizione di instradamento:
+
+\begin{equation}
+    \displaystyle\sum_{j=1}^MP_{ij}=1
+\end{equation}
+
+Poiché la variabile di stato $n$ è costante, non si possono considerare le stazioni indipendentemente tra di loro, per cui gli stati in cui una 
+stazione può essere dipende esplicitamente dallo stato delle altri stazioni. 
+
+Si considerano ulteriori ipotesi per poter esprimere la probabilità di instradamento da una stazione $i$ reti chiuse. 
+La prime cinque ipotesi del teorema di Gordon coincidono con quelle del teorema di Jackson. La prima ipotesi propria del teorema di Gordon esprime 
+la frequenza con cui una stazione $j$ si trova allo stato $n_j$:
+\begin{gather}
+    f_j(n_j)=\begin{cases}
+        \displaystyle\frac{\strut x_j^{n_j}}{\strut n_j!}&n_j<s_j\\
+        \displaystyle\frac{\strut x_j^{x_j}}{\strut s_j!s_j^{n_j-s_j}}&n_j\geq n_j
+    \end{cases}
+\end{gather}
+
+Il fattore $x_j$ indica il tempo intrapreso da un cliente nella stazione $j$:
+\begin{equation*}
+    x_j=\displaystyle\frac{\nu_j}{\mu_j}
+\end{equation*}
+
+Nel teorema di Jackson questo fattore $f_j$ coincideva alla probabilità di una stazione di trovarsi in un dato stato, mentre in questo caso dipende 
+dal tempo, per cui per ritornare ad una distribuzione di probabilità bisogna restringere l'insieme di arrivo di questa funzione $f_j$ introducendo 
+un fattore di normalizzazione. Inoltre bisogna renderla adimensionale per poterla trattare come una distribuzione di probabilità. 
+
+Il teorema di Gordon introduce il fattore di normalizzazione $G(N)$ sullo spazio campione $\Omega$, ovvero l'insieme degli stati ammissibili. Poiché 
+lo stato del sistema è costante, lo spazio campione rappresenta tutte le possibili combinazioni di clienti nelle diverse stazioni tali che la loro 
+somma sia costante e sia esattamente il valore attesto del sistema $N$. Per ogni stato si avrà un prodotto di ogni $f_j$, per ogni stazione $j$:
+\begin{gather}
+    G(N)=\displaystyle\sum_{n\in\Omega}\prod_{j=1}^Mf_j(n_j)
+\end{gather}
+
+Per cui la probabilità di uno stato $n$ è dato dalla seguente espressione:
+\begin{equation}
+    P(n)=\displaystyle\frac{1}{G(N)}\prod_{j=1}^Mf_j(n_j)
+\end{equation}
+
+Si rappresenta ricorsivamente il fattore di normalizzazione mediante la seguente espressione:
+\begin{equation}
+    G(M,N)=\displaystyle\sum_{k=0}^Nf_M(k)G(M-1,N-k)
+\end{equation}
+
+Per calcolare il valore atteso di una singola stazione $j$ è necessario conoscere la distribuzione di probabilità della stazione $j$. Si può calcolare solamente la 
+distribuzione di probabilità dell'ultima stazione $M$, di contenere un numero $k$ di clienti:
+\begin{gather}
+    P_M(n_M=k)=\displaystyle f_M(k)\frac{G(M-1,N-k)}{G(N)}
+\end{gather}
+
+Per calcolare il ``visit count" di una singola stazione $i$ si determina in base alla probabilità di instradamento di ogni altra stazione $j$ diretta alla stazione $i$:
+\begin{gather*}
+    \nu_i=\displaystyle\sum_{j=1}^M\nu_jP_{ji}
+\end{gather*}
+
+Generalmente la stazione di riferimento è la stazione di ingresso-uscita, che presenta un ``visit count" $\nu_1=1$. Per cui senza una stazione di riferimento, e quindi un 
+termine noto, sarebbero presenti infinite soluzioni per il sistema di equazioni per il ``visit count". 
+
+%% tabella 21/12
+%Si indica come può essere calcolato ricorsivamente il fattore di normalizzazione $G(N)$ utilizzando una tabella per indicare le probabilità per ogni stazione: 
+%\begin{center}
+%    \begin{tabular}[pos]{cols}
+%        
+%    \end{tabular}
+%\end{center}
 
 \end{document}
