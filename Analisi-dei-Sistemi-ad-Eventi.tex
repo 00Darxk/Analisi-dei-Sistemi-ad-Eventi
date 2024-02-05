@@ -16,13 +16,12 @@
 \usepackage{fancyhdr}
 \usepackage{romanbarpagenumber}
 \usepackage{pgfgantt}
+\allowdisplaybreaks
 
 \setlength{\headheight}{12.0pt}
 \addtolength{\topmargin}{-12.0pt}
 
-%% numerare equazioni nella versione finale
 %% segnati con un doppio segno percentuale ("%%") le correzioni o inserimenti da apportare al testo
-%% formulario
 
 \usetikzlibrary{petri, positioning, arrows.meta}
 \hypersetup{
@@ -37,31 +36,33 @@
 
 \renewcommand{\contentsname}{Indice}
 \newcommand{\df}{\mathrm{d}}
+\newcommand{\tageq}{\tag{\stepcounter{equation}\theequation}}
 
 \numberwithin{equation}{subsection}
 
-\title{Appunti di Analisi dei Sistemi ad Eventi}
-\author{Giacomo Sturm}
-\date{AA: 2023/2024 - Ing. Informatica}
+\fancypagestyle{link}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\fancyfoot[C]{Sorgente del file LaTeX disponibile al seguente link: \url{https://github.com/00Darxk/Analisi-dei-Sistemi-ad-Eventi}}}
 
 \begin{document}
 
-\pagenumbering{Roman}
+\title{%
+    \textbf{Analisi dei Sistemi ad Eventi}  \\ 
+    \large Appunti delle Lezioni di Analisi dei Sistemi ad Eventi\\
+    \textit{Anno Accademico: 2023/24}}
+\author{\textit{Giacomo Sturm}}
+\date{\textit{Dipartimento di Ingegneria Civile, Informatica e delle Tecnologie Aeronautiche \\
+Università degli Studi ``Roma Tre"}}
+
+\maketitle
+\thispagestyle{link}
+
+\clearpage
+
 
 \pagestyle{fancy}
 \fancyhead{}\fancyfoot{}
-\fancyhead[C]{Analisi dei Sistemi ad Eventi - Giacomo Sturm}
+\fancyhead[C]{\textit{Analisi dei Sistemi ad Eventi - Università degli Studi ``Roma Tre"}}
 \fancyfoot[C]{\thepage}
-
-\maketitle
-
-\vspace{10mm}
-
-\begin{center}
-    Sorgente del file LaTeX disponibile su \url{https://github.com/00Darxk/Analisi-dei-Sistemi-ad-Eventi}
-\end{center}
-
-\clearpage
+\pagenumbering{Roman}
 
 \tableofcontents
 
@@ -211,15 +212,15 @@ disabilita le altre transizioni. Il conflitto è potenziale se questo scatto non
         \node[transition, label=right:$t_1$](t1)at(1,0.5){};
         \node[transition, label=right:$t_2$](t2)at(1,-0.5){};
 
-        \draw[->](p1.0)--(t1.180);
-        \draw[->](p1.0)--(t2.180);
+        \draw[->](p1.45)--(t1.180);
+        \draw[->](p1.315)--(t2.180);
 
         \node[place, tokens=1, label=left:$p_2$](p2)at(3,0){};
         \node[transition, label=right:$t_3$](t3)at(4,0.5){};
         \node[transition, label=right:$t_4$](t4)at(4,-0.5){};
 
-        \draw[->](p2.0)--(t3.180);
-        \draw[->](p2.0)--(t4.180);
+        \draw[->](p2.45)--(t3.180);
+        \draw[->](p2.315)--(t4.180);
     \end{tikzpicture}
 \end{center}
 Le transizioni $t_1$ e $t_2$ si dicono in conflitto potenziale, le $t_3$ e $t_4$ si dicono in conflitto effettivo. 
@@ -555,7 +556,7 @@ dell'arco entrante al posto equivale al peso dell'arco uscente dal posto:
         \draw[<-](0.05,1.05)--(0.5,1.5);
         \draw[<-](-0.05,1.05)--(-0.5,1.5);
 
-        \draw[->, ultra thick](0.75,0)--(2.5,0);
+        \draw[->, very thick](0.75,0)--(2.5,0);
 
         \node[transition, rotate=90, label=below:$t_{1,2}$](t3)at(3,0){};
         \draw[<-](3.05,0.05)--(3.5,0.5);
@@ -574,11 +575,11 @@ risultante contiene la somma dei gettoni presenti nei due posti:
 \begin{center}
     \begin{tikzpicture}
         \node[transition, rotate=90, label=below:$t_1$](t)at(0,0){};
-        \node[place, tokens=2, label=right:$p_1$](p1)at(0,1){};
-        \node[place, tokens=1, label=right:$p_2$](p2)at(0,-1){};
+        \node[place, structured tokens={n}, label=right:$p_1$](p1)at(0,1){};
+        \node[place, structured tokens={m}, label=right:$p_2$](p2)at(0,-1){};
 
-        \draw[->](p1.270)--(t.0)node[midway, right]{$2$};
-        \draw[->](t.180)--(p2.90)node[midway, right]{$2$};
+        \draw[->](p1.270)--(t.0)node[midway, right]{$k$};
+        \draw[->](t.180)--(p2.90)node[midway, right]{$k$};
 
         \draw[->](0,1.75)--(p1.90);
         \draw[->](-0.75,1.75)--(p1.135);
@@ -587,9 +588,9 @@ risultante contiene la somma dei gettoni presenti nei due posti:
         \draw[->](p2.315)--(0.75,-1.75);
         \draw[->](p2.225)--(-0.75,-1.75);
 
-        \draw[->, ultra thick](0.75,0)--(2.5,0);
+        \draw[->, very thick](0.75,0)--(2.5,0);
 
-        \node[place, tokens=3, label=right:$p_{1,2}$](p3)at(3,0){};
+        \node[place, structured tokens={n,m}, label=right:$p_{1,2}$](p3)at(3,0){};
 
         \draw[->](3,0.75)--(p3.90);
         \draw[->](2.25,0.75)--(p3.135);
@@ -607,22 +608,22 @@ archi entranti nei due posti originali, analogamente per l'arco uscente dal post
     \begin{tikzpicture}
         \node[transition, rotate=90, label=below:$t_1$](t1)at(0,1.5){};
         \node[transition, rotate=90, label=below:$t_2$](t2)at(0,-1.5){};
-        \node[place, tokens=1, label=right:$p_1$](p1)at(1,0){};
-        \node[place, tokens=2, label=left:$p_2$](p2)at(-1,0){};
+        \node[place, structured tokens={n}, label=right:$p_1$](p1)at(1,0){};
+        \node[place, structured tokens={m}, label=left:$p_2$](p2)at(-1,0){};
 
-        \draw[->](t1.190)--(p1.90)node[midway, right]{$2$};
-        \draw[->](t1.170)--(p2.90)node[midway, left]{$3$};
-        \draw[<-](t2.350)--(p1.270)node[midway, right]{};
-        \draw[<-](t2.10)--(p2.270)node[midway, left]{$2$};
+        \draw[->](t1.190)--(p1.90)node[midway, right]{$k_1$};
+        \draw[->](t1.170)--(p2.90)node[midway, left]{$k_2$};
+        \draw[<-](t2.350)--(p1.270)node[midway, right]{$n_1$};
+        \draw[<-](t2.10)--(p2.270)node[midway, left]{$n_2$};
         
-        \draw[->,ultra thick](1.8,0)--(3.5,0);
+        \draw[->,very thick](1.8,0)--(3.5,0);
 
         \node[transition, rotate=90, label=below:$t_1$](t3)at(4,1.5){};
         \node[transition, rotate=90, label=below:$t_2$](t4)at(4,-1.5){}; 
-        \node[place, tokens=3, label=right:$p_{1,2}$](p3)at(4,0){};
+        \node[place, structured tokens={n,m}, label=right:$p_{1,2}$](p3)at(4,0){};
         
-        \draw[->](t3.180)--(p3.90)node[midway, right]{$5$};
-        \draw[->](p3.270)--(t4.0)node[midway, right]{$3$};
+        \draw[->](t3.180)--(p3.90)node[midway, right]{$k_1+k_2$};
+        \draw[->](p3.270)--(t4.0)node[midway, right]{$n_1+n_2$};
     \end{tikzpicture}
 \end{center}
 
@@ -636,19 +637,19 @@ si considerano come un'unica transizione:
         \node[place, tokens=2, label=right:$p_1$](p1)at(0,1.5){};
         \node[place, tokens=1, label=right:$p_2$](p2)at(0,-1.5){};
 
-        \draw[->](p1.315)--(t1.0)node[midway, right]{$2$};
-        \draw[->](p1.225)--(t2.0)node[midway, left]{$2$};
-        \draw[->](t1.180)--(p2.45);
-        \draw[->](t2.180)--(p2.135);
+        \draw[->](p1.315)--(t1.0)node[midway, right]{$k$};
+        \draw[->](p1.225)--(t2.0)node[midway, left]{$k$};
+        \draw[->](t1.180)--(p2.45)node[midway, right]{$n$};
+        \draw[->](t2.180)--(p2.135)node[midway, left]{$n$};
 
-        \draw[->,ultra thick](1.75,0)--(3.5,0);
+        \draw[->,very thick](1.75,0)--(3.5,0);
 
         \node[transition, rotate=90, label=below:$t_{1,2}$](t3)at(4,0){};
         \node[place, tokens=2, label=right:$p_1$](p3)at(4,1.5){};
         \node[place, tokens=1, label=right:$p_2$](p4)at(4,-1.5){};
         
-        \draw[->](p3.270)--(t3.0)node[midway, right]{$2$};
-        \draw[->](t3.180)--(p4.90);
+        \draw[->](p3.270)--(t3.0)node[midway, right]{$k$};
+        \draw[->](t3.180)--(p4.90)node[midway, right]{$n$};
     \end{tikzpicture}
 \end{center}
 
@@ -669,7 +670,7 @@ la transizione diventa morta.
         \draw[->](1.5,-1)--(t1.180);
         \draw[->](t1.0)--(1.5,1);
 
-        \draw[->,ultra thick](2.25,0)--(3.5,0);
+        \draw[->,very thick](2.25,0)--(3.5,0);
 
         \node[transition, rotate=90, label=below:$t_1$](t2)at(4,0){};
         \draw[->](4,-1)--(t2.180);
@@ -690,7 +691,7 @@ di $k$, allora quella transizione è morta. Se il peso degli archi entranti ed u
         \draw[->](0.25,-1)--(p1.270);
         \draw[->](p1.90)--(0.25,1);
 
-        \draw[->,ultra thick](2.25,0)--(3.5,0);
+        \draw[->,very thick](2.25,0)--(3.5,0);
 
         \node[place, tokens=1, label=right:$p_1$](t2)at(4,0){};
         \draw[->](4,-1)--(t2.270);
@@ -713,9 +714,9 @@ Analogamente la matrice di uscita $O\in M(|P|,|T|,\mathbb{N})$ (Output), contien
 
 
 La matrice di incidenza $C$ è definita come la differenza tra la matrice di uscita e la matrice di entrata:
-\begin{equation*}
+\begin{equation}
     C:=O-I\in M(|P|,|T|,\mathbb{Z})
-\end{equation*}
+\end{equation}
 
 Se nella rete è presente un ciclo, a gettoni costanti, le componenti della matrice di incidenza relative a quegli archi assumono valori nulli. Se un elemento $c_{ij}$ della 
 matrice di incidenza $C:=(c_{ij})$ è negativo, allora la transizione $t_j$ è in ingresso al posto $p_i$, se è positivo allora la transizione $t_j$ è di uscita dal posto $p_i$, 
@@ -775,7 +776,7 @@ arbitraria. Se questo è verificato la sequenza di transizioni si dice ammissibi
 
 L'effetto di una sequenza di scatti $S=t_{k_1},\cdots,t_{k_n}$ da una marcatura $M_0$ ad una marcatura $M^*$ può essere espresso mediante l'equazione di stato della rete:
 \begin{equation*}
-    M^*=M+C_{k_1}+\cdots+C_{k_n}=M+C\cdot(s_{k_1}+\cdots+c_{k_n})
+    M^*=M+C_{k_1}+\cdots+C_{k_n}=M+C\cdot(s_{k_1}+\cdots+s_{k_n})
 \end{equation*}
 Si definisce il vettore colonna $s_k$, di dimensione pari alla cardinalità dell'insieme delle transizioni, associato alla sequenza di scatti, che indica quante volte ogni 
 singola transizione è scattata, senza fornire informazioni sull'ordine in cui le transizioni scattano. Presenta nella posizione $i-$esima il valore corrispondente al numero 
@@ -784,9 +785,9 @@ di occorrenze della transizione $t_i$ nella sequenza $S$:
     s_{k_1}+\cdots+s_{k_n}=s_k
 \end{equation*}
 Per cui si può esprimere l'evoluzione della rete da una marcatura $M_0$ dopo una sequenza di scatti $S$ come:
-\begin{equation*}
+\begin{equation}
     M_0\left[\right.S>M^*:\;\;M^*=M_0+C\cdot s_k
-\end{equation*}
+\end{equation}
 Quest'espressione indica una relazione lineare. 
 
 \subsection{Analisi Strutturale}
@@ -822,13 +823,13 @@ Gli ivarianti di posto $x$ sono tali che:
     x^TM=x^T(M+Cs)=x^TM_0+Csx^T
 \end{equation*}
 Per definizione $x^TM=x^TM_0$, allora, un vettore colonna $x$ si dice $P-$invariante se rispetta la seguente equazione:
-\begin{equation*}
+\begin{equation}
     x^TCs=0
-\end{equation*}
+\end{equation}
 Per definizione un vettore associato ad una sequenza di scatti $S$ non è nullo, per cui non si considera come soluzione $s=0$. Per cui il l'equazione diventa un sistema 
 di $|P|$ equazioni: 
-\begin{equation*}
-    x^TC=0\to\begin{pmatrix}
+\begin{equation}
+    \begin{pmatrix}
         x_1 & \cdots & x_{|P|}
     \end{pmatrix}\cdot\begin{pmatrix}
         c_{11} & \cdots & c_{1|T|}\\
@@ -839,11 +840,11 @@ di $|P|$ equazioni:
         \vdots\\
         0
     \end{pmatrix}\to\begin{cases}
-        x_1c_{11}+\cdots+x_{|P|}c_{|P|1}=&0\\
+        x_1\,c_{11}\,+\,\cdots\,+\,x_{|P|}\,c_{|P|1}\,=&0\\
         \vdots &\vdots\\
         x_1c_{1|T|}+\cdots+x_{|P|}c_{|P||T|}=&0
     \end{cases}
-\end{equation*}
+\end{equation}
 Si omette la soluzione $x$ uguale al vettore nullo, poiché inutile nell'analisi di una rete di Petri. Le soluzioni accettate sono vettori colonna con componenti intere. Se 
 non sono presenti soluzioni oppure se le componenti dell'invariante sono minori o uguali a $0$: $x\leq0$, la rete non è strutturalmente conservativa, se è presente almeno una 
 soluzione è possibile crearne infinite tramite combinazione lineare e la rete è strutturalmente conservativa. Se il $P-$invariante è tale che $x\geq0$ la rete è conservativa 
@@ -855,13 +856,12 @@ strutturalmente conservativa.
 I $T-$invarianti sono analoghi ai $P-$invarianti associati alle transizioni $T$. Un vettore colonna $y$, di dimensione pari alla cardinalità dell'insieme delle transizioni, 
 si definisce $T-$invariante, se dopo lo scatto delle transizioni indicate dal vettore si ritorna alla marcatura iniziale, quindi esprime la reversibilità della rete. 
 Si considera uno sequenza di scatti $S: M_0\left[\right.S>M_0$ associata al vettore $y$: 
-\begin{equation*}
+\begin{equation}
     M=M_0+Cy=M_0\to Cy=0
-\end{equation*}
+\end{equation}
 Non si considera $y=0$ una soluzione, per cui un vettore colonna si definisce $T-$invariante se non è il vettore nullo e ha componenti interi. Per trovare 
 le componenti del vettore $y$ bisogna risolvare un sistema di $|T|$ equazioni: 
-\begin{gather*}
-    Cy=0\to
+\begin{gather}
     \begin{pmatrix}
         c_{11} & \cdots & c_{1|T|}\\
         \vdots & \ddots & \vdots\\
@@ -878,11 +878,11 @@ le componenti del vettore $y$ bisogna risolvare un sistema di $|T|$ equazioni:
         0
     \end{pmatrix}\to
     \begin{cases}
-        y_1c_{11}+\cdots+y_{|T|}c_{1|T|}=&0\\
+        y_1\,c_{11}\,+\,\cdots\,+\,y_{|T|}\,c_{1|T|}\,=&0\\
         \vdots & \vdots\\
         y_{|T|}c_{|P|1}+\cdots+y_{|T|}c_{|P||T|}=&0
     \end{cases}
-\end{gather*}
+\end{gather}
 Se il vettore $y$ è maggiore uguale del vettore nullo, ovvero ha componenti tutte positive, la rete si dice reversibile, altrimenti se presenta almeno una componente negativa 
 implicherebbe che per ritornare alla marcatura iniziale bisognerebbe invertire lo scatto di una transizione, ma ciò è impossibile, quindi in questo caso la rete non è 
 reversibile. Se una ammete un $T-$invariante, ne ammette infiniti. Se non ammette $T-$invarianti sicuramente non è reversibile. Bisogna comunque verificare che la sequenza di 
@@ -992,15 +992,15 @@ potenziale:
         \node[place, tokens=1,label=above:$B$](b)at(2.5,0){};
         \node[instant,rotate=90,label=above:$t_1$](t1)at(0.25,-1){};
         \node[instant,rotate=90,label=below:$t_2$](t2)at(1.75,-1){};
-        \node[transition,rotate=90,label=above:$t_3$](t3)at(0.25,-2){};
-        \node[transition,rotate=90,label=below:$t_4$](t4)at(1.75,-2){};
+        \node[place,tokens=0,rotate=90,label=above:$p_1$](t3)at(0.25,-2){};
+        \node[place,tokens=0,rotate=90,label=below:$p_1$](t4)at(1.75,-2){};
 
         \draw[->](a.315)--(t1.45);
         \draw[->](r.225)--(t1.315);
         \draw[->](r.315)--(t2.45);
         \draw[->](b.225)--(t2.315);
-        \draw[dashed,->](t1.180)--(t3.0);
-        \draw[dashed,->](t2.180)--(t4.0);
+        \draw[->](t1.180)--(t3.0);
+        \draw[->](t2.180)--(t4.0);
         \draw[->](t3.180)--(0.25,-2.5);
         \draw[->](t4.180)--(1.75,-2.5);
     \end{tikzpicture}
@@ -1050,9 +1050,9 @@ come $3$ posti a monte di una transizione istantanea $t_{R_A}/t_{R_B}$, poiché 
         \draw[<->](b.270)--(trb.0);
     \end{tikzpicture}
 \end{center}
-Le transizioni istantanee portano ad un posto $R_A/R_B$, che esprime lo stato del braccio meccanico, occupato nel carico $A/B.pick$, trasporto $A/B.mov$ e scarico $A/B.release$ 
+Le transizioni istantanee portano ad un posto $R_A/R_B$, che esprime lo stato del braccio meccanico, occupato nel carico $A/B.\mathrm{pick}$, trasporto $A/B.mov$ e scarico $A/B.\mathrm{release}$ 
 del grezzo $A$ o $B$, e rappresentano il primo evento nella sequenza della lavorazione della macchina. Ognuna delle operazioni del braccio viene espressa come una transizione 
-temporizzata, e solo al termine, ovvero allo scarico $t_{A/B.release}$, il braccio torna di nuovo disponibile allo spostamento di un altro grezzo. 
+temporizzata, e solo al termine, ovvero allo scarico $t_{A/B.\mathrm{release}}$, il braccio torna di nuovo disponibile allo spostamento di un altro grezzo. 
 \begin{center}
     \begin{tikzpicture}
         \node[place,tokens=1,label=above:$M_A$](ma)at(0,0){};
@@ -1072,16 +1072,16 @@ temporizzata, e solo al termine, ovvero allo scarico $t_{A/B.release}$, il bracc
 
         \node[place,tokens=0,label=left:$R_A$](ra)at(1,-2){};
         \node[place,tokens=0,label=right:$R_B$](rb)at(3,-2){};
-        \node[transition, rotate=90, label=above:$t_{A.pick}$](rap)at(1,-3){};
-        \node[transition, rotate=90, label=below:$t_{B.pick}$](rbp)at(3,-3){};
+        \node[transition, rotate=90, label=above:$t_{A.\mathrm{pick}}$](rap)at(1,-3){};
+        \node[transition, rotate=90, label=below:$t_{B.\mathrm{pick}}$](rbp)at(3,-3){};
         \node[place,tokens=0,label=left:$A\in R$](ra1)at(1,-4){};
         \node[place,tokens=0,label=right:$B\in R$](rb1)at(3,-4){};
-        \node[transition, rotate=90, label=above:$t_{A.move}$](ram)at(1,-5){};
-        \node[transition, rotate=90, label=below:$t_{B.move}$](rbm)at(3,-5){};
+        \node[transition, rotate=90, label=above:$t_{A.\mathrm{move}}$](ram)at(1,-5){};
+        \node[transition, rotate=90, label=below:$t_{B.\mathrm{move}}$](rbm)at(3,-5){};
         \node[place,tokens=0,label=left:$A\in R$](ra2)at(1,-6){};
         \node[place,tokens=0,label=right:$B\in R$](rb2)at(3,-6){};
-        \node[transition, rotate=90, label=above:$t_{A.release}$](rar)at(1,-7){};
-        \node[transition, rotate=90, label=below:$t_{B.release}$](rbr)at(3,-7){};
+        \node[transition, rotate=90, label=above:$t_{A.\mathrm{release}}$](rar)at(1,-7){};
+        \node[transition, rotate=90, label=below:$t_{B.\mathrm{release}}$](rbr)at(3,-7){};
         \node[place,tokens=0,label=left:$A\in M_A$](maa)at(1,-8){};
         \node[place,tokens=0,label=right:$B\in M_B$](mbb)at(3,-8){};
 
@@ -1105,7 +1105,7 @@ temporizzata, e solo al termine, ovvero allo scarico $t_{A/B.release}$, il bracc
         \draw[->](rbr.120)to[out=270,in=270](r.280);
     \end{tikzpicture}
 \end{center}
-Le transizioni in sequenza $t_{A/B.pick},\;t_{A/B.move},\;t_{A/B.release}$ possono essere sostituite da un'unica transizione associata ad un intervallo di tempo pari alla 
+Le transizioni in sequenza $t_{A/B.\mathrm{pick}},\;t_{A/B.\mathrm{move}},\;t_{A/B.\mathrm{release}}$ possono essere sostituite da un'unica transizione associata ad un intervallo di tempo pari alla 
 somma dei tre intervalli delle transizioni originali:
 \begin{center}
     \begin{tikzpicture}
@@ -1126,8 +1126,8 @@ somma dei tre intervalli delle transizioni originali:
 
         \node[place,tokens=0,label=left:$R_A$](ra)at(1,-2){};
         \node[place,tokens=0,label=right:$R_B$](rb)at(3,-2){};
-        \node[transition, rotate=90, label=above:$t_{A.move}$](rap)at(1,-3){};
-        \node[transition, rotate=90, label=below:$t_{B.move}$](rbp)at(3,-3){};
+        \node[transition, rotate=90, label=above:$t_{A.\mathrm{move}}$](rap)at(1,-3){};
+        \node[transition, rotate=90, label=below:$t_{B.\mathrm{move}}$](rbp)at(3,-3){};
         \draw[->](tra.180)--(ra.90);
         \draw[->](ra.270)--(rap.0);
         \draw[->](trb.180)--(rb.90);
@@ -1143,7 +1143,7 @@ somma dei tre intervalli delle transizioni originali:
 \end{center}
 
 Quando le macchine presenta al loro interno un grezzo, lo lavorano fino ad un prodotto finito, quest'operazione viene rappresentata come una transizione 
-temporizzata $t_{A/B.make}$ che passa dallo stato $A/B\in M_{A/B}$ allo stato $A_f/B_f\in M_{A/B}$, entrambi espressi come posti. Quando entrambi i posti che rappresentano 
+temporizzata $t_{A/B.\mathrm{make}}$ che passa dallo stato $A/B\in M_{A/B}$ allo stato $A_f/B_f\in M_{A/B}$, entrambi espressi come posti. Quando entrambi i posti che rappresentano 
 lo stato del prodotto finito in una macchina sono marcati, ed il braccio meccanico è disponibile, allora il braccio può raccogliere entrambi i prodotti finiti per cominciare 
 il processo di assemblaggio finale. Quest'operazione si rappresenta mediante una transizione $t_{R_{(A_f,B_f)}}$ istantanea, poiché lo stesso braccio è in entrata ad altre due 
 transizioni, ma il conflitto non avverrà mai con questa transizione, poiché può essere abilitata se e solo se le due transizioni in ingresso alle sequenze di lavorazione dei 
@@ -1170,8 +1170,8 @@ rendendoli nuovamente disponibili, e arriva ad uno stato $(A_f,B_f)\in R$, dove 
 
         \node[place,tokens=0,label=left:$R_A$](ra)at(1,-2){};
         \node[place,tokens=0,label=right:$R_B$](rb)at(3,-2){};
-        \node[transition, rotate=90, label=above:$t_{A.move}$](rap)at(1,-3){};
-        \node[transition, rotate=90, label=below:$t_{B.move}$](rbp)at(3,-3){};
+        \node[transition, rotate=90, label=above:$t_{A.\mathrm{move}}$](rap)at(1,-3){};
+        \node[transition, rotate=90, label=below:$t_{B.\mathrm{move}}$](rbp)at(3,-3){};
         \draw[->](tra.180)--(ra.90);
         \draw[->](ra.270)--(rap.0);
         \draw[->](trb.180)--(rb.90);
@@ -1184,8 +1184,8 @@ rendendoli nuovamente disponibili, e arriva ad uno stato $(A_f,B_f)\in R$, dove 
         \draw[->](rap.180)--(maa.90);
         \draw[->](rbp.180)--(mbb.90);
 
-        \node[transition, rotate=90, label=above:$t_{A.make}$](amake)at(1,-5){};
-        \node[transition, rotate=90, label=below:$t_{B.make}$](bmake)at(3,-5){};
+        \node[transition, rotate=90, label=above:$t_{A.\mathrm{make}}$](amake)at(1,-5){};
+        \node[transition, rotate=90, label=below:$t_{B.\mathrm{make}}$](bmake)at(3,-5){};
         \node[place,tokens=0,label=left:$A_f\in M_A$](maf)at(1,-6){};
         \node[place,tokens=0,label=right:$B_f\in M_B$](mbf)at(3,-6){};
 
@@ -1201,7 +1201,7 @@ rendendoli nuovamente disponibili, e arriva ad uno stato $(A_f,B_f)\in R$, dove 
 
         \node[place,label=left:$R_{(A_f,B_f)}$](rf)at(2,-8){};
         \draw[->](rabf.180)--(rf.90);
-        \node[transition, rotate=90,label=above:$t_{(A_f,B_f).pick}$](trf)at(2,-9){};
+        \node[transition, rotate=90,label=above:$t_{(A_f,B_f).\mathrm{pick}}$](trf)at(2,-9){};
         \node[place,tokens=0,label=left:${ (A_f, B_f)\in R}$](ttrf)at(2,-10){};
         \draw[->](rf.270)--(trf.0);
         \draw[->](trf.180)--(ttrf.90);
@@ -1209,7 +1209,7 @@ rendendoli nuovamente disponibili, e arriva ad uno stato $(A_f,B_f)\in R$, dove 
         \draw[->](trf.135)to[out=225,in=225](ma.225);
         \draw[->](trf.225)to[out=315,in=315](mb.315);
         
-        \node[transition, rotate=90,label=above:$t_{P.make}$](trp)at(2,-11){};
+        \node[transition, rotate=90,label=above:$t_{P.\mathrm{make}}$](trp)at(2,-11){};
         \node[place,tokens=0,label=left:${P\in R}$](rp)at(2,-12){};
 
         \draw[->](ttrf.270)--(trp.0);
@@ -1218,9 +1218,9 @@ rendendoli nuovamente disponibili, e arriva ad uno stato $(A_f,B_f)\in R$, dove 
 \end{center}
 
 A questo 
-punto si rappresenta l'assemblaggio finale come una transizione temporizzata $t_{P.make}$, che porta allo stato $P\in R$, dove $P$ denota il prodotto finale, contenuto ancora 
+punto si rappresenta l'assemblaggio finale come una transizione temporizzata $t_{P.\mathrm{make}}$, che porta allo stato $P\in R$, dove $P$ denota il prodotto finale, contenuto ancora 
 nel robot. Il prodotto finito viene riposto nel buffer di uscita $O$, se è disponibile, rendendo nuovamente disponibile il robot per spostare altri grezzi. Il prodotto finito 
-nel buffer finale a questo punto viene trasportato fuori dal sistema, modellato con un altra transizione temporizzata $t_{P.out}$:
+nel buffer finale a questo punto viene trasportato fuori dal sistema, modellato con un altra transizione temporizzata $t_{P.\mathrm{out}}$:
 
 \begin{center}
     \begin{tikzpicture}
@@ -1241,8 +1241,8 @@ nel buffer finale a questo punto viene trasportato fuori dal sistema, modellato 
 
         \node[place,tokens=0,label=left:$R_A$](ra)at(1,-2){};
         \node[place,tokens=0,label=right:$R_B$](rb)at(3,-2){};
-        \node[transition, rotate=90, label=above:$t_{A.move}$](rap)at(1,-3){};
-        \node[transition, rotate=90, label=below:$t_{B.move}$](rbp)at(3,-3){};
+        \node[transition, rotate=90, label=above:$t_{A.\mathrm{move}}$](rap)at(1,-3){};
+        \node[transition, rotate=90, label=below:$t_{B.\mathrm{move}}$](rbp)at(3,-3){};
         \draw[->](tra.180)--(ra.90);
         \draw[->](ra.270)--(rap.0);
         \draw[->](trb.180)--(rb.90);
@@ -1255,8 +1255,8 @@ nel buffer finale a questo punto viene trasportato fuori dal sistema, modellato 
         \draw[->](rap.180)--(maa.90);
         \draw[->](rbp.180)--(mbb.90);
 
-        \node[transition, rotate=90, label=above:$t_{A.make}$](amake)at(1,-5){};
-        \node[transition, rotate=90, label=below:$t_{B.make}$](bmake)at(3,-5){};
+        \node[transition, rotate=90, label=above:$t_{A.\mathrm{make}}$](amake)at(1,-5){};
+        \node[transition, rotate=90, label=below:$t_{B.\mathrm{make}}$](bmake)at(3,-5){};
         \node[place,tokens=0,label=left:$A_f\in M_A$](maf)at(1,-6){};
         \node[place,tokens=0,label=right:$B_f\in M_B$](mbf)at(3,-6){};
 
@@ -1272,7 +1272,7 @@ nel buffer finale a questo punto viene trasportato fuori dal sistema, modellato 
 
         \node[place,label=left:$R_{(A_f,B_f)}$](rf)at(2,-8){};
         \draw[->](rabf.180)--(rf.90);
-        \node[transition, rotate=90,label=above:$t_{(A_f,B_f).pick}$](trf)at(2,-9){};
+        \node[transition, rotate=90,label=above:$t_{(A_f,B_f).\mathrm{pick}}$](trf)at(2,-9){};
         \node[place,tokens=0,label=left:${ (A_f, B_f)\in R}$](ttrf)at(2,-10){};
         \draw[->](rf.270)--(trf.0);
         \draw[->](trf.180)--(ttrf.90);
@@ -1280,13 +1280,13 @@ nel buffer finale a questo punto viene trasportato fuori dal sistema, modellato 
         \draw[->](trf.135)to[out=225,in=225](ma.225);
         \draw[->](trf.225)to[out=315,in=315](mb.315);
         
-        \node[transition, rotate=45,label=above:$t_{P.make}$](trp)at(2,-11){};
+        \node[transition, rotate=45,label=above:$t_{P.\mathrm{make}}$](trp)at(2,-11){};
         \node[place,tokens=0,label=below left:${P\in R}$](rp)at(3,-11){};
 
         \draw[->](ttrf.270)--(trp.45);
         \draw[->](trp.315)--(rp.180);
 
-        \node[transition, label=below:$t_{P.move}$](tpm)at(4,-11){};
+        \node[transition, label=below:$t_{P.\mathrm{move}}$](tpm)at(4,-11){};
         \draw[->](rp.0)--(tpm.180);
         \node[place, tokens=0, label=right:$P\in O$](po)at(5,-10){};
         \node[place, tokens=1, label=below:$P\notin O$](pio)at(5,-12){};
@@ -1294,7 +1294,7 @@ nel buffer finale a questo punto viene trasportato fuori dal sistema, modellato 
         \draw[->](pio.135)--(tpm.315);
         \draw[->](tpm.60)to[out=45,in=45](r.45);
 
-        \node[transition, label=right:$t_{P.out}$](tpo)at(6,-11){};
+        \node[transition, label=right:$t_{P.\mathrm{out}}$](tpo)at(6,-11){};
         \draw[->](po.315)--(tpo.135);
         \draw[->](tpo.225)--(pio.45);
     \end{tikzpicture}
@@ -1326,8 +1326,8 @@ controllore come ogni ciclo deve essere marcato:
         \draw[->](r.0)to[out=0,in=90](trb.0);
         \draw[<->](mb.180)to[out=180, in=90](trb.315);
 
-        \node[place, tokens=1, label=below:$A$](a)at(2,0){};
-        \node[place, tokens=0, label=below:$B$](b)at(2,-2){};
+        \node[place, tokens=1, label=below:$R_A$](a)at(2,0){};
+        \node[place, tokens=0, label=below:$R_B$](b)at(2,-2){};
 
         \draw[->](a.180)to[out=180,in=90](tra.315);
         \draw[->](tra.225)to[out=270,in=180](b.180);
@@ -1375,7 +1375,7 @@ Se non viene esplicitamente richiesto, non si modella la risoluzione del conflit
 \subsection{Buffer FIFO e LIFO}
 
 In caso il sistema presenta una pila o una coda, bisogna modellare un magazzino con disciplina FIFO o LIFO. 
-Si modella un buffer nella convenzione First In First Out, tramite archi inibitori, dove la transizione $t_{out}$ determina l'uscita dell'elemento dal buffer. Si 
+Si modella un buffer nella convenzione First In First Out, tramite archi inibitori, dove la transizione $t_\mathrm{out}$ determina l'uscita dell'elemento dal buffer. Si 
 considera un buffer di $n$ elementi: 
 \begin{center}
     \begin{tikzpicture}
@@ -1388,7 +1388,7 @@ considera un buffer di $n$ elementi:
         \node[place,label=above:$G_2$](p1)at(4,0){};
         \node[instant](t2)at(5,0){};
         \node[place,label=above:$G_1$](p2)at(6,0){};
-        \node[transition,label=above:$t_{out}$](t0)at(7,0){};
+        \node[transition,label=above:$t_\mathrm{out}$](t0)at(7,0){};
 
         \draw[->](r.0)--(tp.180);
         \draw[->](tp.0)--(p0.180);
@@ -1413,13 +1413,13 @@ Si modella ora un buffer LIFO, di $n$ elementi:
         \node[instant](tp)at(0,0){};
         \node[place,label=above:$G_n$](p0)at(1,0){};
         \node[instant](ta)at(2,0){};
-        \node[transition,rotate=90,label=left:$t_{out}$](t00)at(1,-1){};
+        \node[transition,rotate=90,label=left:$t_\mathrm{out}$](t00)at(1,-1){};
         \node[instant](t1)at(3,0){};
         \node[place,label=above:$G_2$](p1)at(4,0){};
         \node[instant](t2)at(5,0){};
-        \node[transition,rotate=90,label=left:$t_{out}$](t01)at(4,-1){};
+        \node[transition,rotate=90,label=left:$t_\mathrm{out}$](t01)at(4,-1){};
         \node[place,label=above:$G_1$](p2)at(6,0){};
-        \node[transition,rotate=90,label=left:$t_{out}$](t02)at(6,-1){};
+        \node[transition,rotate=90,label=left:$t_\mathrm{out}$](t02)at(6,-1){};
 
         \draw[->](r.0)--(tp.180);
         \draw[->](tp.0)--(p0.180);
@@ -1442,16 +1442,27 @@ Si modella ora un buffer LIFO, di $n$ elementi:
     \end{tikzpicture}
 \end{center}
 
-\subsection{Diagramma di Gant}
+\subsection{Diagramma di Gantt}
 
-Il grafico di Gant è una rappresentazione grafica dell'uso delle risorse in un sistema. Ogni risorsa si indica come una linea parallela. Si scorrono verso destra, rispetto 
-al tempo, e viene associato un evento in un determinato tempo per ogni scatto di una o più transizioni. Si può identificare nel grafico di Gant quando è presente un conflitto, 
-ovvero quando una stessa risorsa è richiesta per due, o più, processi diversi. Il grafico di Gant è completamente indipendente dalla rete associata ad un sistema. Attraverso 
+Il grafico di Gantt è una rappresentazione grafica dell'uso delle risorse in un sistema. Ogni risorsa si indica come una linea parallela. Si scorrono verso destra, rispetto 
+al tempo, e viene associato un evento in un determinato tempo per ogni scatto di una o più transizioni. Si può identificare nel grafico di Gantt quando è presente un conflitto, 
+ovvero quando una stessa risorsa è richiesta per due, o più, processi diversi. Il grafico di Gantt è completamente indipendente dalla rete associata ad un sistema. Attraverso 
 questa visualizzazione, si possono individuare tutti i conflitti effettivi della rete, quindi si possono modellare adeguatamente le risoluzioni, se sono richieste. La 
-precedenza nel grafico di Gant viene scelta arbitrariamente. Questa 
-rappresentazione dipende dalla marcatura iniziale del sistema, in caso sia presente un deadlock, la rappresentazione non è periodica. Generalmente un grafico di Gant di un 
-sistema produttivo ciclico, è periodico, per cui è sufficiente rappresentare solo un periodo del sistema. 
-%% esempio grafo (2/11) https://texdoc.org/serve/pgfgantt/0
+precedenza nel grafico di Gantt viene scelta arbitrariamente. Questa 
+rappresentazione dipende dalla marcatura iniziale del sistema, in caso sia presente un deadlock, la rappresentazione non è periodica. Generalmente un grafico di Gantt di un 
+sistema produttivo ciclico, è periodico, per cui è sufficiente rappresentare solo un periodo del sistema. Di seguito un esempio di un possibile diagramma di Gantt: 
+\begin{center}
+    \begin{ganttchart}[
+        hgrid=true,
+        vgrid={dashed}
+    ]{1}{15}
+        \gantttitle{Diagramma di Gantt}{15}\\
+        \gantttitlelist{1,...,15}{1}\\
+        \ganttbar[bar/.append style={fill=red}]{Risorsa 1}{1}{4}\ganttbar[bar/.append style={fill=blue}]{}{5}{8}\ganttbar[bar/.append style={fill=red}]{}{12}{15}\\
+        \ganttbar[bar/.append style={fill=blue}]{Risorsa 2}{1}{3}\ganttbar[bar/.append style={fill=red}]{}{5}{7}\ganttbar[bar/.append style={fill=blue}]{}{9}{11}\\
+        \ganttbar[bar/.append style={fill=red}]{Risorsa 3}{8}{11}\ganttbar[bar/.append style={fill=blue}]{}{12}{15}
+    \end{ganttchart}
+\end{center}
 
 \subsection{Scambio}
 
@@ -1512,8 +1523,8 @@ un contatore.
 
 \begin{center}
     \begin{tikzpicture}
-        \node[transition, rotate=90, label=above:$t_{in}$](tin)at(0,2){};
-        \node[place, label=left:$G_{in}$](gin)at(0,1){};
+        \node[transition, rotate=90, label=above:$t_\mathrm{in}$](tin)at(0,2){};
+        \node[place, label=left:$G_\mathrm{in}$](gin)at(0,1){};
         \draw[->](tin.180)--(gin.90);
 
         \node[place, tokens=1, label=left:$G_0$](g0)at(0,0){};
@@ -1539,7 +1550,7 @@ un contatore.
         \draw[->](t4.0)--(gn.180);
         \draw[->](gin.350)--(t4.110);
 
-        \node[transition, rotate=90, label=below:$G_{{\geq n}_{in}}$](tgin)at(7.5,-1){};
+        \node[transition, rotate=90, label=below:$G_{{\geq n}_\mathrm{in}}$](tgin)at(7.5,-1){};
         \draw[->](gn.270)--(tgin.0);
         \draw[->](tgin.90)to[out=180,in=315](g0.315);
         \draw[->,dashed](tgin.180)--(7.5,-2);
@@ -1577,7 +1588,7 @@ Si definisce la distribuzione di una variabile aleatoria, una funzione che indic
 Si definisce la densità di probabilità di un evento, la probabilità con cui la variabile aleatoria assume un certo valore, nel discreto corrisponde ad una somma di probabilità:
 \begin{gather*}
     F_x(x)=\displaystyle\sum_{y\leq x}p_x(y)\\
-    F_x(x)=\displaystyle\int_{-\infty}^xf_x(y)dy
+    F_x(x)=\displaystyle\int_{-\infty}^xf_x(y)\df y
 \end{gather*}
 Si definisce la media d'insieme la media di tutti i valori di uno spazio campione:
 \begin{gather*}
@@ -1787,11 +1798,9 @@ Si porta un fattore $\rho$ ed il fattore $P_0$, costanti, fuori dalla sommatoria
 \end{gather*}
 Poiché la derivata è un'operazione lineare, si può portare fuori dalla sommatoria, una serie geometrica di ragione $\rho<1$, per cui converge:
 \begin{gather*}
-    N=\rho P_0\displaystyle\sum_{n=0}^{\infty}\frac{\df}{\df\rho}\rho^n=\rho P_0\frac{\df}{\df\rho}\left(\sum_{n=0}^{\infty}\rho^n\right)=\rho P_0\frac{\df}{\df\rho}\left(\frac{1}{1-\rho}\right)=\frac{\rho(1-\rho)}{(1-\rho)^2}=\frac{\rho}{1-\rho}=\frac{\displaystyle\frac{\lambda}{\mu}}{1-\displaystyle\frac{\lambda}{\mu}}
+    N=\rho P_0\displaystyle\sum_{n=0}^{\infty}\frac{\df}{\df\rho}\rho^n=\rho P_0\frac{\df}{\df\rho}\left(\sum_{n=0}^{\infty}\rho^n\right)=\rho P_0\frac{\df}{\df\rho}\left(\frac{1}{1-\rho}\right)=\frac{\rho(1-\rho)}{(1-\rho)^2}=\frac{\rho}{1-\rho}=\frac{\displaystyle\frac{\lambda}{\mu}}{1-\displaystyle\frac{\lambda}{\mu}}\\
+    N=\displaystyle\frac{\lambda}{\mu-\lambda}\tageq
 \end{gather*}
-\begin{equation}
-    N=\displaystyle\frac{\lambda}{\mu-\lambda}
-\end{equation}
 
 Questa relazione corrisponde ad una delle tre leggi di Little. 
 Per determinare le altre due leggi si considera il valore atteso del tempo di attraversamento del sistema $W$, pari alla somma del valore atteso del tempo di 
@@ -1808,21 +1817,17 @@ frequenza di arrivo moltiplicata per il valore atteso del tempo di attraversamen
 sia nulla, indipendentemente dal tempo di attraversamento del sistema:
 \begin{gather*}
     N=\lambda W\\
-    W =\displaystyle\frac{N}{\lambda}=W_q+\frac{1}{\mu}
+    W =\displaystyle\frac{N}{\lambda}=W_q+\frac{1}{\mu}\\
+    W_q=\displaystyle\frac{1}{\mu-\lambda}-\frac{1}{\mu}\tageq
 \end{gather*}
-\begin{equation}
-    W_q=\displaystyle\frac{1}{\mu-\lambda}-\frac{1}{\mu}
-\end{equation}
 
 L'ultima legge di Little lega il valore atteso della lunghezza della coda $l$ del sistema al valore atteso del tempo passato in coda $t_q$, ovvero mette in relazione diretta il numero 
 dei clienti in coda $L$ con il tempo speso in coda $W_q$. Questo valore atteso dipende solo dalla velocità degli arrivi in coda, per cui si può esprimere come la frequenza di 
 arrivo moltiplicata per il tempo medio passato in coda:
 \begin{gather*}
-    L=\lambda W_q=\lambda\left(\displaystyle\frac{1}{\mu-\lambda}-\frac{1}{\mu}\right)=\frac{\lambda}{\mu-\lambda}-\frac{\lambda}{\mu}
+    L=\lambda W_q=\lambda\left(\displaystyle\frac{1}{\mu-\lambda}-\frac{1}{\mu}\right)=\frac{\lambda}{\mu-\lambda}-\frac{\lambda}{\mu}\\
+    L=N-\rho\tageq
 \end{gather*}
-\begin{equation}
-    L=N-\rho
-\end{equation}
 
 \subsection{Sistemi M/M/1/K}
 
@@ -1935,13 +1940,13 @@ Si considera solamente il denominatore del denominatore, poiché solo la velocit
     \displaystyle\sum_{n=0}^{\infty}\prod_{0=1}^n\mu_j=\sum_{n=0}^{s-1}\prod_{j=1}^n\mu_j+\sum_{n=s}^{\infty}\prod_{j=1}^n\mu_j\\
     0+1\mu+\cdots+(s-1)!\mu^{s-1}+s!\mu^s+(s!\mu^s)s\mu+(s!\mu^s)(s\mu)^2+\cdots\\
     \displaystyle\sum_{n=0}^{s-1}n!\mu^n+\sum_{n=s}^{\infty}s!s^{n-s}\mu^n\\
-    \displaystyle\sum_{n=0}^{\infty}\left(\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\lambda_j}\right)=\sum_{n=0}^{s-1}\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^n+\sum_{n=s}^{\infty}\frac{1}{s!s^{n-s}}\left(\frac{\lambda}{\mu}\right)^n\\
+    \displaystyle\sum_{n=0}^{\infty}\left(\frac{\displaystyle\prod_{i=0}^{n-1}\lambda_i}{\displaystyle\prod_{j=1}^n\lambda_j}\right)=\sum_{n=0}^{s-1}\frac{1}{n!}\left(\frac{\lambda}{\mu}\right)^n+\sum_{n=s}^{\infty}\frac{1}{s!s^{n-s}}\left(\frac{\lambda}{\mu}\right)^n\\
     \displaystyle\sum_{n=s}^{\infty}\frac{1}{s!s^{n-s}}\left(\frac{\lambda}{\mu}\right)^n\mbox{ per }n-s=l\to\frac{1}{s!}\sum_{l=0}^{\infty}\frac{1}{s^l}\left(\frac{\lambda}{\mu}\right)^{l+s}\\
     \frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\sum_{l=0}^{\infty}\left(\frac{\lambda}{\mu}\right)^l=\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\frac{s\mu}{s\mu-\lambda}
 \end{gather*}
 Per cui la probabilità si esprimere tramite la seguente espressione:
 \begin{gather}
-    P_0=\displaystyle\frac{1}{\displaystyle\sum_{n=0}^{s-1}\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^n+\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\frac{s\mu}{s\mu-\lambda}}
+    P_0=\displaystyle\frac{1}{\displaystyle\sum_{n=0}^{s-1}\frac{1}{n!}\left(\frac{\lambda}{\mu}\right)^n+\frac{1}{s!}\left(\frac{\lambda}{\mu}\right)^s\frac{s\mu}{s\mu-\lambda}}
 \end{gather}
 Si esprime la probabilità di trovarsi in uno stato $n$, in base alla condizione se tutti i serventi stiano lavorando o solo un numero $n<s$:
 \begin{gather*}
@@ -2105,7 +2110,7 @@ code aperta si ottiene la seguente espressione per la produttività reale:
 Per ogni stazione $j$ invece si possono individuare due diverse produttività reali. Si possono considerare solamente i prodotti finiti dalla stazione, ovvero non si considerano 
 i prodotti e clienti che attraversano la stazione più di una volta, per cui questa produttività si esprime come:
 \begin{equation*}
-    X_{R_j}=\displaystyle\frac{\lambda_j'}{\nu_j}=\frac{\lambda_j'}{\frac{\lambda_j'}{\lambda_j}}=\lambda_j
+    X_{R_j}=\displaystyle\frac{\lambda_j'}{\nu_j}=\frac{\lambda_j'}{\frac{\lambda_j'}{\lambda}}=\lambda
 \end{equation*}
 La produttività reale di una stazione $j$, considerando solo i prodotti finiti, coincide agli arrivi dall'esterno, questo era facilmente individuabile poiché essendo la 
 stazione stazionaria il numero di clienti in entrata coincide con il numero di clienti in uscita. 
@@ -2132,9 +2137,9 @@ Per cui per ogni stazione si ottengono le seguenti relazioni:
     \begin{tabular}{c|c|c|}
         & Finiti & Tutti\\
         \hline
-        $X_{R_j}$ & $\lambda_j$ & $\lambda_j'$\\
+        $X_{R_j}\strut$ & $\lambda\strut$ & $\lambda_j'\strut$\\
         \hline
-        $X_{T_j}$ & $\frac{s_j\mu_j}{\nu_j}$ & $s_j\mu_j$\\
+        $X_{T_j}\strut$ & $\frac{s_j\mu_j}{\nu_j}\strut$ & $s_j\mu_j\strut$\\
         \hline
     \end{tabular}
 \end{center}
@@ -2205,7 +2210,7 @@ Per cui la probabilità di uscire da uno stato $n$ si ottiene tramite l'espressi
     \displaystyle\sum_{j=1}^M[\lambda_j+(1-P_{jj})r_j]P(n)
 \end{equation*}
 Per esprimere la probabilità di entrare nello stato $n$ si considerano tre casi, quando esce un cliente da uno stato $n_{j0}$, quando entra un cliente dall'esterno in 
-uno stato $n_{k0}$: 
+uno stato $n_{0k}$: 
 \begin{gather*}
     \displaystyle\sum_{j=1}^M\left[P_{j0}r_jP(n_{j0})\right]+\displaystyle\sum_{k=1}^M\left[\lambda_kP(n_{0k})\right]
 \end{gather*}
@@ -2230,7 +2235,7 @@ Una rete si dice chiusa se il numero numero di clienti all'interno del sistema �
 introduce nel sistema un cliente non appena ne esce uno, per mantenere costante il numero di clienti nel sistema. 
 Una rete si dice chiusa se rispetta le seguenti condizioni:
 \begin{itemize}
-    \item Il valore atteso del numero dei clienti è costante $N=\mbox{cost.}$;
+    \item Il valore atteso del numero dei clienti è costante $N=\mathrm{cost.}$;
     \item Il tempo di servizio è distribuito esponenzialmente con parametro caratteristico $\mu$;
     \item I clienti vengono serviti con disciplina FIFO. 
 \end{itemize}
@@ -2257,9 +2262,9 @@ la frequenza con cui una stazione $j$ si trova allo stato $n_j$:
 \end{gather}
 
 Il fattore $x_j$ indica il tempo intrapreso da un cliente nella stazione $j$:
-\begin{equation*}
-    x_j=\displaystyle\frac{\nu_j}{\mu_j}
-\end{equation*}
+\begin{equation}
+    x_j=\displaystyle\frac{\nu_j}{\mu_j}=W_{sj}
+\end{equation}
 
 Nel teorema di Jackson questo fattore $f_j$ coincideva alla probabilità di una stazione di trovarsi in un dato stato, mentre in questo caso dipende 
 dal tempo, per cui per ritornare ad una distribuzione di probabilità bisogna restringere l'insieme di arrivo di questa funzione $f_j$ introducendo 
@@ -2289,19 +2294,98 @@ distribuzione di probabilità dell'ultima stazione $M$, di contenere un numero $
 \end{gather}
 
 Per calcolare il ``visit count" di una singola stazione $i$ si determina in base alla probabilità di instradamento di ogni altra stazione $j$ diretta alla stazione $i$:
-\begin{gather*}
+\begin{gather}
     \nu_i=\displaystyle\sum_{j=1}^M\nu_jP_{ji}
-\end{gather*}
+\end{gather}
 
 Generalmente la stazione di riferimento è la stazione di ingresso-uscita, che presenta un ``visit count" $\nu_1=1$. Per cui senza una stazione di riferimento, e quindi un 
 termine noto, sarebbero presenti infinite soluzioni per il sistema di equazioni per il ``visit count". 
 
-%% tabella 21/12
-%Si indica come può essere calcolato ricorsivamente il fattore di normalizzazione $G(N)$ utilizzando una tabella per indicare le probabilità per ogni stazione: 
-%\begin{center}
-%    \begin{tabular}[pos]{cols}
-%        
-%    \end{tabular}
-%\end{center}
+
+Si indica come può essere calcolato il fattore di normalizzazione $G(N)$ utilizzando una tabella per indicare il fattore di normalizzazione calcolato ricorsivamente $G(M,N)$ per 
+ogni numero di stazione $M$ e numero di clienti $N$ 
+\begin{center}
+    \begin{tabular}{c||c|c|c|c|}
+        $G(M,N)$&1&2&$\cdots$&$M$\\
+        \hline\hline
+        0&$f_1(0)=1$&$f_2(0)=1$&$\cdots$&$f_M(0)=1$\\
+        \hline
+        1&$f_1(2)$&$f_2(0)G(1,1)+f_2(1)G(1,0)$&$\cdots$&$f_{M}(0)G(1,M-1)+f_{M}(1)G(M-1,0)$\\
+        \hline
+        $\vdots$&$\vdots$&$\vdots$&$\ddots$&$\vdots$\\
+        \hline
+        $N-1$&$f_1(N-1)$&$\displaystyle\sum_{n=0}^{N-1}f_2(n)G(1,N-1-n)$&$\cdots$&$\displaystyle\sum_{n=0}^{N-1}f_M(n)G(M-1,N-1-n)$\\
+        \hline
+        $N$&$f_1(N)$&$\displaystyle\sum_{n=0}^{N}f_2(n)G(1,N-n)$&$\cdots$&$\displaystyle\sum_{n=0}^{N}f_M(n)G(M-1,N-n)$\\
+        \hline
+    \end{tabular}
+\end{center}
+Il valore nell'ultima casella $G(M,N)$ rappresenta il valore del fattore di normalizzazione. 
+
+Inoltre è possibile esprimere la produttività reale del sistema tramite questa tabella così calcolata. Si considera un caso monoservente, ma la seguente relazione ha una 
+validità generale, e si determina la probabilità che l'ultima stazione $M$ sia attiva:
+\begin{gather*}
+    P_M(n_M>0)=1-P_M(0)=1-\displaystyle\frac{G(M-1,N)}{G(M,N)}=\frac{G(M,N)-G(M-1,N)}{G(M,N)}
+\end{gather*}
+Poiché ogni stazione considerata è monoservente, può essere utilizzata la seguente formula, valida anche per il calcolo 
+del fattore di normalizzazione:
+\begin{equation}
+    G(M,N)=G(M-1,N)+x_MG(M,N-1)
+\end{equation}
+Per cui la probabilità che l'ultima stazione sia attiva è data da:
+\begin{gather*}
+    P_M(n_M>0)=\displaystyle x_M\frac{G(M,N-1)}{G(M,N)}
+\end{gather*}
+Poiché $x_M$ rappresenta il tempo medio che un cliente trascorre nella stazione $M$, il fattore che lo moltiplica deve rappresentare una frequenza, e poiché fornisce 
+informazione su quando la stazione è attiva, questo fattore rappresenta il numero di pezzi prodotti in un unità di tempo:
+\begin{gather*}
+    X_{R,M}=\displaystyle\frac{G(M,N-1)}{G(M,N)}
+\end{gather*}
+Poiché la rete è chiusa, la produttività reale di una singola stazione coincide con la produttività reale dell'intero sistema:
+\begin{equation}
+    X_R=\displaystyle\frac{G(M,N-1)}{G(M,N)}
+\end{equation}
+Dato questo valore è possibile esprimere la frequenza media di arrivo ad una stazione generica $j$ del sistema, poiché il numero di prodotti finiti coincide al numero 
+dei prodotti entrati nel sistema dalla stazione I/O. La percentuale di questi che attraversa, ovvero entra, all'intero di una stazione $j$ viene fornito dal suo visit 
+count, per cui la sua frequenza di arrivo può essere espressa come:
+\begin{equation}
+    \lambda_j=\nu_jX_R=X_{Rj}
+\end{equation}
+La frequenza di arrivo ad una stazione $j$ corrisponde quindi alla sua produttività reale, considerando tutti i clienti che la attraversano anche più di una volta. 
+
+La produttività teorica di una singola stazione rimane invariata se si tratta di una rete chiusa o aperta, per cui la produttività teoria del sistema può essere calcolata 
+analogamente ad una rete di code aperta:
+\begin{equation*}
+    X_T=\min_{j=1,\cdots,M}\left\{\displaystyle\frac{s_j\mu_j}{\nu_j}\right\}
+\end{equation*}
+
+Per aumentare la produttività teorica si adoperano le stesse tecniche trattate per le reti di code aperte, mentre per aumentare la produttività reale, si può aumentare 
+il numero di clienti $N$ all'interno del sistema, se questo valore così ottenuto rimane inferiore della sua produttività teorica. 
+
+
+Poiché il numero dei clienti è costante, si può esprimere il tempo che un singolo cliente spende nell'intero sistema rispetto alla produttività reale di quest'ultimo:
+\begin{equation}
+    W=\displaystyle\frac{N}{X_R}
+\end{equation}
+
+Mentre per calcolare il tempo medio speso in una singola stazione $j$ bisogna determinare il valore atteso dei clienti al suo interno, tramite la definizione si ottiene:
+\begin{equation}
+    N_j=\displaystyle\sum_{k=1}^NkP_j(k)=\sum_{k=1}^N\frac{kf_j(k)G(M-1,N-k)}{G(M,N)}
+\end{equation}
+Questo è possibile se si è calcolato il fattore di normalizzazione considerando la stazione $j$ l'ultima stazione. 
+Per cui il tempo speso da un cliente in una singola stazione $j$ può essere calcolato come:
+\begin{equation}
+    W_j=\displaystyle\frac{N_j}{X_R}=\sum_{k=1}^N\frac{kf_j(k)G(M-1,N-k)}{G(M,N-1)}
+\end{equation}
+Il tempo di attraversamento di una stazione è stato precedentemente definito come $x_j$, per cui il tempo speso in coda nell'intero sistema, o in una singola stazione $j$, 
+da un unico cliente può essere calcolato come:
+\begin{gather}
+    W_q=W-W_s=\displaystyle\frac{N}{X_R}-\sum_{j=1}^Mx_j\\
+    W_{qj}=W_j-W_{sj}=\displaystyle\frac{N_j}{X_R}-x_j
+\end{gather}
+Trattando la produttività reale $X_R$ come la frequenza di arrivo dentro al sistema, si può calcolare tramite le leggi di Little il numero medio dei clienti in coda nel sistema:
+\begin{equation}
+    L=X_RW_q
+\end{equation}
 
 \end{document}
